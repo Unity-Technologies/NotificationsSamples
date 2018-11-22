@@ -1,0 +1,70 @@
+# Don't touch EOLs
+* -text
+
+# Actual text files
+*.cs diff=csharp 
+*.cginc
+*.shader
+*.bat
+*.sh
+
+# Unity files
+*.unity merge=unityyamlmerge
+*.prefab merge=unityyamlmerge
+*.meta merge=unityyamlmerge
+*.mat merge=unityyamlmerge
+*.anim merge=unityyamlmerge
+*.cubemap merge=unityyamlmerge
+*.fontsettings merge=unityyamlmerge
+*.physicMaterial merge=unityyamlmerge
+*.physicsMaterial2D merge=unityyamlmerge
+*.mask merge=unityyamlmerge
+*.overrideController merge=unityyamlmerge
+*.controller merge=unityyamlmerge
+*.flare merge=unityyamlmerge
+*.playable merge=unityyamlmerge 
+*.spriteatlas merge=unityyamlmerge
+*.mixer merge=unityyamlmerge
+*.guiskin merge=unityyamlmerge
+*.asset merge=unityyamlmerge 
+
+## git-lfs ##
+
+# Textures
+*.bmp filter=lfs diff=lfs merge=lfs
+*.jpg filter=lfs diff=lfs merge=lfs
+*.jpeg filter=lfs diff=lfs merge=lfs
+*.png filter=lfs diff=lfs merge=lfs
+*.tga filter=lfs diff=lfs merge=lfs
+*.tiff filter=lfs diff=lfs merge=lfs
+*.tif filter=lfs diff=lfs merge=lfs
+*.psd filter=lfs diff=lfs merge=lfs
+*.exr filter=lfs diff=lfs merge=lfs
+*.dds filter=lfs diff=lfs merge=lfs
+
+# Audio
+*.mp3 filter=lfs diff=lfs merge=lfs
+*.wav filter=lfs diff=lfs merge=lfs
+*.ogg filter=lfs diff=lfs merge=lfs
+*.aif filter=lfs diff=lfs merge=lfs
+
+# Video
+*.mp4 filter=lfs diff=lfs merge=lfs
+*.mov filter=lfs diff=lfs merge=lfs
+*.avi filter=lfs diff=lfs merge=lfs
+
+# Meshes
+*.fbx filter=lfs diff=lfs merge=lfs
+*.blend filter=lfs diff=lfs merge=lfs
+*.obj filter=lfs diff=lfs merge=lfs
+
+# Other binaries
+*.a filter=lfs diff=lfs merge=lfs
+*.exe filter=lfs diff=lfs merge=lfs
+*.pdf filter=lfs diff=lfs merge=lfs
+*.zip filter=lfs diff=lfs merge=lfs
+*.dll filter=lfs diff=lfs merge=lfs
+*.mdb filter=lfs diff=lfs merge=lfs
+*.unitypackage filter=lfs diff=lfs merge=lfs
+*.ttf filter=lfs diff=lfs merge=lfs
+*.assetbundle filter=lfs diff=lfs merge=lfs
