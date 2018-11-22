@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
   m_Script: {fileID: 0}
   m_Name: NotificationSettings
   m_EditorClassIdentifier: Unity.Notifications.Editor:Unity.Notifications:UnityNotificationEditorManager
