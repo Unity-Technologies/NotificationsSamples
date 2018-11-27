@@ -1,8 +1,6 @@
 using System;
 using JetBrains.Annotations;
 using Unity.Notifications.Android;
-using Unity.Notifications.iOS;
-using UnityEngine.UIElements;
 
 namespace NotificationSamples.Android
 {
@@ -39,7 +37,7 @@ namespace NotificationSamples.Android
 				throw new ArgumentNullException(nameof(gameNotification));
 			}
 
-			if (! (gameNotification is AndroidGameNotification androidNotification))
+			if (!(gameNotification is AndroidGameNotification androidNotification))
 			{
 				throw new InvalidOperationException("Notification provided to ScheduleNotification isn't an AndroidNotification.");
 			}

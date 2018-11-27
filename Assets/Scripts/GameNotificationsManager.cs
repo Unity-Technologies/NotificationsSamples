@@ -8,7 +8,10 @@ namespace NotificationSamples
 	/// </summary>
 	public class GameNotificationsManager : MonoBehaviour
 	{
-		private IGameNotificationsPlatform platform;
+		/// <summary>
+		/// Gets the implementation of the notifications for the current platform;
+		/// </summary>
+		public IGameNotificationsPlatform Platform { get; private set; }
 
 		/// <summary>
 		/// Initialize the correct platform
@@ -16,7 +19,7 @@ namespace NotificationSamples
 		protected virtual void Awake()
 		{
 #if UNITY_ANDROID
-			platform = new AndroidNotificationsPlatform();
+			Platform = new AndroidNotificationsPlatform();
 #endif
 		}
 
@@ -26,7 +29,7 @@ namespace NotificationSamples
 		/// <returns>The new notification, ready to be scheduled, or null if there's no valid platform.</returns>
 		public IGameNotification CreateNotification()
 		{
-			return platform?.CreateNotification();
+			return Platform?.CreateNotification();
 		}
 
 		/// <summary>
@@ -37,7 +40,7 @@ namespace NotificationSamples
 		{
 			if (notification != null)
 			{
-				platform?.ScheduleNotification(notification);
+				Platform?.ScheduleNotification(notification);
 			}
 		}
 	}
