@@ -1,3 +1,4 @@
+#if UNITY_ANDROID
 using System;
 using JetBrains.Annotations;
 using Unity.Notifications.Android;
@@ -66,3 +67,4 @@ namespace NotificationSamples.Android
 		}
 	}
 }
+#endif

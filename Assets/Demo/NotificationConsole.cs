@@ -1,7 +1,9 @@
 using System;
+using UnityEngine;
+#if UNITY_ANDROID
 using NotificationSamples.Android;
 using Unity.Notifications.Android;
-using UnityEngine;
+#endif
 
 namespace NotificationSamples
 {
@@ -11,7 +13,7 @@ namespace NotificationSamples
 	/// </summary>
 	public class NotificationConsole : MonoBehaviour
 	{
-		private const string channelId = "game_channel";
+		private const string ChannelId = "game_channel";
 		
 		[SerializeField]
 		protected GameNotificationsManager manager;
@@ -45,7 +47,7 @@ namespace NotificationSamples
 			{
 				notification.Title = "Notification sample";
 				notification.Body = "This is a test notification";
-				notification.Group = channelId;
+				notification.Group = ChannelId;
 				notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(2);
 				
 				manager.ScheduleNotification(notification);

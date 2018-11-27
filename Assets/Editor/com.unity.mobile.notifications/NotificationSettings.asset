@@ -13,20 +13,8 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: NotificationSettings
   m_EditorClassIdentifier: Unity.Notifications.Editor:Unity.Notifications:UnityNotificationEditorManager
-  toolbarInt: 1
+  toolbarInt: 0
   iOSNotificationEditorSettingsValues:
-    keys:
-    - UnityNotificationRequestAuthorizationOnAppLaunch
-    - UnityNotificationDefaultAuthorizationOptions
-    - UnityNotificationRequestAuthorizationForRemoteNotificationsOnAppLaunch
-    - UnityRemoteNotificationForegroundPresentationOptions
-    - UnityUseLocationNotificationTrigger
-    - UnityAPSReleaseEnvironment
-    values:
-    - True
-    - -1
-    - False
-    - -1
-    - False
-    - False
+    keys: []
+    values: []
   TrackedResourceAssets: []
