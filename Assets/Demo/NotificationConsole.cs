@@ -24,7 +24,7 @@ namespace NotificationSamples
 			// Initialize android channel
 			var c = new AndroidNotificationChannel()
 			{
-				Id = channelId,
+				Id = ChannelId,
 				Name = "Default Game Channel",
 				Importance = Importance.Default,
 				Description = "Generic notifications",
@@ -34,7 +34,7 @@ namespace NotificationSamples
 			var androidPlatform = manager.Platform as AndroidNotificationsPlatform;
 			if (androidPlatform != null)
 			{
-				androidPlatform.DefaultChannelId = channelId;
+				androidPlatform.DefaultChannelId = ChannelId;
 			}
 #endif
 		}

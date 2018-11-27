@@ -1,4 +1,6 @@
-﻿using NotificationSamples.Android;
+﻿#if UNITY_ANDROID
+using NotificationSamples.Android;
+#endif
 using UnityEngine;
 
 namespace NotificationSamples
