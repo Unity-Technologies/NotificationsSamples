@@ -44,10 +44,10 @@ namespace NotificationSamples.Android
 		public string Group { get => Channel; set => Channel = value; }
 
 		/// <inheritdoc />
-		public DateTime DeliveryTime
+		public DateTime? DeliveryTime
 		{
 			get => InternalNotification.FireTime;
-			set => internalNotification.FireTime = value;
+			set => internalNotification.FireTime = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
