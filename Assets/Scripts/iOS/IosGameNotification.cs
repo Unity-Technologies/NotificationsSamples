@@ -1,6 +1,7 @@
 #if UNITY_IOS
 using System;
 using Unity.Notifications.iOS;
+using UnityEngine;
 
 namespace NotificationSamples.iOS
 {
@@ -17,7 +18,32 @@ namespace NotificationSamples.iOS
 		public iOSNotification InternalNotification => internalNotification;
 
 		/// <inheritdoc />
-		public string Id { get => internalNotification.Identifier; set => internalNotification.Identifier = value; }
+		/// <remarks>
+		/// Internally stored as a string. Gets parsed to an integer when retrieving.
+		/// </remarks>
+		/// <value>The identifier as an integer, or null if the identifier couldn't be parsed as a number.</value>
+		public int? Id
+		{
+			get
+			{
+				if (!int.TryParse(internalNotification.Identifier, out int value))
+				{
+					Debug.LogWarning("Internal iOS notification's identifier isn't a number.");
+					return null;
+				}
+
+				return value;
+			}
+			set
+			{
+				if (value == null)
+				{
+					throw new ArgumentNullException(nameof(value));
+				}
+
+				internalNotification.Identifier = value.Value.ToString();
+			}
+		}
 
 		/// <inheritdoc />
 		public string Title { get => internalNotification.Title; set => internalNotification.Title = value; }

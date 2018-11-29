@@ -11,18 +11,19 @@ namespace NotificationSamples.Android
 	{
 		private AndroidNotification internalNotification;
 		private int id;
-		private string idString;
 
 		/// <summary>
 		/// Gets the internal notification object used by the mobile notifications system.
 		/// </summary>
 		public AndroidNotification InternalNotification => internalNotification;
 
+		/// <inheritdoc />
 		/// <summary>
 		/// On Android, IDs are only available after the message has been sent.
 		/// </summary>
-		/// <exception cref="NotSupportedException">Throw when trying to set this value.</exception>
-		public string Id { get => idString; set => throw new NotSupportedException(); }
+		/// <exception cref="T:System.NotSupportedException">Throw when trying to set this value.</exception>
+		/// TODO: Update once unity API supports setting ID.
+		public int? Id { get => id; set => throw new NotSupportedException(); }
 
 		/// <inheritdoc />
 		public string Title { get => InternalNotification.Title; set => internalNotification.Title = value; }
@@ -70,7 +71,6 @@ namespace NotificationSamples.Android
 		internal void OnScheduled(int returnedId)
 		{
 			id = returnedId;
-			idString = id.ToString();
 		}
 	}
 }

@@ -20,6 +20,28 @@ namespace NotificationSamples
 		/// <exception cref="ArgumentNullException"><paramref name="gameNotification"/> is null.</exception>
 		/// <exception cref="InvalidOperationException"><paramref name="gameNotification"/> isn't of the correct type.</exception>
 		void ScheduleNotification(IGameNotification gameNotification);
+
+		/// <summary>
+		/// Cancels a scheduled notification.
+		/// </summary>
+		/// <param name="notificationId">The ID of a previously scheduled notification.</param>
+		void CancelNotification(int notificationId);
+
+		/// <summary>
+		/// Dismiss a displayed notification.
+		/// </summary>
+		/// <param name="notificationId">The ID of a previously scheduled notification that is being displayed to the user.</param>
+		void DismissNotification(int notificationId);
+
+		/// <summary>
+		/// Cancels all scheduled notifications.
+		/// </summary>
+		void CancelAllScheduledNotifications();
+
+		/// <summary>
+		/// Dismisses all displayed notifications.
+		/// </summary>
+		void DismissAllDisplayedNotifications();
 	}
 
 	/// <summary>

@@ -73,6 +73,33 @@ namespace NotificationSamples.Android
 		{
 			return CreateNotification();
 		}
+
+		/// <inheritdoc />
+		public void CancelNotification(int notificationId)
+		{
+			AndroidNotificationCenter.CancelScheduledNotification(notificationId);
+		}
+
+		/// <inheritdoc />
+		/// <summary>
+		/// Not currently implemented on Android
+		/// </summary>
+		public void DismissNotification(int notificationId)
+		{
+			throw new NotImplementedException("API support unavailable at the moment.");
+		}
+
+		/// <inheritdoc />
+		public void CancelAllScheduledNotifications()
+		{
+			AndroidNotificationCenter.CancelAllScheduledNotifications();
+		}
+
+		/// <inheritdoc />
+		public void DismissAllDisplayedNotifications()
+		{
+			AndroidNotificationCenter.CancelAllDisplayedNotifications();
+		}
 	}
 }
 #endif

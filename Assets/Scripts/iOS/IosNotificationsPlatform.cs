@@ -54,6 +54,30 @@ namespace NotificationSamples.iOS
 		{
 			return new IosGameNotification();
 		}
+
+		/// <inheritdoc />
+		public void CancelNotification(int notificationId)
+		{
+			iOSNotificationCenter.RemoveScheduledNotification(notificationId.ToString());
+		}
+
+		/// <inheritdoc />
+		public void DismissNotification(int notificationId)
+		{
+			iOSNotificationCenter.RemoveDeliveredNotification(notificationId.ToString());
+		}
+
+		/// <inheritdoc />
+		public void CancelAllScheduledNotifications()
+		{
+			iOSNotificationCenter.RemoveAllScheduledNotifications();
+		}
+
+		/// <inheritdoc />
+		public void DismissAllDisplayedNotifications()
+		{
+			iOSNotificationCenter.RemoveAllDeliveredNotifications();
+		}
 	}
 }
 #endif

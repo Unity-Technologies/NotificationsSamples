@@ -8,10 +8,17 @@ namespace NotificationSamples
 	public interface IGameNotification
 	{
 		/// <summary>
-		/// Gets or sets a unique identifier for this notification
+		/// Gets or sets a unique identifier for this notification.
 		/// </summary>
-		/// <value>A unique string identifier for this notification.</value>
-		string Id { get; set; }
+		/// <remarks>
+		/// <para>
+		/// If null, will be generated automatically once the notification is delivered, and then
+		/// can be retrieved afterwards
+		/// </para>
+		/// <para>On some platforms, this might be converted to a string identifier internally.</para>
+		/// </remarks>
+		/// <value>A unique integer identifier for this notification, or null (on some platforms) if not explicitly set.</value>
+		int? Id { get; set; }
 		/// <summary>
 		/// Gets or sets the notification's title
 		/// </summary>
