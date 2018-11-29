@@ -15,6 +15,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Notifications.Editor:Unity.Notifications:UnityNotificationEditorManager
   toolbarInt: 0
   iOSNotificationEditorSettingsValues:
-    keys: []
-    values: []
+    keys:
+    - UnityNotificationRequestAuthorizationOnAppLaunch
+    - UnityNotificationDefaultAuthorizationOptions
+    - UnityNotificationRequestAuthorizationForRemoteNotificationsOnAppLaunch
+    - UnityRemoteNotificationForegroundPresentationOptions
+    - UnityUseLocationNotificationTrigger
+    - UnityAPSReleaseEnvironment
+    values:
+    - True
+    - -1
+    - False
+    - -1
+    - False
+    - False
   TrackedResourceAssets: []
