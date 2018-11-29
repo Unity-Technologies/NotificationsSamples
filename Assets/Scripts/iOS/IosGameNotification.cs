@@ -36,7 +36,58 @@ namespace NotificationSamples.iOS
 		public string Group { get => CategoryIdentifier; set => CategoryIdentifier = value; }
 
 		/// <inheritdoc />
-		public DateTime DeliveryTime { get; set; }
+		/// <remarks>
+		/// <para>On iOS, setting this causes the notification to be delivered on a calendar time.</para>
+		/// <para>If it has previously been manually set to a different type of trigger, or has not been set before,
+		/// this returns null.</para>
+		/// <para>The millisecond component of the provided DateTime is ignored.</para>
+		/// </remarks>
+		/// <value>A <see cref="DateTime"/> representing the delivery time of this message, or null if
+		/// not set or the trigger isn't a <see cref="iOSNotificationCalendarTrigger"/>.</value>
+		public DateTime? DeliveryTime
+		{
+			get
+			{
+				if (!(internalNotification.Trigger is iOSNotificationCalendarTrigger calendarTrigger))
+				{
+					return null;
+				}
+
+				DateTime now = DateTime.Now;
+				var result = new DateTime
+				(
+					calendarTrigger.Year ?? now.Year,
+					calendarTrigger.Month ?? now.Month,
+					calendarTrigger.Day ?? now.Day,
+					calendarTrigger.Hour ?? now.Hour,
+					calendarTrigger.Minute ?? now.Minute,
+					calendarTrigger.Second ?? now.Second,
+					DateTimeKind.Local
+				);
+
+				return result;
+
+			}
+			set
+			{
+				if (!value.HasValue)
+				{
+					return;
+				}
+
+				DateTime date = value.Value.ToLocalTime();
+
+				internalNotification.Trigger = new iOSNotificationCalendarTrigger
+				{
+					Year = date.Year,
+					Month = date.Month,
+					Day = date.Day,
+					Hour = date.Hour,
+					Minute = date.Minute,
+					Second = date.Second
+				};
+			}
+		}
 
 		/// <summary>
 		/// The category identifier for this notification.

@@ -35,6 +35,6 @@ namespace NotificationSamples
 		/// <summary>
 		/// The time to deliver the notification.
 		/// </summary>
-		DateTime DeliveryTime { get; set; }
+		DateTime? DeliveryTime { get; set; }
 	}
 }
