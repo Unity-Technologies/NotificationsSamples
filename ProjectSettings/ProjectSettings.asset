@@ -157,6 +157,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.unity.notificationsamples
     Standalone: com.unity.notificationsamples
+    iOS: com.unity.notificationsamples
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
