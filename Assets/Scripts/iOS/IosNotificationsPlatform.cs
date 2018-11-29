@@ -5,7 +5,7 @@ using Unity.Notifications.iOS;
 namespace NotificationSamples.iOS
 {
 	/// <summary>
-	/// Ios implementation of <see cref="IGameNotificationsPlatform"/>.
+	/// iOS implementation of <see cref="IGameNotificationsPlatform"/>.
 	/// </summary>
 	public class IosNotificationsPlatform : IGameNotificationsPlatform<IosGameNotification>
 	{
