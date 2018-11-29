@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 #if UNITY_ANDROID
@@ -16,6 +17,12 @@ namespace NotificationSamples.Demo
 	{
 		private const string ChannelId = "game_channel";
 
+		[SerializeField]
+		protected TMP_InputField titleField;
+		
+		[SerializeField]
+		protected TMP_InputField bodyField;
+		
 		[SerializeField]
 		protected GameNotificationsManager manager;
 
@@ -45,10 +52,10 @@ namespace NotificationSamples.Demo
 
 			if (notification != null)
 			{
-				notification.Title = "Notification sample";
-				notification.Body = "This is a test notification";
+				notification.Title = titleField.text;
+				notification.Body = bodyField.text;
 				notification.Group = ChannelId;
-				notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(2);
+				notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(1);
 
 				manager.ScheduleNotification(notification);
 			}
