@@ -1,6 +1,5 @@
 #if UNITY_ANDROID
 using System;
-using JetBrains.Annotations;
 using Unity.Notifications.Android;
 
 namespace NotificationSamples.Android
@@ -22,6 +21,11 @@ namespace NotificationSamples.Android
 		/// </remarks>
 		public void ScheduleNotification(AndroidGameNotification gameNotification)
 		{
+			if (gameNotification == null)
+			{
+				throw new ArgumentNullException(nameof(gameNotification));
+			}
+
 			int notificationId = AndroidNotificationCenter.SendNotification(gameNotification.InternalNotification,
 			                                                                gameNotification.Channel);
 			gameNotification.OnScheduled(notificationId);
@@ -31,7 +35,7 @@ namespace NotificationSamples.Android
 		/// <remarks>
 		/// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
 		/// </remarks>
-		public void ScheduleNotification([NotNull] IGameNotification gameNotification)
+		public void ScheduleNotification(IGameNotification gameNotification)
 		{
 			if (gameNotification == null)
 			{
@@ -40,9 +44,10 @@ namespace NotificationSamples.Android
 
 			if (!(gameNotification is AndroidGameNotification androidNotification))
 			{
-				throw new InvalidOperationException("Notification provided to ScheduleNotification isn't an AndroidNotification.");
+				throw new InvalidOperationException(
+					"Notification provided to ScheduleNotification isn't an AndroidGameNotification.");
 			}
-			
+
 			ScheduleNotification(androidNotification);
 		}
 
@@ -61,6 +66,9 @@ namespace NotificationSamples.Android
 		}
 
 		/// <inheritdoc />
+		/// <summary>
+		/// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
+		/// </summary>
 		IGameNotification IGameNotificationsPlatform.CreateNotification()
 		{
 			return CreateNotification();

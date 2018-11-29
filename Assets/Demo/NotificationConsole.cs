@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
+
 #if UNITY_ANDROID
 using NotificationSamples.Android;
 using Unity.Notifications.Android;
 #endif
 
-namespace NotificationSamples
+namespace NotificationSamples.Demo
 {
 	/// <summary>
 	/// Manages the console on screen that displays information about notifications,
@@ -14,14 +15,14 @@ namespace NotificationSamples
 	public class NotificationConsole : MonoBehaviour
 	{
 		private const string ChannelId = "game_channel";
-		
+
 		[SerializeField]
 		protected GameNotificationsManager manager;
-		
+
 		private void Start()
 		{
 #if UNITY_ANDROID
-			// Initialize android channel
+			// Initialize Android channel
 			var c = new AndroidNotificationChannel()
 			{
 				Id = ChannelId,
@@ -31,14 +32,13 @@ namespace NotificationSamples
 			};
 			AndroidNotificationCenter.RegisterNotificationChannel(c);
 
-			var androidPlatform = manager.Platform as AndroidNotificationsPlatform;
-			if (androidPlatform != null)
+			if (manager.Platform is AndroidNotificationsPlatform androidPlatform)
 			{
 				androidPlatform.DefaultChannelId = ChannelId;
 			}
 #endif
 		}
-		
+
 		public void SendNotification()
 		{
 			IGameNotification notification = manager.CreateNotification();
@@ -49,7 +49,7 @@ namespace NotificationSamples
 				notification.Body = "This is a test notification";
 				notification.Group = ChannelId;
 				notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(2);
-				
+
 				manager.ScheduleNotification(notification);
 			}
 		}

@@ -1,12 +1,14 @@
 ﻿#if UNITY_ANDROID
 using NotificationSamples.Android;
+#elif UNITY_IOS
+using NotificationSamples.iOS;
 #endif
 using UnityEngine;
 
 namespace NotificationSamples
 {
 	/// <summary>
-	/// Global notifications manager that serves as a wrapper for multiple platform's notification systems.
+	/// Global notifications manager that serves as a wrapper for multiple platforms' notification systems.
 	/// </summary>
 	public class GameNotificationsManager : MonoBehaviour
 	{
@@ -22,6 +24,8 @@ namespace NotificationSamples
 		{
 #if UNITY_ANDROID
 			Platform = new AndroidNotificationsPlatform();
+#elif UNITY_IOS
+			Platform = new IosNotificationsPlatform();
 #endif
 		}
 

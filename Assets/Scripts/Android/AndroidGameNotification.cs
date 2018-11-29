@@ -5,7 +5,7 @@ using Unity.Notifications.Android;
 namespace NotificationSamples.Android
 {
 	/// <summary>
-	/// Android specific implementation of <see cref="IGameNotification"/>
+	/// Android specific implementation of <see cref="IGameNotification"/>.
 	/// </summary>
 	public class AndroidGameNotification : IGameNotification
 	{
@@ -14,7 +14,7 @@ namespace NotificationSamples.Android
 		private string idString;
 
 		/// <summary>
-		/// Gets the internal 
+		/// Gets the internal notification object used by the mobile notifications system.
 		/// </summary>
 		public AndroidNotification InternalNotification => internalNotification;
 
