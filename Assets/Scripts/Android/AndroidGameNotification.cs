@@ -45,6 +45,9 @@ namespace NotificationSamples.Android
 		public string Group { get => Channel; set => Channel = value; }
 
 		/// <inheritdoc />
+		public int BadgeNumber { get => internalNotification.Number; set => internalNotification.Number = value; }
+
+		/// <inheritdoc />
 		public DateTime? DeliveryTime
 		{
 			get => InternalNotification.FireTime;

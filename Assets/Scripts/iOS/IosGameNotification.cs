@@ -62,6 +62,9 @@ namespace NotificationSamples.iOS
 		public string Group { get => CategoryIdentifier; set => CategoryIdentifier = value; }
 
 		/// <inheritdoc />
+		public int BadgeNumber { get => internalNotification.Badge; set => internalNotification.Badge = value; }
+
+		/// <inheritdoc />
 		/// <remarks>
 		/// <para>On iOS, setting this causes the notification to be delivered on a calendar time.</para>
 		/// <para>If it has previously been manually set to a different type of trigger, or has not been set before,
@@ -92,7 +95,6 @@ namespace NotificationSamples.iOS
 				);
 
 				return result;
-
 			}
 			set
 			{

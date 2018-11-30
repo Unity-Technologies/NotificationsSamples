@@ -24,7 +24,19 @@ namespace NotificationSamples.Demo
 		protected TMP_InputField bodyField;
 		
 		[SerializeField]
+		protected TMP_InputField timeField;
+		
+		[SerializeField]
+		protected TMP_InputField badgeField;
+		
+		[SerializeField]
 		protected GameNotificationsManager manager;
+
+		[SerializeField]
+		protected Transform pendingNotificationsListParent;
+		
+		[SerializeField]
+		protected PendingNotificationItem pendingNotificationPrefab;
 
 		private void Start()
 		{
@@ -50,14 +62,60 @@ namespace NotificationSamples.Demo
 		{
 			IGameNotification notification = manager.CreateNotification();
 
-			if (notification != null)
+			if (notification == null)
 			{
-				notification.Title = titleField.text;
-				notification.Body = bodyField.text;
-				notification.Group = ChannelId;
-				notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(1);
+				return;
+			}
 
-				manager.ScheduleNotification(notification);
+			notification.Title = titleField.text;
+			notification.Body = bodyField.text;
+			notification.Group = ChannelId;
+			if (int.TryParse(badgeField.text, out int badgeNumber))
+			{
+				notification.BadgeNumber = badgeNumber;
+			}
+
+			if (float.TryParse(badgeField.text, out float minutes))
+			{
+				notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(minutes);
+			}
+			else
+			{
+				notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(1);
+			}
+
+			manager.ScheduleNotification(notification);
+
+			UpdatePendingNotifications();
+		}
+
+		/// <summary>
+		/// Cancel a given pending notification
+		/// </summary>
+		public void CancelPendingNotificationItem(PendingNotification itemToCancel)
+		{
+			manager.CancelNotification(itemToCancel.Id);
+
+			UpdatePendingNotifications();
+		}
+
+		// Update pending list
+		private void UpdatePendingNotifications()
+		{
+			// Clear all existing ones
+			foreach (object child in pendingNotificationsListParent.transform)
+			{
+				if (child is Transform childTransform)
+				{
+					Destroy(childTransform.gameObject);
+				}
+			}
+
+			// Recreate based on currently pending list
+			foreach (PendingNotification scheduledNotification in manager.ScheduledNotifications)
+			{
+				PendingNotificationItem newItem = Instantiate(pendingNotificationPrefab, pendingNotificationsListParent);
+				newItem.Show(scheduledNotification, this);
 			}
 		}
 	}
