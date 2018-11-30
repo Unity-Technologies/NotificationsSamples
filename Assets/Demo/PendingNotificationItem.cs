@@ -19,7 +19,6 @@ namespace NotificationSamples.Demo
 		/// <summary>
 		/// Show for a given pending notification.
 		/// </summary>
-		/// <param name="notificationToDisplay"></param>
 		public void Show(PendingNotification notificationToDisplay, NotificationConsole containingConsole)
 		{
 			notification = notificationToDisplay;
