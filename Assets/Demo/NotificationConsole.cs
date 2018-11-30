@@ -75,7 +75,7 @@ namespace NotificationSamples.Demo
 				notification.BadgeNumber = badgeNumber;
 			}
 
-			if (float.TryParse(badgeField.text, out float minutes))
+			if (float.TryParse(timeField.text, out float minutes))
 			{
 				notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(minutes);
 			}
