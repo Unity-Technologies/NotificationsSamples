@@ -46,6 +46,7 @@ namespace NotificationSamples.Demo
 			{
 				Id = ChannelId,
 				Name = "Default Game Channel",
+				CanShowBadge = true,
 				Importance = Importance.Default,
 				Description = "Generic notifications",
 			};

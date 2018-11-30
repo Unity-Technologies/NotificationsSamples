@@ -40,9 +40,9 @@ namespace NotificationSamples
 		/// <value>A platform specific string identifier for the notification's group.</value>
 		string Group { get; set; }
 		/// <summary>
-		/// Gets or sets the badge number for this notification.
+		/// Gets or sets the badge number for this notification. No badge number will be shown if null.
 		/// </summary>
-		int BadgeNumber { get; set; }
+		int? BadgeNumber { get; set; }
 		/// <summary>
 		/// The time to deliver the notification.
 		/// </summary>
