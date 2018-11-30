@@ -2506,7 +2506,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00002365752}
+  m_AnchoredPosition: {x: 0, y: 0.0001249349}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1288712612
@@ -3182,7 +3182,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 129500087}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99510837
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4269,7 +4269,7 @@ MonoBehaviour:
   badgeField: {fileID: 1631838287}
   manager: {fileID: 1572179804}
   pendingNotificationsListParent: {fileID: 1288712611}
-  pendingNotificationPrefab: {fileID: 885459788530017650, guid: 8cbf120411ca1bd49815fd77692db4c3,
+  pendingNotificationPrefab: {fileID: 35, guid: 8cbf120411ca1bd49815fd77692db4c3,
     type: 3}
 --- !u!4 &1582023831
 Transform:
