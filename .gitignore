@@ -43,3 +43,5 @@ Desktop.ini
 ### C# files
 bin/
 obj/
+_Builds
+NotificationsSamples.sln.DotSettings
