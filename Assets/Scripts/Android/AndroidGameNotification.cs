@@ -41,8 +41,8 @@ namespace NotificationSamples.Android
 		/// On Android, this represents the notification's channel, and is required. Will be configured automatically by
 		/// <see cref="AndroidNotificationsPlatform"/> if <see cref="AndroidNotificationsPlatform.DefaultChannelId"/> is set
 		/// </remarks>
-		/// <value>The value of <see cref="Channel"/>.</value>
-		public string Group { get => Channel; set => Channel = value; }
+		/// <value>The value of <see cref="DeliveredChannel"/>.</value>
+		public string Group { get => DeliveredChannel; set => DeliveredChannel = value; }
 
 		/// <inheritdoc />
 		public int? BadgeNumber
@@ -61,7 +61,7 @@ namespace NotificationSamples.Android
 		/// <summary>
 		/// Gets or sets the channel for this notification.
 		/// </summary>
-		public string Channel { get; set; }
+		public string DeliveredChannel { get; set; }
 
 		/// <summary>
 		/// Instantiate a new instance of <see cref="AndroidGameNotification"/>.
@@ -69,6 +69,19 @@ namespace NotificationSamples.Android
 		public AndroidGameNotification()
 		{
 			internalNotification = new AndroidNotification();
+		}
+
+		/// <summary>
+		/// Instantiate a new instance of <see cref="AndroidGameNotification"/> from a delivered notification
+		/// </summary>
+		/// <param name="deliveredNotification">The notification that has been delivered.</param>
+		/// <param name="deliveredId">The ID of the delivered notification.</param>
+		/// <param name="deliveredChannel">The channel the notification was delivered to.</param>
+		public AndroidGameNotification(AndroidNotification deliveredNotification, int deliveredId, string deliveredChannel)
+		{
+			internalNotification = deliveredNotification;
+			id = deliveredId;
+			DeliveredChannel = deliveredChannel;
 		}
 
 		/// <summary>

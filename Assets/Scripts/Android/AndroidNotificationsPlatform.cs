@@ -7,13 +7,25 @@ namespace NotificationSamples.Android
 	/// <summary>
 	/// Android implementation of <see cref="IGameNotificationsPlatform"/>.
 	/// </summary>
-	public class AndroidNotificationsPlatform : IGameNotificationsPlatform<AndroidGameNotification>
+	public class AndroidNotificationsPlatform : IGameNotificationsPlatform<AndroidGameNotification>,
+		IDisposable
 	{
+		/// <inheritdoc />
+		public event Action<IGameNotification> NotificationReceived;
+
 		/// <summary>
 		/// Gets or sets the default channel ID for notifications.
 		/// </summary>
 		/// <value>The default channel ID for new notifications, or null.</value>
 		public string DefaultChannelId { get; set; }
+
+		/// <summary>
+		/// Instantiate a new instance of <see cref="AndroidNotificationsPlatform"/>.
+		/// </summary>
+		public AndroidNotificationsPlatform()
+		{
+			AndroidNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
+		}
 
 		/// <inheritdoc />
 		/// <remarks>
@@ -27,7 +39,7 @@ namespace NotificationSamples.Android
 			}
 
 			int notificationId = AndroidNotificationCenter.SendNotification(gameNotification.InternalNotification,
-			                                                                gameNotification.Channel);
+			                                                                gameNotification.DeliveredChannel);
 			gameNotification.OnScheduled(notificationId);
 		}
 
@@ -59,7 +71,7 @@ namespace NotificationSamples.Android
 		{
 			var notification = new AndroidGameNotification()
 			{
-				Channel = DefaultChannelId
+				DeliveredChannel = DefaultChannelId
 			};
 
 			return notification;
@@ -99,6 +111,22 @@ namespace NotificationSamples.Android
 		public void DismissAllDisplayedNotifications()
 		{
 			AndroidNotificationCenter.CancelAllDisplayedNotifications();
+		}
+
+		/// <summary>
+		/// Unregister delegates.
+		/// </summary>
+		public void Dispose()
+		{
+			AndroidNotificationCenter.OnNotificationReceived -= OnLocalNotificationReceived;
+		}
+
+		// Event handler for receiving local notifications.
+		private void OnLocalNotificationReceived(int id, AndroidNotification notification, string channel)
+		{
+			// Create a new AndroidGameNotification out of the delivered notification, but only
+			// if the event is registered
+			NotificationReceived?.Invoke(new AndroidGameNotification(notification, id, channel));
 		}
 	}
 }

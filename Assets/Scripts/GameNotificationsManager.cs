@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 #if UNITY_ANDROID
 using NotificationSamples.Android;
 #elif UNITY_IOS
@@ -13,6 +14,11 @@ namespace NotificationSamples
 	/// </summary>
 	public class GameNotificationsManager : MonoBehaviour
 	{
+		/// <summary>
+		/// Event fired when a scheduled local notification is delivered while the app is in the foreground.
+		/// </summary>
+		public event Action<IGameNotification> LocalNotificationDelivered;
+		
 		/// <summary>
 		/// Gets the implementation of the notifications for the current platform;
 		/// </summary>
@@ -35,6 +41,25 @@ namespace NotificationSamples
 #endif
 
 			ScheduledNotifications = new List<PendingNotification>();
+			
+			Platform.NotificationReceived += OnNotificationReceived;
+		}
+
+		/// <summary>
+		/// Clean up platform object if necessary 
+		/// </summary>
+		protected virtual void OnDestroy()
+		{
+			if (Platform == null)
+			{
+				return;
+			}
+
+			Platform.NotificationReceived -= OnNotificationReceived;
+			if (Platform is IDisposable disposable)
+			{
+				disposable.Dispose();
+			}
 		}
 
 		/// <summary>
@@ -105,6 +130,22 @@ namespace NotificationSamples
 		public void DismissAllNotifications()
 		{
 			Platform.DismissAllDisplayedNotifications();
+		}
+
+		/// <summary>
+		/// Event fired by <see cref="Platform"/> when a notification is received while we're in the foreground.
+		/// </summary>
+		protected void OnNotificationReceived(IGameNotification deliveredNotification)
+		{
+			LocalNotificationDelivered?.Invoke(deliveredNotification);
+			
+			// Remove from pending list
+			int deliveredIndex =
+				ScheduledNotifications.FindIndex(notification => notification.Id == deliveredNotification.Id);
+			if (deliveredIndex >= 0)
+			{
+				ScheduledNotifications.RemoveAt(deliveredIndex);
+			}
 		}
 	}
 }

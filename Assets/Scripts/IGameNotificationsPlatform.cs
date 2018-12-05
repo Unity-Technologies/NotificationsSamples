@@ -8,6 +8,11 @@ namespace NotificationSamples
 	public interface IGameNotificationsPlatform
 	{
 		/// <summary>
+		/// Fired when a notification is received.
+		/// </summary>
+		event Action<IGameNotification> NotificationReceived;
+
+		/// <summary>
 		/// Create a new instance of a <see cref="IGameNotification"/> for this platform.
 		/// </summary>
 		/// <returns>A new platform-appropriate notification object.</returns>

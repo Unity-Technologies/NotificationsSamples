@@ -9,24 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_GeneratorAsset: {fileID: 0}
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 0863bf92b4fcc45b0b9267325249bf0f, type: 3}
   m_Name: NotificationSettings
-  m_EditorClassIdentifier: Unity.Notifications.Editor:Unity.Notifications:UnityNotificationEditorManager
+  m_EditorClassIdentifier: 
   toolbarInt: 0
   iOSNotificationEditorSettingsValues:
     keys:
     - UnityNotificationRequestAuthorizationOnAppLaunch
     - UnityNotificationDefaultAuthorizationOptions
-    - UnityNotificationRequestAuthorizationForRemoteNotificationsOnAppLaunch
-    - UnityRemoteNotificationForegroundPresentationOptions
     - UnityUseLocationNotificationTrigger
     - UnityAPSReleaseEnvironment
+    - UnityNotificationRequestAuthorizationForRemoteNotificationsOnAppLaunch
+    - UnityRemoteNotificationForegroundPresentationOptions
     values:
     - True
     - -1
     - False
+    - False
+    - False
     - -1
-    - False
-    - False
   TrackedResourceAssets: []
