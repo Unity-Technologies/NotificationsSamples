@@ -135,7 +135,19 @@ namespace NotificationSamples.iOS
 		/// </summary>
 		public IosGameNotification()
 		{
-			internalNotification = new iOSNotification();
+			internalNotification = new iOSNotification
+			{
+				ShowInForeground = true // Deliver in foreground by default
+			};
+		}
+
+		/// <summary>
+		/// Instantiate a new instance of <see cref="IosGameNotification"/> from a delivered notification.
+		/// </summary>
+		/// <param name="internalNotification">The delivered notification.</param>
+		internal IosGameNotification(iOSNotification internalNotification)
+		{
+			this.internalNotification = internalNotification;
 		}
 	}
 }

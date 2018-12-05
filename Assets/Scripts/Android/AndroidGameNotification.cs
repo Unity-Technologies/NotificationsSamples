@@ -77,7 +77,7 @@ namespace NotificationSamples.Android
 		/// <param name="deliveredNotification">The notification that has been delivered.</param>
 		/// <param name="deliveredId">The ID of the delivered notification.</param>
 		/// <param name="deliveredChannel">The channel the notification was delivered to.</param>
-		public AndroidGameNotification(AndroidNotification deliveredNotification, int deliveredId, string deliveredChannel)
+		internal AndroidGameNotification(AndroidNotification deliveredNotification, int deliveredId, string deliveredChannel)
 		{
 			internalNotification = deliveredNotification;
 			id = deliveredId;
