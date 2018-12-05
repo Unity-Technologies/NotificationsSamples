@@ -63,18 +63,6 @@ namespace NotificationSamples.Demo
 			}
 		}
 
-		private void OnDestroy()
-		{
-			if (sendButton != null)
-			{
-				sendButton.onClick.RemoveListener(SendNotificationFromUi);
-			}
-			if (clearEventButton != null)
-			{
-				clearEventButton.onClick.RemoveListener(ClearEvents);
-			}
-		}
-
 		private void Start()
 		{
 #if UNITY_ANDROID
@@ -94,8 +82,34 @@ namespace NotificationSamples.Demo
 				androidPlatform.DefaultChannelId = ChannelId;
 			}
 #endif
+		}
 
-			manager.LocalNotificationDelivered += OnDelivered;
+		private void OnDestroy()
+		{
+			if (sendButton != null)
+			{
+				sendButton.onClick.RemoveListener(SendNotificationFromUi);
+			}
+			if (clearEventButton != null)
+			{
+				clearEventButton.onClick.RemoveListener(ClearEvents);
+			}
+		}
+
+		private void OnEnable()
+		{
+			if (manager != null)
+			{
+				manager.LocalNotificationDelivered += OnDelivered;
+			}
+		}
+
+		private void OnDisable()
+		{
+			if (manager != null)
+			{
+				manager.LocalNotificationDelivered -= OnDelivered;
+			}
 		}
 
 		/// <summary>
