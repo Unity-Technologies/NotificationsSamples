@@ -29,7 +29,7 @@ namespace NotificationSamples.Android
 		public string Title { get => InternalNotification.Title; set => internalNotification.Title = value; }
 
 		/// <inheritdoc />
-		public string Body { get => InternalNotification.Title; set => internalNotification.Title = value; }
+		public string Body { get => InternalNotification.Text; set => internalNotification.Text = value; }
 
 		/// <summary>
 		/// Does nothing on Android.
