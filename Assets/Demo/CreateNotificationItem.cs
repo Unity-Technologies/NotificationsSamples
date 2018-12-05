@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 namespace NotificationSamples.Demo
@@ -55,7 +56,7 @@ namespace NotificationSamples.Demo
 		/// </summary>
 		public void OnCreate()
 		{
-			console.SendNotification(this);
+			console.SendNotification(Title, Description, DateTime.Now + TimeSpan.FromMinutes(Minutes), BadgeNumber);
 		}
 	}
 }

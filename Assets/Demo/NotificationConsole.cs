@@ -143,25 +143,6 @@ namespace NotificationSamples.Demo
 			QueueEvent($"Queued event with ID \"{notification.Id}\" at time {deliveryTime:HH:mm}");
 		}
 
-		public void SendNotification(CreateNotificationItem fromItem)
-		{
-			IGameNotification notification = manager.CreateNotification();
-			if (notification == null)
-			{
-				return;
-			}
-			
-			notification.Title = fromItem.Title;
-			notification.Body = fromItem.Description;
-			notification.Group = ChannelId;
-			notification.BadgeNumber = fromItem.BadgeNumber;
-			notification.DeliveryTime = DateTime.Now + TimeSpan.FromMinutes(fromItem.Minutes);
-
-			manager.ScheduleNotification(notification);
-
-			UpdatePendingNotifications();
-		}
-
 		/// <summary>
 		/// Cancel a given pending notification
 		/// </summary>
