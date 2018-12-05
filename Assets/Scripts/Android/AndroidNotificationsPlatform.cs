@@ -65,7 +65,7 @@ namespace NotificationSamples.Android
 
 		/// <inheritdoc />
 		/// <summary>
-		/// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
+		/// Create a new <see cref="AndroidGameNotification" />.
 		/// </summary>
 		public AndroidGameNotification CreateNotification()
 		{
@@ -79,7 +79,7 @@ namespace NotificationSamples.Android
 
 		/// <inheritdoc />
 		/// <summary>
-		/// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
+		/// Create a new <see cref="AndroidGameNotification" />.
 		/// </summary>
 		IGameNotification IGameNotificationsPlatform.CreateNotification()
 		{
@@ -98,7 +98,7 @@ namespace NotificationSamples.Android
 		/// </summary>
 		public void DismissNotification(int notificationId)
 		{
-			throw new NotImplementedException("API support unavailable at the moment.");
+			AndroidNotificationCenter.CancelDisplayedNotification(notificationId);
 		}
 
 		/// <inheritdoc />
