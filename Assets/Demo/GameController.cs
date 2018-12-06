@@ -72,17 +72,21 @@ namespace NotificationSamples.Demo
 		// Bought items displayed in the status area
 		private readonly Dictionary<InventoryItemData, InventoryItem> items = new Dictionary<InventoryItemData, InventoryItem>();
 		
+		// Keep track of the items to buy
+		private readonly List<BuyInventoryItem> buyItems = new List<BuyInventoryItem>();
+		
 		private void Awake()
 		{
-			currency = initialCurrency;
 			// Create the buy items
 			for (int i = 0, len = itemsData.Length; i < len; i++)
 			{
 				InventoryItemData data = itemsData[i];
 				BuyInventoryItem item = Instantiate(buyItemPrefab, buyContentHolder);
 				item.Initialise(data, OnBuy);
+				buyItems.Add(item);
 			}
 
+			SetCurrency(initialCurrency);
 			UpdateControls();
 		}
 
@@ -96,7 +100,6 @@ namespace NotificationSamples.Demo
 
 			DateTime deliveryTime = DateTime.Now + TimeSpan.FromMinutes(item.Minutes);
 			console.SendNotification(item.Title, item.Description, deliveryTime, item.BadgeNumber);
-			currency -= item.Cost;
 			
 			pendingItems.Add(new PendingInventoryItem
 			{
@@ -104,10 +107,13 @@ namespace NotificationSamples.Demo
 				ItemData = item.ItemData
 			});
 			
+			// Store the item's cost before deducting it, so item can be updated in SetCurrency based on its new cost
+			int cost = item.Cost;
 			item.Cost += item.ItemData.CostIncrease;
 			item.Minutes += item.ItemData.CreationTimeIncrease;
 			item.UpdateControls();
 			
+			SetCurrency(currency - cost);
 			UpdateControls();
 		}
 
@@ -133,7 +139,7 @@ namespace NotificationSamples.Demo
 				pendingItems.RemoveAt(i);
 			}
 			
-			currency += currencyBonus * Time.deltaTime;
+			SetCurrency(currency + currencyBonus * Time.deltaTime);
 			UpdateControls();
 		}
 
@@ -150,6 +156,28 @@ namespace NotificationSamples.Demo
 				item = Instantiate(itemPrefab, contentHolder);
 				items.Add(itemData, item);
 				item.Initialise(itemData);
+			}
+		}
+
+		private void SetCurrency(float newCurrency)
+		{
+			int oldCurrency = (int)currency;
+			currency = newCurrency;
+			if (oldCurrency == (int)currency || buyItems.Count <= 0)
+			{
+				return;
+			}
+			
+			// Let buy items know the currency changed
+			int changedCurrency = (int)currency;
+			for (int i = 0, len = buyItems.Count; i < len; i++)
+			{
+				BuyInventoryItem item = buyItems[i];
+				if (item == null)
+				{
+					continue;
+				}
+				item.OnCurrencyChanged(changedCurrency);
 			}
 		}
 	}

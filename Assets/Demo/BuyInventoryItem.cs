@@ -18,6 +18,8 @@ namespace NotificationSamples.Demo
 		protected TextMeshProUGUI costLabel;
 		[SerializeField]
 		protected Image icon;
+		[SerializeField]
+		protected Button buyButton;
 		
 		// Fired when the buy button is pressed.
 		private Action<BuyInventoryItem> bought;
@@ -82,7 +84,15 @@ namespace NotificationSamples.Demo
 		public void UpdateControls()
 		{
 			costLabel.text = Cost.ToString("N0");
-			timeLabel.text = $"Takes {Minutes} minute(s)";
+			timeLabel.text = $"Takes {Minutes:F1} minute(s)";
+		}
+
+		/// <summary>
+		/// Called when the game's currency total changed.
+		/// </summary>
+		public void OnCurrencyChanged(int currency)
+		{
+			buyButton.interactable = currency >= Cost;
 		}
 	}
 }
