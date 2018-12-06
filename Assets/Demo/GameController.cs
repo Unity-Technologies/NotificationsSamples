@@ -54,6 +54,9 @@ namespace NotificationSamples.Demo
 		[SerializeField, Tooltip("Label to display the currency.")]
 		protected TextMeshProUGUI currencyLabel;
 		
+		[SerializeField, Tooltip("Label to display the current time.")]
+		protected TextMeshProUGUI timeLabel;
+		
 		[SerializeField, Tooltip("Start the game with this currency.")]
 		protected float initialCurrency = 100.0f;
 		
@@ -122,6 +125,7 @@ namespace NotificationSamples.Demo
 		{
 			int currencyInt = (int)currency;
 			currencyLabel.text = currencyInt.ToString("N0");
+			timeLabel.text = DateTime.Now.ToString("yy-MM-dd HH:mm:ss");
 		}
 
 		private void Update()
