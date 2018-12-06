@@ -72,6 +72,9 @@ namespace NotificationSamples.Demo
 		// Currency bonus per second.
 		private float currencyBonus;
 
+		// DateTime when the application was paused.
+		private DateTime? applicationPausedTime;
+
 		// Inventory item bought, and will be received at the specified delivery time.
 		private readonly List<PendingInventoryItem> pendingItems = new List<PendingInventoryItem>();
 
@@ -94,9 +97,28 @@ namespace NotificationSamples.Demo
 
 			SetCurrency(initialCurrency);
 			UpdateControls();
-			
-			// Force an initial update for the status area's UI
-			Canvas.ForceUpdateCanvases();
+		}
+
+		private void OnApplicationPause(bool pauseStatus)
+		{
+			if (pauseStatus)
+			{
+				applicationPausedTime = DateTime.Now;
+			}
+			else if (applicationPausedTime != null)
+			{
+				// Award currency bonus which accumulated while the app was paused
+				TimeSpan timeSpan = DateTime.Now - applicationPausedTime.Value;
+				float pausedTime = Mathf.Max((float)timeSpan.TotalSeconds, 0.0f);
+				applicationPausedTime = null;
+				AwardCurrencyBonus(pausedTime);
+			}
+		}
+
+		// Increase the currency by (currency bonus * elapsed time).
+		private void AwardCurrencyBonus(float elapsedTime)
+		{
+			SetCurrency(currency + currencyBonus * elapsedTime);
 		}
 
 		// Called when an item's buy button is clicked.
@@ -137,7 +159,14 @@ namespace NotificationSamples.Demo
 
 		private void Update()
 		{
-			// Check if pending items must be received
+			UpdatePendingItems();
+			AwardCurrencyBonus(Time.deltaTime);
+			UpdateControls();
+		}
+
+		// Check if pending items must be received
+		private void UpdatePendingItems()
+		{
 			for (int i = pendingItems.Count - 1; i >= 0; i--)
 			{
 				PendingInventoryItem pendingItem = pendingItems[i];
@@ -149,15 +178,12 @@ namespace NotificationSamples.Demo
 				OnDeliveredItem(pendingItem.ItemData);
 				pendingItems.RemoveAt(i);
 			}
-			
-			SetCurrency(currency + currencyBonus * Time.deltaTime);
-			UpdateControls();
 		}
 
 		// Called when an item was delivered.
 		private void OnDeliveredItem(InventoryItemData itemData)
 		{
-			// Add the item to the status area.
+			// Add the item to the stats area.
 			if (items.TryGetValue(itemData, out InventoryItem item))
 			{
 				// Update existing item of the same type
