@@ -67,10 +67,10 @@ namespace NotificationSamples.Demo
 		private float currencyBonus;
 
 		// Inventory item bought, and will be received at the specified delivery time.
-		private List<PendingInventoryItem> pendingItems = new List<PendingInventoryItem>();
+		private readonly List<PendingInventoryItem> pendingItems = new List<PendingInventoryItem>();
 
 		// Bought items displayed in the status area
-		private Dictionary<InventoryItemData, InventoryItem> items = new Dictionary<InventoryItemData, InventoryItem>();
+		private readonly Dictionary<InventoryItemData, InventoryItem> items = new Dictionary<InventoryItemData, InventoryItem>();
 		
 		private void Awake()
 		{
@@ -140,8 +140,7 @@ namespace NotificationSamples.Demo
 		// Add the item to the status area.
 		private void AddItemToStatus(InventoryItemData itemData)
 		{
-			InventoryItem item;
-			if (items.TryGetValue(itemData, out item))
+			if (items.TryGetValue(itemData, out InventoryItem item))
 			{
 				// Update existing item of the same type
 				item.OnReceivedItem();
