@@ -51,6 +51,7 @@ MonoBehaviour:
     type: 3}
   contentHolder: {fileID: 0}
   currencyLabel: {fileID: 0}
+  bonusLabel: {fileID: 0}
   timeLabel: {fileID: 0}
   initialCurrency: 100
   itemsData:

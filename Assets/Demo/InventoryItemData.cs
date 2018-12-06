@@ -26,7 +26,7 @@ namespace NotificationSamples.Demo
 		[Tooltip("How long it takes to create the item after buying it (minutes).")]
 		public float InitialCreationTime;
 		
-		[Tooltip("Increase the delivery time every time it is bought (minutes).")]
+		[Tooltip("Increase the creation time every time it is bought (minutes).")]
 		public float CreationTimeIncrease;
 		
 		[Tooltip("Currency bonus the item provides per second.")]

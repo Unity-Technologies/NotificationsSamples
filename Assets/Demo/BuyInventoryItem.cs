@@ -20,9 +20,20 @@ namespace NotificationSamples.Demo
 		protected Image icon;
 		[SerializeField]
 		protected Button buyButton;
+		[SerializeField]
+		protected Image progressImage;
 		
 		// Fired when the buy button is pressed.
 		private Action<BuyInventoryItem> bought;
+
+		// When the last bought item will be delivered.
+		private DateTime? deliveryTime;
+
+		// Initial time remaining for the delivery of the last bought item.
+		private float initialTimeRemaining;
+		
+		// The last currency received from the game controller.
+		private int currency;
 
 		/// <summary>
 		/// Title to show in the notification.
@@ -67,6 +78,8 @@ namespace NotificationSamples.Demo
 			icon.sprite = itemData.Icon;
 			BadgeNumber = 1;
 			bought = buyAction;
+			deliveryTime = null;
+			progressImage.fillAmount = 0.0f;
 			UpdateControls();
 		}
 		
@@ -79,10 +92,26 @@ namespace NotificationSamples.Demo
 		}
 
 		/// <summary>
+		/// Called when buying an item was successful.
+		/// </summary>
+		public void OnBuySuccess(DateTime boughtDeliveryTime)
+		{
+			deliveryTime = boughtDeliveryTime;
+			initialTimeRemaining = GetTimeRemaining();
+			buyButton.interactable = false;
+			UpdateControls();
+		}
+
+		/// <summary>
 		/// Update UI controls.
 		/// </summary>
 		public void UpdateControls()
 		{
+			if (deliveryTime != null)
+			{
+				// Do not update the labels (i.e. show the old values until the item is delivered).
+				return;
+			}
 			costLabel.text = Cost.ToString("N0");
 			timeLabel.text = $"Takes {Minutes:F1} minute(s)";
 		}
@@ -90,9 +119,61 @@ namespace NotificationSamples.Demo
 		/// <summary>
 		/// Called when the game's currency total changed.
 		/// </summary>
-		public void OnCurrencyChanged(int currency)
+		public void OnCurrencyChanged(int newCurrency)
 		{
-			buyButton.interactable = currency >= Cost;
+			currency = newCurrency;
+			UpdateBuyButton();
+		}
+
+		/// <summary>
+		/// Called when an item was delivered.
+		/// </summary>
+		public void OnDeliveredItem(InventoryItemData itemData)
+		{
+			if (itemData == ItemData)
+			{
+				UpdateBuyButton();
+			}
+		}
+		
+		// Time remaining until the last bought item is delivered.
+		private float GetTimeRemaining()
+		{
+			if (deliveryTime == null)
+			{
+				return 0.0f;
+			}
+			TimeSpan timeSpan = deliveryTime.Value - DateTime.Now;
+			return Mathf.Max((float)timeSpan.TotalSeconds, 0.0f);
+		}
+		
+		private void Update()
+		{
+			UpdateProgress();
+		}
+
+		// Determine if the buy button should be interactable.
+		private void UpdateBuyButton()
+		{
+			buyButton.interactable = currency >= Cost && GetTimeRemaining() <= 0.0f;
+		}
+
+		// Update an item's delivery progress, and update the progress bar.
+		private void UpdateProgress()
+		{
+			if (deliveryTime == null)
+			{
+				return;
+			}
+			float timeRemaining = GetTimeRemaining();
+			if (timeRemaining > 0.0f)
+			{
+				progressImage.fillAmount = 1.0f - Mathf.Clamp01(timeRemaining / initialTimeRemaining);
+				return;
+			}
+			progressImage.fillAmount = 0.0f;
+			deliveryTime = null;
+			UpdateControls();
 		}
 	}
 }

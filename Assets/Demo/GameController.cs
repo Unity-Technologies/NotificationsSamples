@@ -31,7 +31,7 @@ namespace NotificationSamples.Demo
 				get
 				{
 					TimeSpan timeSpan = DeliveryTime - DateTime.Now;
-					return (float)timeSpan.TotalSeconds;
+					return Mathf.Max((float)timeSpan.TotalSeconds, 0.0f);
 				}
 			}
 		}
@@ -53,6 +53,9 @@ namespace NotificationSamples.Demo
 		
 		[SerializeField, Tooltip("Label to display the currency.")]
 		protected TextMeshProUGUI currencyLabel;
+		
+		[SerializeField, Tooltip("Label to display the currency bonus.")]
+		protected TextMeshProUGUI bonusLabel;
 		
 		[SerializeField, Tooltip("Label to display the current time.")]
 		protected TextMeshProUGUI timeLabel;
@@ -91,6 +94,9 @@ namespace NotificationSamples.Demo
 
 			SetCurrency(initialCurrency);
 			UpdateControls();
+			
+			// Force an initial update for the status area's UI
+			Canvas.ForceUpdateCanvases();
 		}
 
 		// Called when an item's buy button is clicked.
@@ -114,7 +120,7 @@ namespace NotificationSamples.Demo
 			int cost = item.Cost;
 			item.Cost += item.ItemData.CostIncrease;
 			item.Minutes += item.ItemData.CreationTimeIncrease;
-			item.UpdateControls();
+			item.OnBuySuccess(deliveryTime);
 			
 			SetCurrency(currency - cost);
 			UpdateControls();
@@ -125,6 +131,7 @@ namespace NotificationSamples.Demo
 		{
 			int currencyInt = (int)currency;
 			currencyLabel.text = currencyInt.ToString("N0");
+			bonusLabel.text = $"(+{currencyBonus:f1}/s)";
 			timeLabel.text = DateTime.Now.ToString("yy-MM-dd HH:mm:ss");
 		}
 
@@ -139,7 +146,7 @@ namespace NotificationSamples.Demo
 					continue;
 				}
 				currencyBonus += pendingItem.ItemData.CurrencyBonus;
-				AddItemToStatus(pendingItem.ItemData);
+				OnDeliveredItem(pendingItem.ItemData);
 				pendingItems.RemoveAt(i);
 			}
 			
@@ -147,9 +154,10 @@ namespace NotificationSamples.Demo
 			UpdateControls();
 		}
 
-		// Add the item to the status area.
-		private void AddItemToStatus(InventoryItemData itemData)
+		// Called when an item was delivered.
+		private void OnDeliveredItem(InventoryItemData itemData)
 		{
+			// Add the item to the status area.
 			if (items.TryGetValue(itemData, out InventoryItem item))
 			{
 				// Update existing item of the same type
@@ -160,6 +168,17 @@ namespace NotificationSamples.Demo
 				item = Instantiate(itemPrefab, contentHolder);
 				items.Add(itemData, item);
 				item.Initialise(itemData);
+			}
+			
+			// Let buy items know an item was delivered
+			for (int i = 0, len = buyItems.Count; i < len; i++)
+			{
+				BuyInventoryItem buyItem = buyItems[i];
+				if (buyItem == null)
+				{
+					continue;
+				}
+				buyItem.OnDeliveredItem(itemData);
 			}
 		}
 
