@@ -47,6 +47,7 @@ namespace NotificationSamples.iOS
 			}
 
 			iOSNotificationCenter.ScheduleNotification(notification.InternalNotification);
+			notification.OnScheduled();
 		}
 
 		/// <inheritdoc />

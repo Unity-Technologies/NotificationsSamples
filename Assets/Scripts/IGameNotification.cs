@@ -19,33 +19,47 @@ namespace NotificationSamples
 		/// </remarks>
 		/// <value>A unique integer identifier for this notification, or null (on some platforms) if not explicitly set.</value>
 		int? Id { get; set; }
+
 		/// <summary>
 		/// Gets or sets the notification's title.
 		/// </summary>
 		/// <value>The title message for the notification.</value>
 		string Title { get; set; }
+
 		/// <summary>
 		/// Gets or sets the body text of the notification.
 		/// </summary>
 		/// <value>The body message for the notification.</value> 
 		string Body { get; set; }
+
 		/// <summary>
 		/// Gets or sets a subtitle for the notification.
 		/// </summary>
 		/// <value>The subtitle message for the notification.</value>
 		string Subtitle { get; set; }
+
 		/// <summary>
-		/// The group to which this notification belongs.
+		/// Gets or sets group to which this notification belongs.
 		/// </summary>
 		/// <value>A platform specific string identifier for the notification's group.</value>
 		string Group { get; set; }
+
 		/// <summary>
 		/// Gets or sets the badge number for this notification. No badge number will be shown if null.
 		/// </summary>
+		/// <value>The number displayed on the app badge.</value>
 		int? BadgeNumber { get; set; }
+
 		/// <summary>
-		/// The time to deliver the notification.
+		/// Gets or sets time to deliver the notification.
 		/// </summary>
+		/// <value>The time of delivery in local time.</value>
 		DateTime? DeliveryTime { get; set; }
+
+		/// <summary>
+		/// Gets whether this notification has been scheduled.
+		/// </summary>
+		/// <value>True if the notification has been scheduled with the underlying operating system.</value>
+		bool Scheduled { get; }
 	}
 }

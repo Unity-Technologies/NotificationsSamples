@@ -38,9 +38,20 @@ namespace NotificationSamples.Android
 				throw new ArgumentNullException(nameof(gameNotification));
 			}
 
-			int notificationId = AndroidNotificationCenter.SendNotification(gameNotification.InternalNotification,
-			                                                                gameNotification.DeliveredChannel);
-			gameNotification.OnScheduled(notificationId);
+			if (gameNotification.Id.HasValue)
+			{
+				AndroidNotificationCenter.SendNotificationWithExplicitID(gameNotification.InternalNotification,
+				                                                         gameNotification.DeliveredChannel,
+				                                                         gameNotification.Id.Value);
+			}
+			else
+			{
+				int notificationId = AndroidNotificationCenter.SendNotification(gameNotification.InternalNotification,
+				                                                                gameNotification.DeliveredChannel);
+				gameNotification.Id = notificationId;
+			}
+
+			gameNotification.OnScheduled();
 		}
 
 		/// <inheritdoc />

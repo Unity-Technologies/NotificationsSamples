@@ -1,6 +1,7 @@
 #if UNITY_ANDROID
 using System;
 using Unity.Notifications.Android;
+using UnityEngine.Assertions;
 
 namespace NotificationSamples.Android
 {
@@ -10,7 +11,6 @@ namespace NotificationSamples.Android
 	public class AndroidGameNotification : IGameNotification
 	{
 		private AndroidNotification internalNotification;
-		private int id;
 
 		/// <summary>
 		/// Gets the internal notification object used by the mobile notifications system.
@@ -19,11 +19,9 @@ namespace NotificationSamples.Android
 
 		/// <inheritdoc />
 		/// <summary>
-		/// On Android, IDs are only available after the message has been sent.
+		/// On Android, if the ID isn't explicitly set, it will be generated after it has been scheduled.
 		/// </summary>
-		/// <exception cref="T:System.NotSupportedException">Throw when trying to set this value.</exception>
-		/// TODO: Update once unity API supports setting ID.
-		public int? Id { get => id; set => throw new NotSupportedException(); }
+		public int? Id { get; set; }
 
 		/// <inheritdoc />
 		public string Title { get => InternalNotification.Title; set => internalNotification.Title = value; }
@@ -47,7 +45,7 @@ namespace NotificationSamples.Android
 		/// <inheritdoc />
 		public int? BadgeNumber
 		{
-			get => internalNotification.Number != -1 ? internalNotification.Number : (int?)null; 
+			get => internalNotification.Number != -1 ? internalNotification.Number : (int?)null;
 			set => internalNotification.Number = value ?? -1;
 		}
 
@@ -63,6 +61,9 @@ namespace NotificationSamples.Android
 		/// </summary>
 		public string DeliveredChannel { get; set; }
 
+		/// <inheritdoc />
+		public bool Scheduled { get; private set; }
+
 		/// <summary>
 		/// Instantiate a new instance of <see cref="AndroidGameNotification"/>.
 		/// </summary>
@@ -77,20 +78,21 @@ namespace NotificationSamples.Android
 		/// <param name="deliveredNotification">The notification that has been delivered.</param>
 		/// <param name="deliveredId">The ID of the delivered notification.</param>
 		/// <param name="deliveredChannel">The channel the notification was delivered to.</param>
-		internal AndroidGameNotification(AndroidNotification deliveredNotification, int deliveredId, string deliveredChannel)
+		internal AndroidGameNotification(AndroidNotification deliveredNotification, int deliveredId,
+		                                 string deliveredChannel)
 		{
 			internalNotification = deliveredNotification;
-			id = deliveredId;
+			Id = deliveredId;
 			DeliveredChannel = deliveredChannel;
 		}
 
 		/// <summary>
-		/// Called when this notification gets scheduled
+		/// Set the scheduled flag.
 		/// </summary>
-		/// <param name="returnedId">The id this notification was provided</param>
-		internal void OnScheduled(int returnedId)
+		internal void OnScheduled()
 		{
-			id = returnedId;
+			Assert.IsFalse(Scheduled);
+			Scheduled = true;
 		}
 	}
 }

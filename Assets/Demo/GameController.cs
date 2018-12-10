@@ -130,7 +130,7 @@ namespace NotificationSamples.Demo
 			}
 
 			DateTime deliveryTime = DateTime.Now + TimeSpan.FromMinutes(item.Minutes);
-			console.SendNotification(item.Title, item.Description, deliveryTime, item.BadgeNumber);
+			console.SendNotification(item.Title, item.Description, deliveryTime, item.BadgeNumber, true);
 			
 			pendingItems.Add(new PendingInventoryItem
 			{

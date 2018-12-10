@@ -24,19 +24,19 @@ namespace NotificationSamples.Demo
 			notification = notificationToDisplay;
 			console = containingConsole;
 
-			if (idLabel != null)
+			if (idLabel != null && notificationToDisplay.Notification.Id.HasValue)
 			{
-				idLabel.text = notificationToDisplay.Id.ToString();
+				idLabel.text = notificationToDisplay.Notification.Id.Value.ToString();
 			}
 
 			if (titleLabel != null)
 			{
-				titleLabel.text = notificationToDisplay.Title;
+				titleLabel.text = notificationToDisplay.Notification.Title;
 			}
 			
-			if (timeLabel != null)
+			if (timeLabel != null && notificationToDisplay.Notification.DeliveryTime.HasValue)
 			{
-				timeLabel.text = notificationToDisplay.NotificationTime.ToString("yy-MM-dd HH:mm:ss");
+				timeLabel.text = notificationToDisplay.Notification.DeliveryTime.Value.ToString("yy-MM-dd HH:mm:ss");
 			}
 		}
 

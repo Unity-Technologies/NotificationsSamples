@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 #if UNITY_ANDROID
 using NotificationSamples.Android;
@@ -20,34 +21,34 @@ namespace NotificationSamples.Demo
 
 		[SerializeField]
 		protected Button sendButton;
-		
+
 		[SerializeField]
 		protected Button clearEventButton;
 
 		[SerializeField]
 		protected TMP_InputField titleField;
-		
+
 		[SerializeField]
 		protected TMP_InputField bodyField;
-		
+
 		[SerializeField]
 		protected TMP_InputField timeField;
-		
+
 		[SerializeField]
 		protected TMP_InputField badgeField;
-		
+
 		[SerializeField]
 		protected GameNotificationsManager manager;
 
 		[SerializeField]
 		protected Transform pendingNotificationsListParent;
-		
+
 		[SerializeField]
 		protected PendingNotificationItem pendingNotificationPrefab;
 
 		[SerializeField]
 		protected Transform pendingEventParent;
-		
+
 		[SerializeField]
 		protected NotificationEventItem eventPrefab;
 
@@ -57,6 +58,7 @@ namespace NotificationSamples.Demo
 			{
 				sendButton.onClick.AddListener(SendNotificationFromUi);
 			}
+
 			if (clearEventButton != null)
 			{
 				clearEventButton.onClick.AddListener(ClearEvents);
@@ -90,6 +92,7 @@ namespace NotificationSamples.Demo
 			{
 				sendButton.onClick.RemoveListener(SendNotificationFromUi);
 			}
+
 			if (clearEventButton != null)
 			{
 				clearEventButton.onClick.RemoveListener(ClearEvents);
@@ -113,13 +116,17 @@ namespace NotificationSamples.Demo
 		}
 
 		/// <summary>
-		/// Queue a notification with the given parameters
+		/// Queue a notification with the given parameters.
 		/// </summary>
 		/// <param name="title">The title for the notification.</param>
 		/// <param name="body">The body text for the notification.</param>
 		/// <param name="deliveryTime">The time to deliver the notification.</param>
 		/// <param name="badgeNumber">The optional badge number to display on the application icon.</param>
-		public void SendNotification(string title, string body, DateTime deliveryTime, int? badgeNumber = null)
+		/// <param name="reschedule">
+		/// Whether to reschedule the notification if foregrounding and the notification hasn't yet been shown.
+		/// </param>
+		public void SendNotification(string title, string body, DateTime deliveryTime, int? badgeNumber = null,
+		                             bool reschedule = false)
 		{
 			IGameNotification notification = manager.CreateNotification();
 
@@ -137,7 +144,8 @@ namespace NotificationSamples.Demo
 				notification.BadgeNumber = badgeNumber;
 			}
 
-			manager.ScheduleNotification(notification);
+			PendingNotification notificationToDisplay = manager.ScheduleNotification(notification);
+			notificationToDisplay.Reschedule = reschedule;
 			UpdatePendingNotifications();
 
 			QueueEvent($"Queued event with ID \"{notification.Id}\" at time {deliveryTime:HH:mm}");
@@ -148,16 +156,31 @@ namespace NotificationSamples.Demo
 		/// </summary>
 		public void CancelPendingNotificationItem(PendingNotification itemToCancel)
 		{
-			manager.CancelNotification(itemToCancel.Id);
+			if (!itemToCancel.Notification.Scheduled)
+			{
+				return;
+			}
+
+			manager.CancelNotification(itemToCancel.Notification.Id.Value);
 
 			UpdatePendingNotifications();
-			
-			QueueEvent($"Cancelled notification with ID \"{itemToCancel.Id}\"");
+
+			QueueEvent($"Cancelled notification with ID \"{itemToCancel.Notification.Id}\"");
+		}
+
+		private void OnApplicationFocus(bool hasFocus)
+		{
+			if (hasFocus)
+			{
+				StartCoroutine(UpdatePendingNotificationsNextFrame());
+			}
 		}
 
 		private void SendNotificationFromUi()
 		{
-			int? badgeNumber = int.TryParse(badgeField.text, out int parsedBadgeNumber) ? parsedBadgeNumber : (int?)null;
+			int? badgeNumber = int.TryParse(badgeField.text, out int parsedBadgeNumber)
+				? parsedBadgeNumber
+				: (int?)null;
 
 			DateTime deliveryTime;
 			if (float.TryParse(timeField.text, out float minutes))
@@ -168,29 +191,35 @@ namespace NotificationSamples.Demo
 			{
 				deliveryTime = DateTime.Now + TimeSpan.FromMinutes(1);
 			}
-			
+
 			SendNotification(titleField.text, bodyField.text, deliveryTime, badgeNumber);
 		}
 
-		private void OnDelivered(IGameNotification deliveredNotification)
+		private void OnDelivered(PendingNotification deliveredNotification)
 		{
 			// Schedule this to run on the next frame (can't create UI elements from a Java callback)
-			StartCoroutine(ShowDeliveryNotificationCoroutine(deliveredNotification));
+			StartCoroutine(ShowDeliveryNotificationCoroutine(deliveredNotification.Notification));
 		}
 
 		private IEnumerator ShowDeliveryNotificationCoroutine(IGameNotification deliveredNotification)
 		{
 			yield return null;
-			
+
 			QueueEvent($"Notification with ID \"{deliveredNotification.Id}\" shown in foreground.");
-			
+
+			UpdatePendingNotifications();
+		}
+
+		private IEnumerator UpdatePendingNotificationsNextFrame()
+		{
+			yield return null;
 			UpdatePendingNotifications();
 		}
 
 		private void UpdatePendingNotifications()
 		{
 			Debug.Log("Updating pending list.");
-				
+
 			// Clear all existing ones
 			foreach (object child in pendingNotificationsListParent.transform)
 			{
@@ -201,9 +230,10 @@ namespace NotificationSamples.Demo
 			}
 
 			// Recreate based on currently pending list
-			foreach (PendingNotification scheduledNotification in manager.ScheduledNotifications)
+			foreach (PendingNotification scheduledNotification in manager.PendingNotifications)
 			{
-				PendingNotificationItem newItem = Instantiate(pendingNotificationPrefab, pendingNotificationsListParent);
+				PendingNotificationItem newItem =
+					Instantiate(pendingNotificationPrefab, pendingNotificationsListParent);
 				newItem.Show(scheduledNotification, this);
 			}
 		}
@@ -211,7 +241,7 @@ namespace NotificationSamples.Demo
 		private void QueueEvent(string eventText)
 		{
 			Debug.Log($"Queueing event with text \"{eventText}\"");
-			
+
 			NotificationEventItem newItem = Instantiate(eventPrefab, pendingEventParent);
 			newItem.Show(eventText);
 		}

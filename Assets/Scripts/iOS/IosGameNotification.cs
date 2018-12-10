@@ -2,6 +2,7 @@
 using System;
 using Unity.Notifications.iOS;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace NotificationSamples.iOS
 {
@@ -64,9 +65,12 @@ namespace NotificationSamples.iOS
 		/// <inheritdoc />
 		public int? BadgeNumber
 		{
-			get => internalNotification.Badge != -1 ? internalNotification.Badge : (int?)null; 
+			get => internalNotification.Badge != -1 ? internalNotification.Badge : (int?)null;
 			set => internalNotification.Badge = value ?? -1;
 		}
+
+		/// <inheritdoc />
+		public bool Scheduled { get; private set; }
 
 		/// <inheritdoc />
 		/// <remarks>
@@ -148,6 +152,15 @@ namespace NotificationSamples.iOS
 		internal IosGameNotification(iOSNotification internalNotification)
 		{
 			this.internalNotification = internalNotification;
+		}
+
+		/// <summary>
+		/// Mark this notifications scheduled flag.
+		/// </summary>
+		internal void OnScheduled()
+		{
+			Assert.IsFalse(Scheduled);
+			Scheduled = true;
 		}
 	}
 }

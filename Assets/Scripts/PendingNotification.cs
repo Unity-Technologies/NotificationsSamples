@@ -5,42 +5,35 @@ namespace NotificationSamples
 	/// <summary>
 	/// Represents a notification that was scheduled with <see cref="GameNotificationsManager.ScheduleNotification"/>.
 	/// </summary>
-	public struct PendingNotification
+	public class PendingNotification
 	{
 		/// <summary>
-		/// The ID of the pending notification.
+		/// Whether to reschedule this event if it hasn't displayed once the app is foregrounded again.
 		/// </summary>
-		public readonly int Id;
+		/// <remarks>
+		/// <para>
+		/// Only valid if the <see cref="GameNotificationsManager"/>'s <see cref="GameNotificationsManager.Mode"/>
+		/// flag is set to <see cref="GameNotificationsManager.OperatingMode.RescheduleAfterClearing"/>.
+		/// </para>
+		/// <para>
+		/// Will not function for any notifications that are using a delivery scheduling method that isn't time
+		/// based, such as iOS location notifications.
+		/// </para>
+		/// </remarks>
+		public bool Reschedule;
+		
 		/// <summary>
-		/// The title of the pending notification.
+		/// The scheduled notification.
 		/// </summary>
-		public readonly string Title;
-		/// <summary>
-		/// The time when the notification will be shown.
-		/// </summary>
-		public readonly DateTime NotificationTime;
-
-		/// <summary>
-		/// Instantiate a new instance of <see cref="PendingNotification"/>.
-		/// </summary>
-		/// <param name="id">The ID of the pending notification.</param>
-		/// <param name="title">The title of the pending notification.</param>
-		/// <param name="notificationTime">The time when the notification is scheduled to be displayed.</param>
-		public PendingNotification(int id, string title, DateTime notificationTime)
-		{
-			Id = id;
-			Title = title;
-			NotificationTime = notificationTime;
-		}
+		public readonly IGameNotification Notification;
 
 		/// <summary>
 		/// Instantiate a new instance of <see cref="PendingNotification"/> from a <see cref="IGameNotification"/>.
 		/// </summary>
 		/// <param name="notification">The notification to create from.</param>
 		public PendingNotification(IGameNotification notification)
-			: this(notification.Id ?? throw new ArgumentNullException(nameof(notification), "Id of provided notification cannot be null."), notification.Title, notification.DeliveryTime ?? DateTime.Now)
 		{
-			
+			Notification = notification ?? throw new ArgumentNullException(nameof(notification));
 		}
 	}
 }
