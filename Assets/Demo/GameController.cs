@@ -313,7 +313,7 @@ namespace NotificationSamples.Demo
 			{
 				body = body.Substring(0, MaxNewsFeedSummaryLength);
 			}
-			console.SendNotification(title, body, deliveryTime, 1, NotificationConsole.NewsChannelId);
+			console.SendNotification(title, body, deliveryTime, 1, false, NotificationConsole.NewsChannelId);
 		}
 	}
 }

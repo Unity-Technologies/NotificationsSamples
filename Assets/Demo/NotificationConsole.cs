@@ -17,7 +17,11 @@ namespace NotificationSamples.Demo
 	/// </summary>
 	public class NotificationConsole : MonoBehaviour
 	{
+		// Default channel ID.
 		private const string ChannelId = "game_channel";
+		
+		// News channel ID.
+		public const string NewsChannelId = "news_channel";
 
 		[SerializeField]
 		protected Button sendButton;
@@ -51,6 +55,9 @@ namespace NotificationSamples.Demo
 
 		[SerializeField]
 		protected NotificationEventItem eventPrefab;
+		
+		// Update pending notifications in the next update.
+		private bool updatePendingNotifications;
 
 		private void Awake()
 		{
@@ -68,8 +75,15 @@ namespace NotificationSamples.Demo
 		private void Start()
 		{
 #if UNITY_ANDROID
-			// Initialize Android channel
-			var c = new AndroidNotificationChannel()
+			RegisterAndroidChannels();
+#endif
+		}
+		
+#if UNITY_ANDROID
+		private void RegisterAndroidChannels()
+		{
+			// Initialize Android channels
+			var c1 = new AndroidNotificationChannel()
 			{
 				Id = ChannelId,
 				Name = "Default Game Channel",
@@ -77,14 +91,24 @@ namespace NotificationSamples.Demo
 				Importance = Importance.High,
 				Description = "Generic notifications",
 			};
-			AndroidNotificationCenter.RegisterNotificationChannel(c);
+			AndroidNotificationCenter.RegisterNotificationChannel(c1);
+	
+			var c2 = new AndroidNotificationChannel()
+			{
+				Id = NewsChannelId,
+				Name = "News Channel",
+				CanShowBadge = true,
+				Importance = Importance.High,
+				Description = "News feed notifications",
+			};
+			AndroidNotificationCenter.RegisterNotificationChannel(c2);
 
 			if (manager.Platform is AndroidNotificationsPlatform androidPlatform)
 			{
 				androidPlatform.DefaultChannelId = ChannelId;
 			}
-#endif
 		}
+#endif
 
 		private void OnDestroy()
 		{
@@ -125,8 +149,10 @@ namespace NotificationSamples.Demo
 		/// <param name="reschedule">
 		/// Whether to reschedule the notification if foregrounding and the notification hasn't yet been shown.
 		/// </param>
+		/// <param name="channelId">Channel ID to use. If this is null/empty then it will use the default ID. For Android
+		/// the channel must be registered in <see cref="RegisterAndroidChannels"/>.</param>
 		public void SendNotification(string title, string body, DateTime deliveryTime, int? badgeNumber = null,
-		                             bool reschedule = false)
+		                             bool reschedule = false, string channelId = null)
 		{
 			IGameNotification notification = manager.CreateNotification();
 
@@ -137,7 +163,7 @@ namespace NotificationSamples.Demo
 
 			notification.Title = title;
 			notification.Body = body;
-			notification.Group = ChannelId;
+			notification.Group = !string.IsNullOrEmpty(channelId) ? channelId : ChannelId;
 			notification.DeliveryTime = deliveryTime;
 			if (badgeNumber != null)
 			{
@@ -146,7 +172,7 @@ namespace NotificationSamples.Demo
 
 			PendingNotification notificationToDisplay = manager.ScheduleNotification(notification);
 			notificationToDisplay.Reschedule = reschedule;
-			UpdatePendingNotifications();
+			updatePendingNotifications = true;
 
 			QueueEvent($"Queued event with ID \"{notification.Id}\" at time {deliveryTime:HH:mm}");
 		}
@@ -163,7 +189,7 @@ namespace NotificationSamples.Demo
 
 			manager.CancelNotification(itemToCancel.Notification.Id.Value);
 
-			UpdatePendingNotifications();
+			updatePendingNotifications = true;
 
 			QueueEvent($"Cancelled notification with ID \"{itemToCancel.Notification.Id}\"");
 		}
@@ -207,18 +233,28 @@ namespace NotificationSamples.Demo
 
 			QueueEvent($"Notification with ID \"{deliveredNotification.Id}\" shown in foreground.");
 
-			UpdatePendingNotifications();
+			updatePendingNotifications = true;
 		}
 
 		private IEnumerator UpdatePendingNotificationsNextFrame()
 		{
 			yield return null;
-			UpdatePendingNotifications();
+			updatePendingNotifications = true;
+		}
+		
+		private void Update()
+		{
+			if (updatePendingNotifications)
+			{
+				UpdatePendingNotifications();
+			}
 		}
 
 		private void UpdatePendingNotifications()
 		{
 			Debug.Log("Updating pending list.");
+
+			updatePendingNotifications = false;
 
 			// Clear all existing ones
 			foreach (object child in pendingNotificationsListParent.transform)
@@ -230,7 +266,8 @@ namespace NotificationSamples.Demo
 			}
 
 			// Recreate based on currently pending list
-			foreach (PendingNotification scheduledNotification in manager.PendingNotifications)
+			// Note: Using ToArray because the list can change during the loop.
+			foreach (PendingNotification scheduledNotification in manager.PendingNotifications.ToArray())
 			{
 				PendingNotificationItem newItem =
 					Instantiate(pendingNotificationPrefab, pendingNotificationsListParent);
