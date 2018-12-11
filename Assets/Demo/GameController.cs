@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NotificationSamples.Demo
 {
@@ -10,6 +11,15 @@ namespace NotificationSamples.Demo
 	/// </summary>
 	public class GameController : MonoBehaviour
 	{
+		// Space (pixels) to use in the inspector between groups of fields.
+		private const float DefaultInspectorSpace = 10.0f;
+
+		// Max length of the news feed title.
+		private const int MaxNewsFeedTitleLength = 50;
+
+		// Max length of the news feed summary.
+		private const int MaxNewsFeedSummaryLength = 150;
+		
 		// Inventory item bought, and will be received at the specified delivery time.
 		private class PendingInventoryItem
 		{
@@ -39,6 +49,9 @@ namespace NotificationSamples.Demo
 		[SerializeField, Tooltip("Reference to the notification console.")]
 		protected NotificationConsole console;
 		
+		[SerializeField, Tooltip("For reading the news feed items.")]
+		protected NewsFeedReader newsFeedReader;
+		
 		[SerializeField, Tooltip("Buy item prefab to clone.")]
 		protected BuyInventoryItem buyItemPrefab;
 		
@@ -59,10 +72,24 @@ namespace NotificationSamples.Demo
 		
 		[SerializeField, Tooltip("Label to display the current time.")]
 		protected TextMeshProUGUI timeLabel;
+
+		[SerializeField, Tooltip("Loading icon to show the news feed is being loaded.")]
+		protected GameObject newsFeedLoadingIcon;
+
+		[SerializeField, Tooltip("Turn speed of the news feed loading icon.")]
+		protected float newsFeedLoadingIconTurnSpeed = 100.0f;
+
+		[SerializeField, Tooltip("News feed button.")]
+		protected Button newsFeedButton;
 		
+		[Space(DefaultInspectorSpace)]
 		[SerializeField, Tooltip("Start the game with this currency.")]
 		protected float initialCurrency = 100.0f;
+
+		[SerializeField, Tooltip("Get the news feed (RSS) from this url.")]
+		protected string newsFeedUrl = "https://unity3d.com/news.rss";
 		
+		[Space(DefaultInspectorSpace)]
 		[SerializeField, Tooltip("Inventory items data to use in the game.")]
 		protected InventoryItemData[] itemsData;
 
@@ -75,7 +102,7 @@ namespace NotificationSamples.Demo
 		// DateTime when the application was paused.
 		private DateTime? applicationPausedTime;
 
-		// Inventory item bought, and will be received at the specified delivery time.
+		// Inventory items bought, and will be received at the specified delivery times.
 		private readonly List<PendingInventoryItem> pendingItems = new List<PendingInventoryItem>();
 
 		// Bought items displayed in the status area
@@ -83,6 +110,14 @@ namespace NotificationSamples.Demo
 		
 		// Keep track of the items to buy
 		private readonly List<BuyInventoryItem> buyItems = new List<BuyInventoryItem>();
+
+		/// <summary>
+		/// Called when the news feed button is pressed.
+		/// </summary>
+		public void OnNewsFeed()
+		{
+			CreateNewsFeedNotification();
+		}
 		
 		private void Awake()
 		{
@@ -97,6 +132,7 @@ namespace NotificationSamples.Demo
 
 			SetCurrency(initialCurrency);
 			UpdateControls();
+			ShowNewsFeedLoadingIcon(false);
 		}
 
 		private void OnApplicationPause(bool pauseStatus)
@@ -159,9 +195,11 @@ namespace NotificationSamples.Demo
 
 		private void Update()
 		{
+			float dt = Time.deltaTime;
 			UpdatePendingItems();
-			AwardCurrencyBonus(Time.deltaTime);
+			AwardCurrencyBonus(dt);
 			UpdateControls();
+			UpdateNewsFeedLoadingIcon(dt);
 		}
 
 		// Check if pending items must be received
@@ -178,6 +216,15 @@ namespace NotificationSamples.Demo
 				OnDeliveredItem(pendingItem.ItemData);
 				pendingItems.RemoveAt(i);
 			}
+		}
+
+		private void UpdateNewsFeedLoadingIcon(float dt)
+		{
+			if (newsFeedLoadingIcon == null || !newsFeedLoadingIcon.activeInHierarchy)
+			{
+				return;
+			}
+			newsFeedLoadingIcon.transform.Rotate(0.0f, 0.0f, -newsFeedLoadingIconTurnSpeed * dt);
 		}
 
 		// Called when an item was delivered.
@@ -228,6 +275,45 @@ namespace NotificationSamples.Demo
 				}
 				item.OnCurrencyChanged(changedCurrency);
 			}
+		}
+
+		// Show/hide the news feed loading icon. It also makes the news button non-interactable when the icon is visible.
+		private void ShowNewsFeedLoadingIcon(bool visible)
+		{
+			newsFeedLoadingIcon.SetActive(visible);
+			newsFeedButton.interactable = !visible;
+		}
+
+		// Create a notification from the first news feed item.
+		private void CreateNewsFeedNotification()
+		{
+			ShowNewsFeedLoadingIcon(true);
+			newsFeedReader.GetFirstItem(newsFeedUrl, OnGetFirstItem);
+		}
+
+		// Create a notification from the news feed item.
+		private void OnGetFirstItem(NewsFeedReader.NewsItem newsItem)
+		{
+			ShowNewsFeedLoadingIcon(false);
+			if (newsItem == null)
+			{
+				Debug.LogError("Could not get the news feed item.");
+				return;
+			}
+
+			float minutes = 5.0f;
+			DateTime deliveryTime = DateTime.Now + TimeSpan.FromMinutes(minutes);
+			string title = newsItem.Title;
+			string body = newsItem.Description;
+			if (!string.IsNullOrEmpty(title) && title.Length > MaxNewsFeedTitleLength)
+			{
+				title = title.Substring(0, MaxNewsFeedTitleLength);
+			}
+			if (!string.IsNullOrEmpty(body) && body.Length > MaxNewsFeedSummaryLength)
+			{
+				body = body.Substring(0, MaxNewsFeedSummaryLength);
+			}
+			console.SendNotification(title, body, deliveryTime, 1, NotificationConsole.NewsChannelId);
 		}
 	}
 }
