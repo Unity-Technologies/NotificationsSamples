@@ -129,7 +129,7 @@ namespace NotificationSamples.Demo
 				return;
 			}
 
-			DateTime deliveryTime = DateTime.Now + TimeSpan.FromMinutes(item.Minutes);
+			DateTime deliveryTime = DateTime.Now.ToLocalTime() + TimeSpan.FromMinutes(item.Minutes);
 			console.SendNotification(item.Title, item.Description, deliveryTime, item.BadgeNumber, true);
 			
 			pendingItems.Add(new PendingInventoryItem
