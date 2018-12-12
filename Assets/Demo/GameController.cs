@@ -89,6 +89,9 @@ namespace NotificationSamples.Demo
 		[SerializeField, Tooltip("Get the news feed (RSS) from this url.")]
 		protected string newsFeedUrl = "https://unity3d.com/news.rss";
 		
+		[SerializeField, Tooltip("Schedule news feed notifications this time in the future (minutes).")]
+		protected float newsNotificationTime = 5.0f;
+		
 		[Space(DefaultInspectorSpace)]
 		[SerializeField, Tooltip("Inventory items data to use in the game.")]
 		protected InventoryItemData[] itemsData;
@@ -110,14 +113,6 @@ namespace NotificationSamples.Demo
 		
 		// Keep track of the items to buy
 		private readonly List<BuyInventoryItem> buyItems = new List<BuyInventoryItem>();
-
-		/// <summary>
-		/// Called when the news feed button is pressed.
-		/// </summary>
-		public void OnNewsFeed()
-		{
-			CreateNewsFeedNotification();
-		}
 		
 		private void Awake()
 		{
@@ -149,6 +144,24 @@ namespace NotificationSamples.Demo
 				applicationPausedTime = null;
 				AwardCurrencyBonus(pausedTime);
 			}
+		}
+		
+		private void Update()
+		{
+			float dt = Time.deltaTime;
+			UpdatePendingItems();
+			AwardCurrencyBonus(dt);
+			UpdateControls();
+			UpdateNewsFeedLoadingIcon(dt);
+		}
+		
+		/// <summary>
+		/// Called when the news feed button is pressed.
+		/// </summary>
+		public void OnNewsFeed()
+		{
+			ShowNewsFeedLoadingIcon(true);
+			newsFeedReader.GetFirstItem(newsFeedUrl, OnGetFirstItem);
 		}
 
 		// Increase the currency by (currency bonus * elapsed time).
@@ -191,15 +204,6 @@ namespace NotificationSamples.Demo
 			currencyLabel.text = currencyInt.ToString("N0");
 			bonusLabel.text = $"(+{currencyBonus:f1}/s)";
 			timeLabel.text = DateTime.Now.ToString("yy-MM-dd HH:mm:ss");
-		}
-
-		private void Update()
-		{
-			float dt = Time.deltaTime;
-			UpdatePendingItems();
-			AwardCurrencyBonus(dt);
-			UpdateControls();
-			UpdateNewsFeedLoadingIcon(dt);
 		}
 
 		// Check if pending items must be received
@@ -284,13 +288,6 @@ namespace NotificationSamples.Demo
 			newsFeedButton.interactable = !visible;
 		}
 
-		// Create a notification from the first news feed item.
-		private void CreateNewsFeedNotification()
-		{
-			ShowNewsFeedLoadingIcon(true);
-			newsFeedReader.GetFirstItem(newsFeedUrl, OnGetFirstItem);
-		}
-
 		// Create a notification from the news feed item.
 		private void OnGetFirstItem(NewsFeedReader.NewsItem newsItem)
 		{
@@ -301,8 +298,7 @@ namespace NotificationSamples.Demo
 				return;
 			}
 
-			float minutes = 5.0f;
-			DateTime deliveryTime = DateTime.Now + TimeSpan.FromMinutes(minutes);
+			DateTime deliveryTime = DateTime.Now + TimeSpan.FromMinutes(newsNotificationTime);
 			string title = newsItem.Title;
 			string body = newsItem.Description;
 			if (!string.IsNullOrEmpty(title) && title.Length > MaxNewsFeedTitleLength)
