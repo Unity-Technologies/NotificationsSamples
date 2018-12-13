@@ -74,6 +74,8 @@ namespace NotificationSamples.Demo
 
 		private void Start()
 		{
+			manager.Initialize();
+			
 #if UNITY_ANDROID
 			RegisterAndroidChannels();
 #endif
@@ -182,11 +184,6 @@ namespace NotificationSamples.Demo
 		/// </summary>
 		public void CancelPendingNotificationItem(PendingNotification itemToCancel)
 		{
-			if (!itemToCancel.Notification.Scheduled)
-			{
-				return;
-			}
-
 			manager.CancelNotification(itemToCancel.Notification.Id.Value);
 
 			updatePendingNotifications = true;

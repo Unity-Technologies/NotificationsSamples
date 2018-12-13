@@ -26,18 +26,6 @@ namespace NotificationSamples
 		/// <inheritdoc />
 		public void Serialize(IList<PendingNotification> notifications)
 		{
-			// Filter out non rescheduling items
-			var notificationsToSave = new List<PendingNotification>(notifications.Count);
-			foreach (PendingNotification pendingNotification in notifications)
-			{
-				if (pendingNotification.Reschedule &&
-				    pendingNotification.Notification.Scheduled &&
-				    pendingNotification.Notification.DeliveryTime.HasValue)
-				{
-					notificationsToSave.Add(pendingNotification);
-				}
-			}
-
 			using (var file = new FileStream(filename, FileMode.Create))
 			{
 				using (var writer = new BinaryWriter(file))
@@ -46,10 +34,10 @@ namespace NotificationSamples
 					writer.Write(Version);
 
 					// Write list length
-					writer.Write(notificationsToSave.Count);
+					writer.Write(notifications.Count);
 
 					// Write each item
-					foreach (PendingNotification notificationToSave in notificationsToSave)
+					foreach (PendingNotification notificationToSave in notifications)
 					{
 						IGameNotification notification = notificationToSave.Notification;
 
