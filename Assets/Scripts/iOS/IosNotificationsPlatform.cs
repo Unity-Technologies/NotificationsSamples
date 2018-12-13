@@ -93,6 +93,19 @@ namespace NotificationSamples.iOS
 		}
 
 		/// <summary>
+		/// Clears badge count.
+		/// </summary>
+		public void OnForeground()
+		{
+			iOSNotificationCenter.ApplicationBadge = 0;
+		}
+
+		/// <summary>
+		/// Does nothing on iOS.
+		/// </summary>
+		public void OnBackground() { }
+
+		/// <summary>
 		/// Unregister delegates.
 		/// </summary>
 		public void Dispose()

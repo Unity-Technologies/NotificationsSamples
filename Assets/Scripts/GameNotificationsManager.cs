@@ -131,6 +131,8 @@ namespace NotificationSamples
 
 			if (!hasFocus)
 			{
+				Platform.OnBackground();
+
 				// Backgrounding
 				// Queue future dated notifications
 				if ((mode & OperatingMode.Queue) == OperatingMode.Queue)
@@ -387,6 +389,8 @@ namespace NotificationSamples
 		private void OnForegrounding()
 		{
 			PendingNotifications.Clear();
+			
+			Platform.OnForeground();
 
 			// Deserialize saved items
 			IList<IGameNotification> loaded = Serializer?.Deserialize(Platform);

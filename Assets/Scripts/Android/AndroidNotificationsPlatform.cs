@@ -125,6 +125,16 @@ namespace NotificationSamples.Android
 		}
 
 		/// <summary>
+		/// Does nothing on Android.
+		/// </summary>
+		public void OnForeground() { }
+
+		/// <summary>
+		/// Does nothing on Android.
+		/// </summary>
+		public void OnBackground() { }
+
+		/// <summary>
 		/// Unregister delegates.
 		/// </summary>
 		public void Dispose()

@@ -47,6 +47,16 @@ namespace NotificationSamples
 		/// Dismisses all displayed notifications.
 		/// </summary>
 		void DismissAllDisplayedNotifications();
+
+		/// <summary>
+		/// Performs any initialization or processing necessary on foregrounding the application.
+		/// </summary>
+		void OnForeground();
+		
+		/// <summary>
+		/// Performs any processing necessary on backgrounding or closing the application.
+		/// </summary>
+		void OnBackground();
 	}
 
 	/// <summary>
