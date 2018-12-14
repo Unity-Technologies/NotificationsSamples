@@ -305,8 +305,9 @@ namespace NotificationSamples
 		/// <summary>
 		/// Initialize the notifications manager.
 		/// </summary>
+		/// <param name="channels">An optional collection of channels to register, for Android</param>
 		/// <exception cref="InvalidOperationException"><see cref="Initialize"/> has already been called.</exception>
-		public void Initialize()
+		public void Initialize(params AndroidNotificationChannel[] channels)
 		{
 			if (Initialized)
 			{
@@ -317,6 +318,19 @@ namespace NotificationSamples
 
 #if UNITY_ANDROID
 			Platform = new AndroidNotificationsPlatform();
+
+			// Register the notification channels
+			var doneDefault = false;
+			foreach (AndroidNotificationChannel androidNotificationChannel in channels)
+			{
+				if (!doneDefault)
+				{
+					doneDefault = true;
+					((AndroidNotificationsPlatform)Platform).DefaultChannelId = androidNotificationChannel.Id;
+				}
+
+				AndroidNotificationCenter.RegisterNotificationChannel(androidNotificationChannel);
+			}
 #elif UNITY_IOS
 			Platform = new IosNotificationsPlatform();
 #endif

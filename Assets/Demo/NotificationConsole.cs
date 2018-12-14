@@ -2,12 +2,8 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
-#if UNITY_ANDROID
-using NotificationSamples.Android;
 using Unity.Notifications.Android;
-#endif
 
 namespace NotificationSamples.Demo
 {
@@ -74,17 +70,7 @@ namespace NotificationSamples.Demo
 
 		private void Start()
 		{
-			manager.Initialize();
-			
-#if UNITY_ANDROID
-			RegisterAndroidChannels();
-#endif
-		}
-		
-#if UNITY_ANDROID
-		private void RegisterAndroidChannels()
-		{
-			// Initialize Android channels
+			// Set up channels
 			var c1 = new AndroidNotificationChannel()
 			{
 				Id = ChannelId,
@@ -93,8 +79,6 @@ namespace NotificationSamples.Demo
 				Importance = Importance.High,
 				Description = "Generic notifications",
 			};
-			AndroidNotificationCenter.RegisterNotificationChannel(c1);
-	
 			var c2 = new AndroidNotificationChannel()
 			{
 				Id = NewsChannelId,
@@ -103,14 +87,9 @@ namespace NotificationSamples.Demo
 				Importance = Importance.High,
 				Description = "News feed notifications",
 			};
-			AndroidNotificationCenter.RegisterNotificationChannel(c2);
 
-			if (manager.Platform is AndroidNotificationsPlatform androidPlatform)
-			{
-				androidPlatform.DefaultChannelId = ChannelId;
-			}
+			manager.Initialize(c1, c2);
 		}
-#endif
 
 		private void OnDestroy()
 		{
@@ -154,7 +133,7 @@ namespace NotificationSamples.Demo
 		/// Whether to reschedule the notification if foregrounding and the notification hasn't yet been shown.
 		/// </param>
 		/// <param name="channelId">Channel ID to use. If this is null/empty then it will use the default ID. For Android
-		/// the channel must be registered in <see cref="RegisterAndroidChannels"/>.</param>
+		/// the channel must be registered in <see cref="GameNotificationsManager.Initialize"/>.</param>
 		public void SendNotification(string title, string body, DateTime deliveryTime, int? badgeNumber = null,
 		                             bool reschedule = false, string channelId = null)
 		{
