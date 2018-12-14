@@ -178,7 +178,8 @@ namespace NotificationSamples.Demo
 			targetTime = new DateTime(targetTime.Year, targetTime.Month, targetTime.Day, playReminderHour, 0, 0);
 			TimeSpan timeSpan = targetTime - currentTime;
 			DateTime deliveryTime = DateTime.Now.ToLocalTime() + timeSpan;
-			console.SendNotification("Cookie Reminder", "Remember to make more cookies!", deliveryTime);
+			console.SendNotification("Cookie Reminder", "Remember to make more cookies!", deliveryTime, 
+			                         channelId: NotificationConsole.ReminderChannelId);
 		}
 
 		// Increase the currency by (currency bonus * elapsed time).

@@ -18,6 +18,9 @@ namespace NotificationSamples.Demo
 		
 		// News channel ID.
 		public const string NewsChannelId = "news_channel";
+		
+		// Channel ID for reminder messages.
+		public const string ReminderChannelId = "reminder_channel";
 
 		[SerializeField]
 		protected Button sendButton;
@@ -87,8 +90,16 @@ namespace NotificationSamples.Demo
 				Importance = Importance.High,
 				Description = "News feed notifications",
 			};
+			var c3 = new AndroidNotificationChannel()
+			{
+				Id = ReminderChannelId,
+				Name = "Reminder Channel",
+				CanShowBadge = true,
+				Importance = Importance.High,
+				Description = "Reminder notifications",
+			};
 
-			manager.Initialize(c1, c2);
+			manager.Initialize(c1, c2, c3);
 		}
 
 		private void OnDestroy()

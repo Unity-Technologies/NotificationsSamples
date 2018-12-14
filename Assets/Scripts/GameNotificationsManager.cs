@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-#if UNITY_ANDROID
-using NotificationSamples.Android;
-#elif UNITY_IOS
+using Unity.Notifications.Android;
+#if UNITY_IOS
 using NotificationSamples.iOS;
 #endif
 using UnityEngine;
