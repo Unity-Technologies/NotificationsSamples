@@ -130,6 +130,7 @@ namespace NotificationSamples.Demo
 			if (manager != null)
 			{
 				manager.LocalNotificationDelivered += OnDelivered;
+				manager.LocalNotificationExpired += OnExpired;
 			}
 		}
 
@@ -138,6 +139,7 @@ namespace NotificationSamples.Demo
 			if (manager != null)
 			{
 				manager.LocalNotificationDelivered -= OnDelivered;
+				manager.LocalNotificationExpired -= OnExpired;
 			}
 		}
 
@@ -222,6 +224,11 @@ namespace NotificationSamples.Demo
 		{
 			// Schedule this to run on the next frame (can't create UI elements from a Java callback)
 			StartCoroutine(ShowDeliveryNotificationCoroutine(deliveredNotification.Notification));
+		}
+
+		private void OnExpired(PendingNotification obj)
+		{
+			QueueEvent($"Notification with title \"{obj.Notification.Title}\" expired and was not displayed.");
 		}
 
 		private IEnumerator ShowDeliveryNotificationCoroutine(IGameNotification deliveredNotification)

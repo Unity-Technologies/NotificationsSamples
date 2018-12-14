@@ -63,7 +63,7 @@ namespace NotificationSamples
 			QueueClearAndReschedule = Queue | ClearOnForegrounding | RescheduleAfterClearing
 		}
 
-		[SerializeField]
+		[SerializeField, Tooltip("The operating mode for the notifications manager.")]
 		private OperatingMode mode;
 
 		/// <summary>
@@ -72,13 +72,19 @@ namespace NotificationSamples
 		public event Action<PendingNotification> LocalNotificationDelivered;
 
 		/// <summary>
+		/// Event fired when a queued local notification is cancelled because the application is in the foreground
+		/// when it was meant to be displayed.
+		/// </summary>
+		/// <seealso cref="OperatingMode.Queue"/>
+		public event Action<PendingNotification> LocalNotificationExpired;
+
+		/// <summary>
 		/// Gets the implementation of the notifications for the current platform;
 		/// </summary>
 		public IGameNotificationsPlatform Platform { get; private set; }
 
 		/// <summary>
-		/// Gets a collection of notifications that are scheduled or queued. In queue mode, these may
-		/// contain notifications that are in the past (and will never be displayed).
+		/// Gets a collection of notifications that are scheduled or queued.
 		/// </summary>
 		public List<PendingNotification> PendingNotifications { get; private set; }
 
@@ -89,12 +95,9 @@ namespace NotificationSamples
 		public IPendingNotificationsSerializer Serializer { get; set; }
 
 		/// <summary>
-		/// Gets whether this manager queues events internally.
+		/// Gets the operating mode for this manager.
 		/// </summary>
-		/// <remarks>
-		/// When this is true, it will never schedule notifications immediately, only when the application goes
-		/// into the background.
-		/// </remarks>
+		/// <seealso cref="OperatingMode"/>
 		public OperatingMode Mode => mode;
 
 		/// <summary>
@@ -116,6 +119,29 @@ namespace NotificationSamples
 			if (Platform is IDisposable disposable)
 			{
 				disposable.Dispose();
+			}
+		}
+
+		/// <summary>
+		/// Check pending list for expired notifications, when in queue mode.
+		/// </summary>
+		protected virtual void Update()
+		{
+			if ((mode & OperatingMode.Queue) != OperatingMode.Queue)
+			{
+				return;
+			}
+
+			// Check each pending notification for expiry, then remove it
+			for (int i = PendingNotifications.Count - 1; i >= 0; --i)
+			{
+				PendingNotification queuedNotification = PendingNotifications[i];
+				DateTime? time = queuedNotification.Notification.DeliveryTime;
+				if (time != null && time < DateTime.Now)
+				{
+					PendingNotifications.RemoveAt(i);
+					LocalNotificationExpired?.Invoke(queuedNotification);
+				}
 			}
 		}
 
@@ -159,7 +185,7 @@ namespace NotificationSamples
 						Platform.ScheduleNotification(pendingNotification.Notification);
 					}
 				}
-				
+
 				// Calculate notifications to save
 				var notificationsToSave = new List<PendingNotification>(PendingNotifications.Count);
 				foreach (PendingNotification pendingNotification in PendingNotifications)
@@ -389,7 +415,7 @@ namespace NotificationSamples
 		private void OnForegrounding()
 		{
 			PendingNotifications.Clear();
-			
+
 			Platform.OnForeground();
 
 			// Deserialize saved items
@@ -403,7 +429,7 @@ namespace NotificationSamples
 
 				// Only reschedule in reschedule mode, and if we loaded any items
 				if (loaded == null ||
-					(mode & OperatingMode.RescheduleAfterClearing) != OperatingMode.RescheduleAfterClearing)
+				    (mode & OperatingMode.RescheduleAfterClearing) != OperatingMode.RescheduleAfterClearing)
 				{
 					return;
 				}
