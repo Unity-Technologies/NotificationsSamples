@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 #if UNITY_ANDROID
 using NotificationSamples.Android;
 #elif UNITY_IOS
@@ -35,6 +36,10 @@ namespace NotificationSamples
 			/// Queue messages that are scheduled with this manager.
 			/// No messages will be sent to the operating system until the application is backgrounded.
 			/// </para>
+			/// <para>
+			/// If badge numbers are not set, will automatically increment them. This will only happen if NO badge numbers
+			/// for pending notifications are ever set.
+			/// </para>
 			/// </summary>
 			Queue = 0x01,
 
@@ -52,6 +57,11 @@ namespace NotificationSamples
 			RescheduleAfterClearing = 0x04,
 
 			/// <summary>
+			/// Combines the behaviour of <see cref="Queue"/> and <see cref="ClearOnForegrounding"/>.
+			/// </summary>
+			QueueAndClear = Queue | ClearOnForegrounding,
+
+			/// <summary>
 			/// <para>
 			/// Combines the behaviour of <see cref="Queue"/>, <see cref="ClearOnForegrounding"/> and
 			/// <see cref="RescheduleAfterClearing"/>.
@@ -60,11 +70,16 @@ namespace NotificationSamples
 			/// Ensures that messages will never be displayed while the application is in the foreground.
 			/// </para>
 			/// </summary>
-			QueueClearAndReschedule = Queue | ClearOnForegrounding | RescheduleAfterClearing
+			QueueClearAndReschedule = Queue | ClearOnForegrounding | RescheduleAfterClearing,
 		}
 
 		[SerializeField, Tooltip("The operating mode for the notifications manager.")]
 		private OperatingMode mode;
+
+		[SerializeField, Tooltip(
+			 "Check to make the notifications manager automatically set badge numbers so that they increment.\n" +
+			 "Schedule notifications with no numbers manually set to make use of this feature.")]
+		private bool autoBadging = true;
 
 		/// <summary>
 		/// Event fired when a scheduled local notification is delivered while the app is in the foreground.
@@ -99,6 +114,11 @@ namespace NotificationSamples
 		/// </summary>
 		/// <seealso cref="OperatingMode"/>
 		public OperatingMode Mode => mode;
+
+		/// <summary>
+		/// Gets whether this manager automatically increments badge numbers.
+		/// </summary>
+		public bool AutoBadging => autoBadging;
 
 		/// <summary>
 		/// Gets whether this manager has been initialized.
@@ -163,6 +183,7 @@ namespace NotificationSamples
 				// Queue future dated notifications
 				if ((mode & OperatingMode.Queue) == OperatingMode.Queue)
 				{
+					// Filter out past events
 					for (var i = PendingNotifications.Count - 1; i >= 0; i--)
 					{
 						PendingNotification pendingNotification = PendingNotifications[i];
@@ -178,11 +199,65 @@ namespace NotificationSamples
 						    pendingNotification.Notification.DeliveryTime - DateTime.Now < MinimumNotificationTime)
 						{
 							PendingNotifications.RemoveAt(i);
+						}
+					}
+
+					// Sort notifications by delivery time, if no notifications have a badge number set
+					bool noBadgeNumbersSet =
+						PendingNotifications.All(notification => notification.Notification.BadgeNumber == null);
+
+					if (noBadgeNumbersSet && AutoBadging)
+					{
+						PendingNotifications.Sort((a, b) =>
+						{
+							if (!a.Notification.DeliveryTime.HasValue)
+							{
+								return 1;
+							}
+
+							if (!b.Notification.DeliveryTime.HasValue)
+							{
+								return -1;
+							}
+
+							return a.Notification.DeliveryTime.Value.CompareTo(b.Notification.DeliveryTime.Value);
+						});
+
+						// Set badge numbers incrementally
+						var badgeNum = 1;
+						foreach (PendingNotification pendingNotification in PendingNotifications)
+						{
+							if (pendingNotification.Notification.DeliveryTime.HasValue &&
+							    !pendingNotification.Notification.Scheduled)
+							{
+								pendingNotification.Notification.BadgeNumber = badgeNum++;
+							}
+						}
+					}
+
+					for (int i = PendingNotifications.Count - 1; i >= 0; i--)
+					{
+						PendingNotification pendingNotification = PendingNotifications[i];
+						// Ignore already scheduled ones
+						if (pendingNotification.Notification.Scheduled)
+						{
 							continue;
 						}
 
 						// Schedule it now
 						Platform.ScheduleNotification(pendingNotification.Notification);
+					}
+
+					// Clear badge numbers again (for saving)
+					if (noBadgeNumbersSet && AutoBadging)
+					{
+						foreach (PendingNotification pendingNotification in PendingNotifications)
+						{
+							if (pendingNotification.Notification.DeliveryTime.HasValue)
+							{
+								pendingNotification.Notification.BadgeNumber = null;
+							}
+						}
 					}
 				}
 
