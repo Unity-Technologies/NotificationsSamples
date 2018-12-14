@@ -92,6 +92,9 @@ namespace NotificationSamples.Demo
 		[SerializeField, Tooltip("Schedule news feed notifications this time in the future (minutes).")]
 		protected float newsNotificationTime = 5.0f;
 		
+		[SerializeField, Tooltip("Schedule a reminder to play the game at this hour (e.g. 6 am, 13 pm, etc.).")]
+		protected int playReminderHour = 6;
+		
 		[Space(DefaultInspectorSpace)]
 		[SerializeField, Tooltip("Inventory items data to use in the game.")]
 		protected InventoryItemData[] itemsData;
@@ -164,6 +167,20 @@ namespace NotificationSamples.Demo
 			newsFeedReader.GetFirstItem(newsFeedUrl, OnGetFirstItem);
 		}
 
+		/// <summary>
+		/// Called when the play reminder button is pressed.
+		/// </summary>
+		public void OnPlayReminder()
+		{
+			// Schedule a reminder to play the game. Schedule it for the next day.
+			DateTime currentTime = DateTime.Now;
+			DateTime targetTime = currentTime.AddDays(1);
+			targetTime = new DateTime(targetTime.Year, targetTime.Month, targetTime.Day, playReminderHour, 0, 0);
+			TimeSpan timeSpan = targetTime - currentTime;
+			DateTime deliveryTime = DateTime.Now.ToLocalTime() + timeSpan;
+			console.SendNotification("Cookie Reminder", "Remember to make more cookies!", deliveryTime);
+		}
+
 		// Increase the currency by (currency bonus * elapsed time).
 		private void AwardCurrencyBonus(float elapsedTime)
 		{
@@ -179,7 +196,8 @@ namespace NotificationSamples.Demo
 			}
 
 			DateTime deliveryTime = DateTime.Now.ToLocalTime() + TimeSpan.FromMinutes(item.Minutes);
-			console.SendNotification(item.Title, item.Description, deliveryTime, reschedule: true);
+			console.SendNotification(item.Title, item.Description, deliveryTime, reschedule: true, 
+			                         smallIcon: item.ItemData.IconId, largeIcon: item.ItemData.IconId);
 			
 			pendingItems.Add(new PendingInventoryItem
 			{
@@ -298,7 +316,6 @@ namespace NotificationSamples.Demo
 				return;
 			}
 
-			DateTime deliveryTime = DateTime.Now + TimeSpan.FromMinutes(newsNotificationTime);
 			string title = newsItem.Title;
 			string body = newsItem.Description;
 			if (!string.IsNullOrEmpty(title) && title.Length > MaxNewsFeedTitleLength)
@@ -309,6 +326,8 @@ namespace NotificationSamples.Demo
 			{
 				body = body.Substring(0, MaxNewsFeedSummaryLength);
 			}
+			
+			DateTime deliveryTime = DateTime.Now.ToLocalTime() + TimeSpan.FromMinutes(newsNotificationTime);
 			console.SendNotification(title, body, deliveryTime, channelId: NotificationConsole.NewsChannelId);
 		}
 	}

@@ -20,3 +20,4 @@ MonoBehaviour:
   InitialCreationTime: 0.1
   CreationTimeIncrease: 0.3
   CurrencyBonus: 2
+  IconId: icon_cupcake

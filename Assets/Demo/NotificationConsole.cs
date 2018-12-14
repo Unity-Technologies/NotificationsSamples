@@ -134,8 +134,11 @@ namespace NotificationSamples.Demo
 		/// </param>
 		/// <param name="channelId">Channel ID to use. If this is null/empty then it will use the default ID. For Android
 		/// the channel must be registered in <see cref="GameNotificationsManager.Initialize"/>.</param>
+		/// <param name="smallIcon">Notification small icon.</param>
+		/// <param name="largeIcon">Notification large icon.</param>
 		public void SendNotification(string title, string body, DateTime deliveryTime, int? badgeNumber = null,
-		                             bool reschedule = false, string channelId = null)
+		                             bool reschedule = false, string channelId = null,
+		                             string smallIcon = null, string largeIcon = null)
 		{
 			IGameNotification notification = manager.CreateNotification();
 
@@ -148,6 +151,8 @@ namespace NotificationSamples.Demo
 			notification.Body = body;
 			notification.Group = !string.IsNullOrEmpty(channelId) ? channelId : ChannelId;
 			notification.DeliveryTime = deliveryTime;
+			notification.SmallIcon = smallIcon;
+			notification.LargeIcon = largeIcon;
 			if (badgeNumber != null)
 			{
 				notification.BadgeNumber = badgeNumber;
@@ -189,11 +194,11 @@ namespace NotificationSamples.Demo
 			DateTime deliveryTime;
 			if (float.TryParse(timeField.text, out float minutes))
 			{
-				deliveryTime = DateTime.Now + TimeSpan.FromMinutes(minutes);
+				deliveryTime = DateTime.Now.ToLocalTime() + TimeSpan.FromMinutes(minutes);
 			}
 			else
 			{
-				deliveryTime = DateTime.Now + TimeSpan.FromMinutes(1);
+				deliveryTime = DateTime.Now.ToLocalTime() + TimeSpan.FromMinutes(1);
 			}
 
 			SendNotification(titleField.text, bodyField.text, deliveryTime, badgeNumber);

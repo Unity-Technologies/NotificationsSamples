@@ -21,6 +21,7 @@ MonoBehaviour:
     - UnityAPSReleaseEnvironment
     - UnityNotificationRequestAuthorizationForRemoteNotificationsOnAppLaunch
     - UnityRemoteNotificationForegroundPresentationOptions
+    - UnityAddRemoteNotificationCapability
     values:
     - True
     - -1
@@ -28,4 +29,11 @@ MonoBehaviour:
     - False
     - False
     - -1
-  TrackedResourceAssets: []
+    - False
+  TrackedResourceAssets:
+  - Id: icon_cookie
+    Type: 0
+    Asset: {fileID: 2800000, guid: eb24c38f144234b3ebbb8091d47d8f05, type: 3}
+  - Id: icon_cupcake
+    Type: 0
+    Asset: {fileID: 2800000, guid: 77e9fb8ea74be4f1a94808ee169f2209, type: 3}

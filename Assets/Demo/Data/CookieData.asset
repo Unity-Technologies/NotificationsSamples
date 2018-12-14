@@ -20,3 +20,4 @@ MonoBehaviour:
   InitialCreationTime: 0.1
   CreationTimeIncrease: 0.1
   CurrencyBonus: 1
+  IconId: icon_cookie
