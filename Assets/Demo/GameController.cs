@@ -179,7 +179,7 @@ namespace NotificationSamples.Demo
 			}
 
 			DateTime deliveryTime = DateTime.Now.ToLocalTime() + TimeSpan.FromMinutes(item.Minutes);
-			console.SendNotification(item.Title, item.Description, deliveryTime, item.BadgeNumber, true);
+			console.SendNotification(item.Title, item.Description, deliveryTime, reschedule: true);
 			
 			pendingItems.Add(new PendingInventoryItem
 			{
@@ -309,7 +309,7 @@ namespace NotificationSamples.Demo
 			{
 				body = body.Substring(0, MaxNewsFeedSummaryLength);
 			}
-			console.SendNotification(title, body, deliveryTime, 1, false, NotificationConsole.NewsChannelId);
+			console.SendNotification(title, body, deliveryTime, channelId: NotificationConsole.NewsChannelId);
 		}
 	}
 }

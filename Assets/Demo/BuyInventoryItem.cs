@@ -46,11 +46,6 @@ namespace NotificationSamples.Demo
 		public string Description { get; private set; }
 		
 		/// <summary>
-		/// Show this number on the badge.
-		/// </summary>
-		public int BadgeNumber { get; private set; }
-		
-		/// <summary>
 		/// Fire notification after this amount of minutes.
 		/// </summary>
 		public float Minutes { get; set; }
@@ -76,7 +71,6 @@ namespace NotificationSamples.Demo
 			Description = itemData.Description;
 			Cost = itemData.InitialCost;
 			icon.sprite = itemData.Icon;
-			BadgeNumber = 1;
 			bought = buyAction;
 			deliveryTime = null;
 			progressImage.fillAmount = 0.0f;
