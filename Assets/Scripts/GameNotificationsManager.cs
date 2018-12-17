@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.Notifications.Android;
 #if UNITY_ANDROID
+using Unity.Notifications.Android;
 using NotificationSamples.Android;
 #elif UNITY_IOS
 using NotificationSamples.iOS;
@@ -303,12 +303,15 @@ namespace NotificationSamples
 			}
 		}
 
+		/// InitializeNotificationChannel
+		// if AndroidNotificationChannel
+
 		/// <summary>
 		/// Initialize the notifications manager.
 		/// </summary>
 		/// <param name="channels">An optional collection of channels to register, for Android</param>
 		/// <exception cref="InvalidOperationException"><see cref="Initialize"/> has already been called.</exception>
-		public void Initialize(params AndroidNotificationChannel[] channels)
+		public void Initialize( List<string> ChannelIDs )
 		{
 			if (Initialized)
 			{
@@ -319,6 +322,42 @@ namespace NotificationSamples
 
 #if UNITY_ANDROID
 			Platform = new AndroidNotificationsPlatform();
+
+			//Channel setup is specific to android
+			List<AndroidNotificationChannel> channels = new List<AndroidNotificationChannel>();
+			// Set up channels
+			// ChannelIDs are defined at the Notification Console level
+			// first default channel
+			var c1 = new AndroidNotificationChannel()
+			{
+				Id = ChannelIDs[0],
+				Name = "Default Channel",
+				CanShowBadge = true,
+				Importance = Importance.High,
+				Description = "Generic notifications",
+			};
+			channels.Add(c1);
+			// a channel for news
+			var c2 = new AndroidNotificationChannel()
+			{
+				Id = ChannelIDs[1],
+				Name = "News Channel",
+				CanShowBadge = true,
+				Importance = Importance.High,
+				Description = "News feed notifications",
+			};
+			channels.Add(c2);
+
+			// Channel ID for reminder messages.
+			var c3 = new AndroidNotificationChannel()
+			{
+				Id = ChannelIDs[2],
+				Name = "Reminder Channel",
+				CanShowBadge = true,
+				Importance = Importance.High,
+				Description = "Reminder notifications",
+			};
+			channels.Add(c3);
 
 			// Register the notification channels
 			var doneDefault = false;

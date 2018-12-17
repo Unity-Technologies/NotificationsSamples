@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Notifications.Android;
 
 namespace NotificationSamples.Demo
 {
@@ -14,13 +14,13 @@ namespace NotificationSamples.Demo
 	public class NotificationConsole : MonoBehaviour
 	{
 		// Default channel ID.
-		private const string ChannelId = "game_channel";
-		
-		// News channel ID.
-		public const string NewsChannelId = "news_channel";
-		
-		// Channel ID for reminder messages.
-		public const string ReminderChannelId = "reminder_channel";
+		// On iOS, this represents the notification's Category Identifier, and is optional
+		// On Android, this represents the notification's channel, and is required (at least one).
+		// Channels defined as global constants so can be refered to from GameController.cs script when setting/sending notification
+		public const string ChannelId = "game_channel0";
+		public const string ReminderChannelId = "reminder_channel1";
+		public const string NewsChannelId = "news_channel2";
+
 
 		[SerializeField]
 		protected Button sendButton;
@@ -73,33 +73,14 @@ namespace NotificationSamples.Demo
 
 		private void Start()
 		{
-			// Set up channels
-			var c1 = new AndroidNotificationChannel()
-			{
-				Id = ChannelId,
-				Name = "Default Game Channel",
-				CanShowBadge = true,
-				Importance = Importance.High,
-				Description = "Generic notifications",
-			};
-			var c2 = new AndroidNotificationChannel()
-			{
-				Id = NewsChannelId,
-				Name = "News Channel",
-				CanShowBadge = true,
-				Importance = Importance.High,
-				Description = "News feed notifications",
-			};
-			var c3 = new AndroidNotificationChannel()
-			{
-				Id = ReminderChannelId,
-				Name = "Reminder Channel",
-				CanShowBadge = true,
-				Importance = Importance.High,
-				Description = "Reminder notifications",
-			};
-
-			manager.Initialize(c1, c2, c3);
+			//Pass the list of Channels to GameNotification Manager for initialization
+			//to avoid platform specific code here
+			List<string> ChannelIDs = new List<string>();
+			ChannelIDs.Add(ChannelId);
+			ChannelIDs.Add(NewsChannelId);
+			ChannelIDs.Add(ReminderChannelId);
+			
+			manager.Initialize(ChannelIDs);
 		}
 
 		private void OnDestroy()
