@@ -315,7 +315,7 @@ namespace NotificationSamples
 		/// </summary>
 		/// <param name="channels">An optional collection of channels to register, for Android</param>
 		/// <exception cref="InvalidOperationException"><see cref="Initialize"/> has already been called.</exception>
-		public void Initialize( List<string> ChannelIDs )
+		public void Initialize(params GameNotificationChannel[] channels)
 		{
 			if (Initialized)
 			{
@@ -327,53 +327,30 @@ namespace NotificationSamples
 #if UNITY_ANDROID
 			Platform = new AndroidNotificationsPlatform();
 
-			//Channel setup is specific to android
-			List<AndroidNotificationChannel> channels = new List<AndroidNotificationChannel>();
-			// Set up channels
-			// ChannelIDs are defined at the Notification Console level
-			// first default channel
-			var c1 = new AndroidNotificationChannel()
-			{
-				Id = ChannelIDs[0],
-				Name = "Default Channel",
-				CanShowBadge = true,
-				Importance = Importance.High,
-				Description = "Generic notifications",
-			};
-			channels.Add(c1);
-			// a channel for news
-			var c2 = new AndroidNotificationChannel()
-			{
-				Id = ChannelIDs[1],
-				Name = "News Channel",
-				CanShowBadge = true,
-				Importance = Importance.High,
-				Description = "News feed notifications",
-			};
-			channels.Add(c2);
-
-			// Channel ID for reminder messages.
-			var c3 = new AndroidNotificationChannel()
-			{
-				Id = ChannelIDs[2],
-				Name = "Reminder Channel",
-				CanShowBadge = true,
-				Importance = Importance.High,
-				Description = "Reminder notifications",
-			};
-			channels.Add(c3);
-
 			// Register the notification channels
 			var doneDefault = false;
-			foreach (AndroidNotificationChannel androidNotificationChannel in channels)
+			foreach (GameNotificationChannel notificationChannel in channels)
 			{
 				if (!doneDefault)
 				{
 					doneDefault = true;
-					((AndroidNotificationsPlatform)Platform).DefaultChannelId = androidNotificationChannel.Id;
+					((AndroidNotificationsPlatform)Platform).DefaultChannelId = notificationChannel.Id;
 				}
+				
+				// Wrap channel in Android object
+				var androidChannel = new AndroidNotificationChannel(notificationChannel.Id, notificationChannel.Name,
+				                                                    notificationChannel.Description,
+				                                                    (Importance)notificationChannel.Style)
+				{
+					CanBypassDnd = notificationChannel.HighPriority,
+					CanShowBadge = notificationChannel.ShowsBadge,
+					EnableLights = notificationChannel.ShowLights,
+					EnableVibration = notificationChannel.Vibrates,
+					LockScreenVisibility = (LockScreenVisibility)notificationChannel.Privacy,
+					VibrationPattern = notificationChannel.VibrationPattern
+				};
 
-				AndroidNotificationCenter.RegisterNotificationChannel(androidNotificationChannel);
+				AndroidNotificationCenter.RegisterNotificationChannel(androidChannel);
 			}
 #elif UNITY_IOS
 			Platform = new IosNotificationsPlatform();

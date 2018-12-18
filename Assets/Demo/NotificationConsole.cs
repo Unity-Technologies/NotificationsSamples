@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,14 +12,12 @@ namespace NotificationSamples.Demo
 	/// </summary>
 	public class NotificationConsole : MonoBehaviour
 	{
-		// Default channel ID.
 		// On iOS, this represents the notification's Category Identifier, and is optional
 		// On Android, this represents the notification's channel, and is required (at least one).
 		// Channels defined as global constants so can be referred to from GameController.cs script when setting/sending notification
 		public const string ChannelId = "game_channel0";
 		public const string ReminderChannelId = "reminder_channel1";
 		public const string NewsChannelId = "news_channel2";
-
 
 		[SerializeField]
 		protected Button sendButton;
@@ -73,14 +70,13 @@ namespace NotificationSamples.Demo
 
 		private void Start()
 		{
-			//Pass the list of Channels to GameNotification Manager for initialization
-			//to avoid platform specific code here
-			List<string> ChannelIDs = new List<string>();
-			ChannelIDs.Add(ChannelId);
-			ChannelIDs.Add(NewsChannelId);
-			ChannelIDs.Add(ReminderChannelId);
-			
-			manager.Initialize(ChannelIDs);
+			// Set up channels (mostly for Android)
+			// You need to have at least one of these
+			var c1 = new GameNotificationChannel(ChannelId, "Default Game Channel", "Generic notifications");
+			var c2 = new GameNotificationChannel(NewsChannelId, "News Channel", "News feed notifications");
+			var c3 = new GameNotificationChannel(ReminderChannelId, "Reminder Channel", "Reminder notifications");
+
+			manager.Initialize(c1, c2, c3);
 		}
 
 		private void OnDestroy()
