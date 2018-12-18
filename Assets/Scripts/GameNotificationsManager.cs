@@ -126,6 +126,9 @@ namespace NotificationSamples
 		/// </summary>
 		public bool Initialized { get; private set; }
 
+		// Flag set when we're in the foreground
+		private bool inForeground = true;
+
 		/// <summary>
 		/// Clean up platform object if necessary 
 		/// </summary>
@@ -141,6 +144,8 @@ namespace NotificationSamples
 			{
 				disposable.Dispose();
 			}
+
+			inForeground = false;
 		}
 
 		/// <summary>
@@ -175,6 +180,8 @@ namespace NotificationSamples
 			{
 				return;
 			}
+
+			inForeground = hasFocus;
 
 			if (!hasFocus)
 			{
@@ -521,10 +528,16 @@ namespace NotificationSamples
 		}
 
 		/// <summary>
-		/// Event fired by <see cref="Platform"/> when a notification is received while we're in the foreground.
+		/// Event fired by <see cref="Platform"/> when a notification is received.
 		/// </summary>
 		private void OnNotificationReceived(IGameNotification deliveredNotification)
 		{
+			// Ignore for background messages (this happens on Android sometimes)
+			if (!inForeground)
+			{
+				return;
+			}
+			
 			// Find in pending list
 			int deliveredIndex =
 				PendingNotifications.FindIndex(scheduledNotification =>
