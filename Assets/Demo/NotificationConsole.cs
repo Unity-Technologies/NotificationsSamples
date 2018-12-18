@@ -16,7 +16,7 @@ namespace NotificationSamples.Demo
 		// Default channel ID.
 		// On iOS, this represents the notification's Category Identifier, and is optional
 		// On Android, this represents the notification's channel, and is required (at least one).
-		// Channels defined as global constants so can be refered to from GameController.cs script when setting/sending notification
+		// Channels defined as global constants so can be referred to from GameController.cs script when setting/sending notification
 		public const string ChannelId = "game_channel0";
 		public const string ReminderChannelId = "reminder_channel1";
 		public const string NewsChannelId = "news_channel2";

@@ -303,9 +303,6 @@ namespace NotificationSamples
 			}
 		}
 
-		/// InitializeNotificationChannel
-		// if AndroidNotificationChannel
-
 		/// <summary>
 		/// Initialize the notifications manager.
 		/// </summary>
