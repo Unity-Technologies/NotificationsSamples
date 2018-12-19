@@ -133,12 +133,16 @@ namespace NotificationSamples.iOS
 			get => internalNotification.CategoryIdentifier;
 			set => internalNotification.CategoryIdentifier = value;
 		}
-		
-		/// <inheritdoc />
-		public string SmallIcon { get; set; }
-
-		/// <inheritdoc />
-		public string LargeIcon { get; set; }
+	
+		/// <summary>
+		/// Does nothing on iOS.
+		/// </summary>
+		public string SmallIcon { get => null; set { } }
+	
+		/// <summary>
+		/// Does nothing on iOS.
+		/// </summary>
+		public string LargeIcon { get => null; set { } }
 
 		/// <summary>
 		/// Instantiate a new instance of <see cref="IosGameNotification"/>.

@@ -92,7 +92,7 @@ namespace NotificationSamples.Demo
 		[SerializeField, Tooltip("Schedule news feed notifications this time in the future (minutes).")]
 		protected float newsNotificationTime = 5.0f;
 		
-		[SerializeField, Tooltip("Schedule a reminder to play the game at this hour (e.g. 6 am, 13 pm, etc.).")]
+		[SerializeField, Tooltip("Schedule a reminder to play the game at this hour (e.g. 6:00, 13:00, etc.).")]
 		protected int playReminderHour = 6;
 		
 		[Space(DefaultInspectorSpace)]
@@ -173,11 +173,10 @@ namespace NotificationSamples.Demo
 		public void OnPlayReminder()
 		{
 			// Schedule a reminder to play the game. Schedule it for the next day.
-			DateTime currentTime = DateTime.Now;
-			DateTime targetTime = currentTime.AddDays(1);
-			targetTime = new DateTime(targetTime.Year, targetTime.Month, targetTime.Day, playReminderHour, 0, 0);
-			TimeSpan timeSpan = targetTime - currentTime;
-			DateTime deliveryTime = DateTime.Now.ToLocalTime() + timeSpan;
+			DateTime deliveryTime = DateTime.Now.ToLocalTime().AddDays(1);
+			deliveryTime = new DateTime(deliveryTime.Year, deliveryTime.Month, deliveryTime.Day, playReminderHour, 0, 0, 
+			                          DateTimeKind.Local);
+			
 			console.SendNotification("Cookie Reminder", "Remember to make more cookies!", deliveryTime, 
 			                         channelId: NotificationConsole.ReminderChannelId);
 		}
