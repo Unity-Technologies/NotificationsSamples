@@ -183,131 +183,131 @@ namespace NotificationSamples
 
 			inForeground = hasFocus;
 
-			if (!hasFocus)
-			{
-				Platform.OnBackground();
-
-				// Backgrounding
-				// Queue future dated notifications
-				if ((mode & OperatingMode.Queue) == OperatingMode.Queue)
-				{
-					// Filter out past events
-					for (var i = PendingNotifications.Count - 1; i >= 0; i--)
-					{
-						PendingNotification pendingNotification = PendingNotifications[i];
-						// Ignore already scheduled ones
-						if (pendingNotification.Notification.Scheduled)
-						{
-							continue;
-						}
-
-						// If a non-scheduled notification is in the past (or not within our threshold)
-						// just remove it immediately
-						if (pendingNotification.Notification.DeliveryTime != null &&
-						    pendingNotification.Notification.DeliveryTime - DateTime.Now < MinimumNotificationTime)
-						{
-							PendingNotifications.RemoveAt(i);
-						}
-					}
-
-					// Sort notifications by delivery time, if no notifications have a badge number set
-					bool noBadgeNumbersSet =
-						PendingNotifications.All(notification => notification.Notification.BadgeNumber == null);
-
-					if (noBadgeNumbersSet && AutoBadging)
-					{
-						PendingNotifications.Sort((a, b) =>
-						{
-							if (!a.Notification.DeliveryTime.HasValue)
-							{
-								return 1;
-							}
-
-							if (!b.Notification.DeliveryTime.HasValue)
-							{
-								return -1;
-							}
-
-							return a.Notification.DeliveryTime.Value.CompareTo(b.Notification.DeliveryTime.Value);
-						});
-
-						// Set badge numbers incrementally
-						var badgeNum = 1;
-						foreach (PendingNotification pendingNotification in PendingNotifications)
-						{
-							if (pendingNotification.Notification.DeliveryTime.HasValue &&
-							    !pendingNotification.Notification.Scheduled)
-							{
-								pendingNotification.Notification.BadgeNumber = badgeNum++;
-							}
-						}
-					}
-
-					for (int i = PendingNotifications.Count - 1; i >= 0; i--)
-					{
-						PendingNotification pendingNotification = PendingNotifications[i];
-						// Ignore already scheduled ones
-						if (pendingNotification.Notification.Scheduled)
-						{
-							continue;
-						}
-
-						// Schedule it now
-						Platform.ScheduleNotification(pendingNotification.Notification);
-					}
-
-					// Clear badge numbers again (for saving)
-					if (noBadgeNumbersSet && AutoBadging)
-					{
-						foreach (PendingNotification pendingNotification in PendingNotifications)
-						{
-							if (pendingNotification.Notification.DeliveryTime.HasValue)
-							{
-								pendingNotification.Notification.BadgeNumber = null;
-							}
-						}
-					}
-				}
-
-				// Calculate notifications to save
-				var notificationsToSave = new List<PendingNotification>(PendingNotifications.Count);
-				foreach (PendingNotification pendingNotification in PendingNotifications)
-				{
-					// If we're in clear mode, add nothing unless we're in rescheduling mode
-					// Otherwise add everything
-					if ((mode & OperatingMode.ClearOnForegrounding) == OperatingMode.ClearOnForegrounding)
-					{
-						if ((mode & OperatingMode.RescheduleAfterClearing) != OperatingMode.RescheduleAfterClearing)
-						{
-							continue;
-						}
-
-						// In reschedule mode, add ones that have been scheduled, are marked for
-						// rescheduling, and that have a time
-						if (pendingNotification.Reschedule &&
-						    pendingNotification.Notification.Scheduled &&
-						    pendingNotification.Notification.DeliveryTime.HasValue)
-						{
-							notificationsToSave.Add(pendingNotification);
-						}
-					}
-					else
-					{
-						// In non-clear mode, just add all scheduled notifications
-						if (pendingNotification.Notification.Scheduled)
-						{
-							notificationsToSave.Add(pendingNotification);
-						}
-					}
-				}
-
-				// Save to disk
-				Serializer.Serialize(notificationsToSave);
-			}
-			else
+			if (hasFocus)
 			{
 				OnForegrounding();
+
+				return;
 			}
+
+			Platform.OnBackground();
+
+			// Backgrounding
+			// Queue future dated notifications
+			if ((mode & OperatingMode.Queue) == OperatingMode.Queue)
+			{
+				// Filter out past events
+				for (var i = PendingNotifications.Count - 1; i >= 0; i--)
+				{
+					PendingNotification pendingNotification = PendingNotifications[i];
+					// Ignore already scheduled ones
+					if (pendingNotification.Notification.Scheduled)
+					{
+						continue;
+					}
+
+					// If a non-scheduled notification is in the past (or not within our threshold)
+					// just remove it immediately
+					if (pendingNotification.Notification.DeliveryTime != null &&
+					    pendingNotification.Notification.DeliveryTime - DateTime.Now < MinimumNotificationTime)
+					{
+						PendingNotifications.RemoveAt(i);
+					}
+				}
+
+				// Sort notifications by delivery time, if no notifications have a badge number set
+				bool noBadgeNumbersSet =
+					PendingNotifications.All(notification => notification.Notification.BadgeNumber == null);
+
+				if (noBadgeNumbersSet && AutoBadging)
+				{
+					PendingNotifications.Sort((a, b) =>
+					{
+						if (!a.Notification.DeliveryTime.HasValue)
+						{
+							return 1;
+						}
+
+						if (!b.Notification.DeliveryTime.HasValue)
+						{
+							return -1;
+						}
+
+						return a.Notification.DeliveryTime.Value.CompareTo(b.Notification.DeliveryTime.Value);
+					});
+
+					// Set badge numbers incrementally
+					var badgeNum = 1;
+					foreach (PendingNotification pendingNotification in PendingNotifications)
+					{
+						if (pendingNotification.Notification.DeliveryTime.HasValue &&
+						    !pendingNotification.Notification.Scheduled)
+						{
+							pendingNotification.Notification.BadgeNumber = badgeNum++;
+						}
+					}
+				}
+
+				for (int i = PendingNotifications.Count - 1; i >= 0; i--)
+				{
+					PendingNotification pendingNotification = PendingNotifications[i];
+					// Ignore already scheduled ones
+					if (pendingNotification.Notification.Scheduled)
+					{
+						continue;
+					}
+
+					// Schedule it now
+					Platform.ScheduleNotification(pendingNotification.Notification);
+				}
+
+				// Clear badge numbers again (for saving)
+				if (noBadgeNumbersSet && AutoBadging)
+				{
+					foreach (PendingNotification pendingNotification in PendingNotifications)
+					{
+						if (pendingNotification.Notification.DeliveryTime.HasValue)
+						{
+							pendingNotification.Notification.BadgeNumber = null;
+						}
+					}
+				}
+			}
+
+			// Calculate notifications to save
+			var notificationsToSave = new List<PendingNotification>(PendingNotifications.Count);
+			foreach (PendingNotification pendingNotification in PendingNotifications)
+			{
+				// If we're in clear mode, add nothing unless we're in rescheduling mode
+				// Otherwise add everything
+				if ((mode & OperatingMode.ClearOnForegrounding) == OperatingMode.ClearOnForegrounding)
+				{
+					if ((mode & OperatingMode.RescheduleAfterClearing) != OperatingMode.RescheduleAfterClearing)
+					{
+						continue;
+					}
+
+					// In reschedule mode, add ones that have been scheduled, are marked for
+					// rescheduling, and that have a time
+					if (pendingNotification.Reschedule &&
+					    pendingNotification.Notification.Scheduled &&
+					    pendingNotification.Notification.DeliveryTime.HasValue)
+					{
+						notificationsToSave.Add(pendingNotification);
+					}
+				}
+				else
+				{
+					// In non-clear mode, just add all scheduled notifications
+					if (pendingNotification.Notification.Scheduled)
+					{
+						notificationsToSave.Add(pendingNotification);
+					}
+				}
+			}
+
+			// Save to disk
+			Serializer.Serialize(notificationsToSave);
 		}
 
 		/// <summary>
