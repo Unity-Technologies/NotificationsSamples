@@ -120,3 +120,7 @@ The current preferences-based setup for Android icons makes a lot of sense to us
 
 1.  If possible, being able to configure one icon as a default would be nice. If configured this way, it would override the Unity icon for all notifications where the icon isn't explicitly specified.
 1.  There's possible fragility with using the string IDs for the icons. It is possible for things to break if an ID is changed in the settings without updating code, the icons could break. If it were possible to, at runtime, reference an asset that contains the ID, this might be safer, but we don't see a clean and obvious way to address this, and it might not be a concern anyway.
+
+
+# Credits
+This Sample was developed in conjunction with 24 Bit Games.  www.24bit.games
