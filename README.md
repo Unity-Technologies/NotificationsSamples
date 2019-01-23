@@ -1,8 +1,9 @@
-# NotificationsSamples
-This sample Unity projet demonstrate how to use the Unity Mobile Notifications API in real-world use cases, including a simple cross platform wrapper to show how to use the APIs.
+# Mobile Notifications Samples & Wrapper
+This Unity projet demonstrate how to use the [Unity Mobile Notifications API](https://docs.unity3d.com/Packages/com.unity.mobile.notifications@1.0/manual/index.html) in real-world use cases, including a simple cross platform wrapper to show how to use the APIs.
 
 
-# Game Notifications Manager
+
+## Overview: the Game Notifications Manager
 
 The primary component of the wrapper is the Game Notifications Manager. It is the interface through which you can schedule cross-platform local notifications.
 
@@ -87,7 +88,7 @@ notificationToDisplay.Reschedule = true;
 
 
 
-# Platform Support notes
+## Platform Support notes
 
 Each platform supported by the Game Notifications Manager is implemented by two types. To implement new platforms, simply implement a new IGameNotificationsPlatform and IGameNotification, and instantiate it in GameNotificationsManager.Initialize.
 
@@ -102,7 +103,7 @@ Wrapper for interfacing with the platform operating system. Generally talks dire
 Platform implementation of an instance of a notification.
 
 
-# Demo Notes
+## Demo Notes
 
 
 
@@ -112,7 +113,7 @@ Platform implementation of an instance of a notification.
 *   More Options contains a 'play reminder' button which will schedule an absence notification message for a fixed time of day the following day. (6am by default, configurable in GameController)
 
 
-# Android icon feedback notes
+## Android icon feedback notes
 
 The current preferences-based setup for Android icons makes a lot of sense to us as users. We only really have two points of feedback:
 
@@ -122,5 +123,5 @@ The current preferences-based setup for Android icons makes a lot of sense to us
 1.  There's possible fragility with using the string IDs for the icons. It is possible for things to break if an ID is changed in the settings without updating code, the icons could break. If it were possible to, at runtime, reference an asset that contains the ID, this might be safer, but we don't see a clean and obvious way to address this, and it might not be a concern anyway.
 
 
-# Credits
+## Credits
 This Sample was developed in conjunction with 24 Bit Games.  www.24bit.games
