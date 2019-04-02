@@ -1,5 +1,5 @@
 # Mobile Notifications Samples & Wrapper
-This Unity projet demonstrate how to use the [Unity Mobile Notifications API](https://docs.unity3d.com/Packages/com.unity.mobile.notifications@1.0/manual/index.html) in real-world use cases, including a simple cross platform wrapper to show how to use the APIs.
+This Unity project demonstrates how to use the [Unity Mobile Notifications API](https://docs.unity3d.com/Packages/com.unity.mobile.notifications@1.0/manual/index.html) in real-world use cases, including a simple cross platform wrapper to show how to use the APIs.
 
 
 
