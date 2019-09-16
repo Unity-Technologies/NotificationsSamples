@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+
 namespace NotificationSamples
 {
 	/// <summary>
@@ -100,7 +103,7 @@ namespace NotificationSamples
 		/// <summary>
 		/// The custom vibration pattern for this channel. Set to null to use the default. 
 		/// </summary>
-		public readonly long[] VibrationPattern;
+		public readonly int[] VibrationPattern;
 
 		/// <summary>
 		/// Initialize a new instance of <see cref="GameNotificationChannel"/> with
@@ -136,7 +139,10 @@ namespace NotificationSamples
 			HighPriority = highPriority;
 			Style = style;
 			Privacy = privacy;
-			VibrationPattern = vibrationPattern;
+			if (vibrationPattern != null)
+				VibrationPattern = vibrationPattern.Select(v => (int) v).ToArray();
+			else
+				VibrationPattern = null;
 		}
 	}
 }

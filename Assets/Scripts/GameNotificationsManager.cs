@@ -125,7 +125,7 @@ namespace NotificationSamples
 		/// Gets whether this manager has been initialized.
 		/// </summary>
 		public bool Initialized { get; private set; }
-
+		
 		// Flag set when we're in the foreground
 		private bool inForeground = true;
 
@@ -336,7 +336,11 @@ namespace NotificationSamples
 					doneDefault = true;
 					((AndroidNotificationsPlatform)Platform).DefaultChannelId = notificationChannel.Id;
 				}
-				
+
+				long[] vibrationPattern = null;
+				if (notificationChannel.VibrationPattern != null)
+					vibrationPattern = notificationChannel.VibrationPattern.Select(v => (long) v).ToArray();
+
 				// Wrap channel in Android object
 				var androidChannel = new AndroidNotificationChannel(notificationChannel.Id, notificationChannel.Name,
 				                                                    notificationChannel.Description,
@@ -347,7 +351,7 @@ namespace NotificationSamples
 					EnableLights = notificationChannel.ShowLights,
 					EnableVibration = notificationChannel.Vibrates,
 					LockScreenVisibility = (LockScreenVisibility)notificationChannel.Privacy,
-					VibrationPattern = notificationChannel.VibrationPattern
+					VibrationPattern = vibrationPattern
 				};
 
 				AndroidNotificationCenter.RegisterNotificationChannel(androidChannel);
@@ -360,7 +364,7 @@ namespace NotificationSamples
 			{
 				return;
 			}
-
+			
 			PendingNotifications = new List<PendingNotification>();
 			Platform.NotificationReceived += OnNotificationReceived;
 
