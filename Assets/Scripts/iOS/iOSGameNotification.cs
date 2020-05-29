@@ -9,7 +9,7 @@ namespace NotificationSamples.iOS
     /// <summary>
     /// iOS implementation of <see cref="IGameNotification"/>.
     /// </summary>
-    public class IosGameNotification : IGameNotification
+    public class iOSGameNotification : IGameNotification
     {
         private readonly iOSNotification internalNotification;
 
@@ -148,9 +148,9 @@ namespace NotificationSamples.iOS
         public string LargeIcon { get => null; set {} }
 
         /// <summary>
-        /// Instantiate a new instance of <see cref="IosGameNotification"/>.
+        /// Instantiate a new instance of <see cref="iOSGameNotification"/>.
         /// </summary>
-        public IosGameNotification()
+        public iOSGameNotification()
         {
             internalNotification = new iOSNotification
             {
@@ -159,10 +159,10 @@ namespace NotificationSamples.iOS
         }
 
         /// <summary>
-        /// Instantiate a new instance of <see cref="IosGameNotification"/> from a delivered notification.
+        /// Instantiate a new instance of <see cref="iOSGameNotification"/> from a delivered notification.
         /// </summary>
         /// <param name="internalNotification">The delivered notification.</param>
-        internal IosGameNotification(iOSNotification internalNotification)
+        internal iOSGameNotification(iOSNotification internalNotification)
         {
             this.internalNotification = internalNotification;
         }

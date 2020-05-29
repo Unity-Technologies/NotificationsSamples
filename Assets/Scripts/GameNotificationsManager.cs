@@ -357,7 +357,7 @@ namespace NotificationSamples
                 AndroidNotificationCenter.RegisterNotificationChannel(androidChannel);
             }
 #elif UNITY_IOS
-            Platform = new IosNotificationsPlatform();
+            Platform = new iOSNotificationsPlatform();
 #endif
 
             if (Platform == null)

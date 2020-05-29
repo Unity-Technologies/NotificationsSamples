@@ -7,16 +7,16 @@ namespace NotificationSamples.iOS
     /// <summary>
     /// iOS implementation of <see cref="IGameNotificationsPlatform"/>.
     /// </summary>
-    public class IosNotificationsPlatform : IGameNotificationsPlatform<IosGameNotification>,
+    public class iOSNotificationsPlatform : IGameNotificationsPlatform<iOSGameNotification>,
         IDisposable
     {
         /// <inheritdoc />
         public event Action<IGameNotification> NotificationReceived;
 
         /// <summary>
-        /// Instantiate a new instance of <see cref="IosNotificationsPlatform"/>.
+        /// Instantiate a new instance of <see cref="iOSNotificationsPlatform"/>.
         /// </summary>
-        public IosNotificationsPlatform()
+        public iOSNotificationsPlatform()
         {
             iOSNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
         }
@@ -29,17 +29,17 @@ namespace NotificationSamples.iOS
                 throw new ArgumentNullException(nameof(gameNotification));
             }
 
-            if (!(gameNotification is IosGameNotification iosGameNotification))
+            if (!(gameNotification is iOSGameNotification notification))
             {
                 throw new InvalidOperationException(
-                    "Notification provided to ScheduleNotification isn't an IosGameNotification.");
+                    "Notification provided to ScheduleNotification isn't an iOSGameNotification.");
             }
 
-            ScheduleNotification(iosGameNotification);
+            ScheduleNotification(notification);
         }
 
         /// <inheritdoc />
-        public void ScheduleNotification(IosGameNotification notification)
+        public void ScheduleNotification(iOSGameNotification notification)
         {
             if (notification == null)
             {
@@ -63,9 +63,9 @@ namespace NotificationSamples.iOS
         /// <summary>
         /// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
         /// </summary>
-        public IosGameNotification CreateNotification()
+        public iOSGameNotification CreateNotification()
         {
-            return new IosGameNotification();
+            return new iOSGameNotification();
         }
 
         /// <inheritdoc />
@@ -118,7 +118,7 @@ namespace NotificationSamples.iOS
         {
             // Create a new AndroidGameNotification out of the delivered notification, but only
             // if the event is registered
-            NotificationReceived?.Invoke(new IosGameNotification(notification));
+            NotificationReceived?.Invoke(new iOSGameNotification(notification));
         }
     }
 }
