@@ -70,6 +70,9 @@ namespace NotificationSamples.iOS
 		}
 
 		/// <inheritdoc />
+		public string ShouldAutoCancel { get; set; }
+
+		/// <inheritdoc />
 		public bool Scheduled { get; private set; }
 
 		/// <inheritdoc />

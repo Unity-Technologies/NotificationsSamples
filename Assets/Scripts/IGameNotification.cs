@@ -50,11 +50,17 @@ namespace NotificationSamples
 		/// <value>The number displayed on the app badge.</value>
 		int? BadgeNumber { get; set; }
 
-		/// <summary>
-		/// Gets or sets time to deliver the notification.
-		/// </summary>
-		/// <value>The time of delivery in local time.</value>
-		DateTime? DeliveryTime { get; set; }
+        /// <summary>
+        /// Gets or sets if this notification will be dismissed automatically when the user taps it.
+        /// Only available on Android.
+        /// </summary>
+        bool ShouldAutoCancel { get; set; }
+
+        /// <summary>
+        /// Gets or sets time to deliver the notification.
+        /// </summary>
+        /// <value>The time of delivery in local time.</value>
+        DateTime? DeliveryTime { get; set; }
 
 		/// <summary>
 		/// Gets whether this notification has been scheduled.

@@ -49,8 +49,15 @@ namespace NotificationSamples.Android
 			set => internalNotification.Number = value ?? -1;
 		}
 
-		/// <inheritdoc />
-		public DateTime? DeliveryTime
+	    /// <inheritdoc />
+	    public bool ShouldAutoCancel
+	    {
+	        get => InternalNotification.ShouldAutoCancel;
+	        set => internalNotification.ShouldAutoCancel = value;
+	    }
+
+        /// <inheritdoc />
+        public DateTime? DeliveryTime
 		{
 			get => InternalNotification.FireTime;
 			set => internalNotification.FireTime = value ?? throw new ArgumentNullException(nameof(value));
