@@ -509,6 +509,21 @@ namespace NotificationSamples
         }
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public IGameNotification GetLastNotification()
+        {
+            if (!Initialized)
+            {
+                throw new InvalidOperationException("Must call Initialize() first.");
+            }
+
+            return Platform?.GetLastNotification();
+        }
+
+        /// <summary>
         /// Event fired by <see cref="Platform"/> when a notification is received.
         /// </summary>
         private void OnNotificationReceived(IGameNotification deliveredNotification)
