@@ -74,10 +74,8 @@ namespace NotificationSamples
             QueueClearAndReschedule = Queue | ClearOnForegrounding | RescheduleAfterClearing,
         }
 
-#pragma warning disable CS0649
         [SerializeField, Tooltip("The operating mode for the notifications manager.")]
-        private OperatingMode mode;
-#pragma warning restore CS0649
+        private OperatingMode mode = OperatingMode.QueueClearAndReschedule;
 
         [SerializeField, Tooltip(
             "Check to make the notifications manager automatically set badge numbers so that they increment.\n" +
