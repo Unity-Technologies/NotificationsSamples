@@ -241,6 +241,9 @@ namespace NotificationSamples.Demo
                 }
             }
 
+            if (manager?.PendingNotifications == null)
+                return;
+
             // Recreate based on currently pending list
             // Note: Using ToArray because the list can change during the loop.
             foreach (PendingNotification scheduledNotification in manager.PendingNotifications.ToArray())

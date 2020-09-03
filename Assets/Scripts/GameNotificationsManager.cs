@@ -75,7 +75,7 @@ namespace NotificationSamples
         }
 
         [SerializeField, Tooltip("The operating mode for the notifications manager.")]
-        private OperatingMode mode;
+        private OperatingMode mode = OperatingMode.QueueClearAndReschedule;
 
         [SerializeField, Tooltip(
             "Check to make the notifications manager automatically set badge numbers so that they increment.\n" +
@@ -153,7 +153,8 @@ namespace NotificationSamples
         /// </summary>
         protected virtual void Update()
         {
-            if ((mode & OperatingMode.Queue) != OperatingMode.Queue)
+            if (PendingNotifications == null || !PendingNotifications.Any()
+                || (mode & OperatingMode.Queue) != OperatingMode.Queue)
             {
                 return;
             }
