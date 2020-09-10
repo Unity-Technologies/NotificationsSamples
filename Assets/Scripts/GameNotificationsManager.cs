@@ -311,6 +311,21 @@ namespace NotificationSamples
             Serializer.Serialize(notificationsToSave);
         }
 
+#if UNITY_ANDROID
+        /// <summary>
+        /// On Android, when the home button is pressend at the moment the keyboard is enabled, OnApplicationFocus is
+        /// not called, but this instead.
+        /// </summary>
+        /// <remarks> See https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html</remarks>
+        protected void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus && TouchScreenKeyboard.visible)
+            {
+                OnApplicationFocus(false);
+            }
+        }
+#endif
+
         /// <summary>
         /// Initialize the notifications manager.
         /// </summary>
@@ -507,6 +522,21 @@ namespace NotificationSamples
             }
 
             Platform?.DismissAllDisplayedNotifications();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public IGameNotification GetLastNotification()
+        {
+            if (!Initialized)
+            {
+                throw new InvalidOperationException("Must call Initialize() first.");
+            }
+
+            return Platform?.GetLastNotification();
         }
 
         /// <summary>

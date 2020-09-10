@@ -35,6 +35,9 @@ namespace NotificationSamples.Android
         public string Subtitle { get => null; set {} }
 
         /// <inheritdoc />
+        public string Data { get => InternalNotification.IntentData; set => internalNotification.IntentData = value; }
+
+        /// <inheritdoc />
         /// <remarks>
         /// On Android, this represents the notification's channel, and is required. Will be configured automatically by
         /// <see cref="AndroidNotificationsPlatform"/> if <see cref="AndroidNotificationsPlatform.DefaultChannelId"/> is set

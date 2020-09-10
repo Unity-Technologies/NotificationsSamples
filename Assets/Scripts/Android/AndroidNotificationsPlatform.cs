@@ -124,6 +124,25 @@ namespace NotificationSamples.Android
             AndroidNotificationCenter.CancelAllDisplayedNotifications();
         }
 
+        /// <inheritdoc />
+        IGameNotification IGameNotificationsPlatform.GetLastNotification()
+        {
+            return GetLastNotification();
+        }
+
+        /// <inheritdoc />
+        public AndroidGameNotification GetLastNotification()
+        {
+            var data = AndroidNotificationCenter.GetLastNotificationIntent();
+
+            if (data != null)
+            {
+                return new AndroidGameNotification(data.Notification, data.Id, data.Channel);
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Does nothing on Android.
         /// </summary>
