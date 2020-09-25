@@ -43,7 +43,7 @@ public class AndroidNotificationCenterExtensions
     }
 
     // Called from managed code
-    public Boolean areNotificationsEnabled() {
+    public boolean areNotificationsEnabled() {
         // See https://stackoverflow.com/questions/11649151/android-4-1-how-to-check-notifications-are-disabled-for-the-application
         if (Build.VERSION.SDK_INT >= 24) {
             return notificationManager.areNotificationsEnabled();
@@ -72,7 +72,7 @@ public class AndroidNotificationCenterExtensions
     }
 
     // Called from managed code
-    public Boolean areNotificationsEnabled(String channelId) {
+    public boolean areNotificationsEnabled(String channelId) {
         return areNotificationsEnabled();
     }
 }

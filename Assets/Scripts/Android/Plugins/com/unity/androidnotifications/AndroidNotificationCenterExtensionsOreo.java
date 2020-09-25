@@ -14,7 +14,7 @@ public class AndroidNotificationCenterExtensionsOreo extends AndroidNotification
 
     // Called from managed code
     @Override
-    public Boolean areNotificationsEnabled(String channelId) {
+    public boolean areNotificationsEnabled(String channelId) {
         // See https://stackoverflow.com/questions/11649151/android-4-1-how-to-check-notifications-are-disabled-for-the-application
         if (super.areNotificationsEnabled()) {
             NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
