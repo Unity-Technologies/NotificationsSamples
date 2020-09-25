@@ -1,30 +1,29 @@
-﻿#if UNITY_ANDROID
+#if UNITY_ANDROID
 using UnityEngine;
 
 namespace NotificationSamples.Android
 {
     /// <summary>
-    /// 
+    /// Class for managing Android notification center extensions.
     /// </summary>
     public class AndroidNotificationCenterExtensions
     {
-        private static bool initialized;
-        private static AndroidJavaObject adroidNotificationExtensions;
+        private static bool s_Initialized;
+        private static AndroidJavaObject s_AndroidNotificationExtensions;
 
         /// <summary>
-        /// 
+        /// Initialize the Android notification center extensions.
         /// </summary>
-        /// <returns></returns>
         public static bool Initialize()
         {
-            if (initialized)
+            if (s_Initialized)
             {
                 return true;
             }
 
 #if UNITY_EDITOR
-            adroidNotificationExtensions = null;
-            initialized = false;
+            s_AndroidNotificationExtensions = null;
+            s_Initialized = false;
 #else
             AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
@@ -35,42 +34,40 @@ namespace NotificationSamples.Android
             AndroidJavaObject notificationManager = notificationManagerImpl.Call<AndroidJavaObject>("getNotificationManager");
 
             AndroidJavaClass pluginClass = new AndroidJavaClass("com.unity.androidnotifications.AndroidNotificationCenterExtensions");
-            adroidNotificationExtensions = pluginClass.CallStatic<AndroidJavaObject>("getExtensionsImpl", context, notificationManager);
+            s_AndroidNotificationExtensions = pluginClass.CallStatic<AndroidJavaObject>("getExtensionsImpl", context, notificationManager);
 
-            initialized = true;
+            s_Initialized = true;
 #endif
-            return initialized;
+            return s_Initialized;
         }
 
         /// <summary>
-        /// 
+        /// Checks whether notifications are enabled on any channel.
         /// </summary>
-        /// <returns></returns>
         public static bool AreNotificationsEnabled()
         {
-            if (!initialized)
+            if (!s_Initialized)
             {
                 // By default notifications are enabled
                 return true;
             }
 
-            return adroidNotificationExtensions.Call<bool>("areNotificationsEnabled");
+            return s_AndroidNotificationExtensions.Call<bool>("areNotificationsEnabled");
         }
 
         /// <summary>
-        /// 
+        /// Checks whether notifications are enabled on a specific channel.
         /// </summary>
-        /// <param name="channelId"></param>
-        /// <returns></returns>
+        /// <param name="channelId">The ID of the channel.</param>
         public static bool AreNotificationsEnabled(string channelId)
         {
-            if (!initialized)
+            if (!s_Initialized)
             {
                 // By default notifications are enabled
                 return true;
             }
 
-            return adroidNotificationExtensions.Call<bool>("areNotificationsEnabled", channelId);
+            return s_AndroidNotificationExtensions.Call<bool>("areNotificationsEnabled", channelId);
         }
     }
 }

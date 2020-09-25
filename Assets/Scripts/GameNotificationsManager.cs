@@ -313,8 +313,8 @@ namespace NotificationSamples
 
 #if UNITY_ANDROID
         /// <summary>
-        /// On Android, when the home button is pressend at the moment the keyboard is enabled, OnApplicationFocus is
-        /// not called, but this instead.
+        /// On Android, when the home button is pressed at the moment the keyboard is enabled,
+        /// this is called instead of OnApplicationFocus.
         /// </summary>
         /// <remarks> See https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html</remarks>
         protected void OnApplicationPause(bool pauseStatus)
@@ -324,6 +324,7 @@ namespace NotificationSamples
                 OnApplicationFocus(false);
             }
         }
+
 #endif
 
         /// <summary>

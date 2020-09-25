@@ -30,7 +30,7 @@ IGameNotification notification = manager.CreateNotification();
 
 ```
 (Note that the wrapper might return a null object on some platforms. Check for null before continuing.)
-    
+
 5.  Fill in the important fields
 
 
@@ -93,7 +93,7 @@ notificationToDisplay.Reschedule = true;
 Each platform supported by the Game Notifications Manager is implemented by two types. To implement new platforms, simply implement a new IGameNotificationsPlatform and IGameNotification, and instantiate it in GameNotificationsManager.Initialize.
 
 
-### IGameNotificationsPlatform 
+### IGameNotificationsPlatform
 
 Wrapper for interfacing with the platform operating system. Generally talks directly to AndroidNotificationCenter and iOSNotificationCenter. Also responsible for creating IGameNotifications.
 

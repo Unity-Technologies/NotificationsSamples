@@ -52,7 +52,7 @@ namespace NotificationSamples
         /// Use this to retrieve the last local or remote notification received by the app.
         /// </summary>
         /// <remarks>
-        /// On Android the last notification is not cleared until the application is explicitely quit.
+        /// On Android the last notification is not cleared until the application is explicitly quit.
         /// </remarks>
         /// <returns>
         /// Returns the last local or remote notification used to open the app or clicked on by the user. If no
@@ -97,7 +97,7 @@ namespace NotificationSamples
         /// received by the app.
         /// </summary>
         /// <remarks>
-        /// On Android the last notification is not cleared until the application is explicitely quit.
+        /// On Android the last notification is not cleared until the application is explicitly quit.
         /// </remarks>
         /// <returns>
         /// Returns new platform-appropriate notification object for the last local or remote notification used to open
