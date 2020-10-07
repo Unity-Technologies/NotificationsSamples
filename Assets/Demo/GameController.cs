@@ -49,6 +49,9 @@ namespace NotificationSamples.Demo
         [SerializeField, Tooltip("Reference to the notification console.")]
         protected NotificationConsole console;
 
+        [SerializeField, Tooltip("Reference to the notification manager.")]
+        protected GameNotificationsManager notificationsManager;
+
         [SerializeField, Tooltip("For reading the news feed items.")]
         protected NewsFeedReader newsFeedReader;
 
@@ -72,6 +75,9 @@ namespace NotificationSamples.Demo
 
         [SerializeField, Tooltip("Label to display the current time.")]
         protected TextMeshProUGUI timeLabel;
+
+        [SerializeField, Tooltip("Label to display log messages.")]
+        protected TextMeshProUGUI logLabel;
 
         [SerializeField, Tooltip("Loading icon to show the news feed is being loaded.")]
         protected GameObject newsFeedLoadingIcon;
@@ -172,6 +178,7 @@ namespace NotificationSamples.Demo
         /// </summary>
         public void OnPlayReminder()
         {
+            console.SendMessage("hello");
             // Schedule a reminder to play the game. Schedule it for the next day.
             DateTime deliveryTime = DateTime.Now.ToLocalTime().AddDays(1);
             deliveryTime = new DateTime(deliveryTime.Year, deliveryTime.Month, deliveryTime.Day, playReminderHour, 0, 0,
@@ -179,6 +186,11 @@ namespace NotificationSamples.Demo
 
             console.SendNotification("Cookie Reminder", "Remember to make more cookies!", deliveryTime,
                 channelId: NotificationConsole.ReminderChannelId);
+        }
+
+        public void DisplayLastNotification()
+        {
+            logLabel.text = "Notification info will be displayed here.";
         }
 
         // Increase the currency by (currency bonus * elapsed time).
@@ -242,7 +254,7 @@ namespace NotificationSamples.Demo
 
         private void UpdateNewsFeedLoadingIcon(float dt)
         {
-            if (newsFeedLoadingIcon == null || !newsFeedLoadingIcon.activeInHierarchy)
+            if (!(newsFeedLoadingIcon != null) || !newsFeedLoadingIcon.activeInHierarchy)
             {
                 return;
             }
