@@ -190,7 +190,16 @@ namespace NotificationSamples.Demo
 
         public void DisplayLastNotification()
         {
-            logLabel.text = "Notification info will be displayed here.";
+            var lastNotification = notificationsManager.GetLastNotification();
+            if (lastNotification == null)
+            {
+                logLabel.text = "No notification has been opened yet";
+                return;
+            }
+
+            logLabel.text = $"id: \"{lastNotification.Id}\"{Environment.NewLine}" +
+                            $"title: \"{lastNotification.Title}\"{Environment.NewLine}" +
+                            $"body: \"{lastNotification.Body}\"{Environment.NewLine}";
         }
 
         // Increase the currency by (currency bonus * elapsed time).

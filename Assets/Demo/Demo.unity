@@ -1047,7 +1047,16 @@ PrefabInstance:
     - target: {fileID: 4364226519050198754, guid: a4695b76ad26d4e42820676a2317449a,
         type: 3}
       propertyPath: m_text
-      value: 
+      value: 'aergaeger
+
+        aergeqrgae
+
+        aergaergeaga'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4364226519050198754, guid: a4695b76ad26d4e42820676a2317449a,
+        type: 3}
+      propertyPath: m_margin.x
+      value: 10.795233
       objectReference: {fileID: 0}
     - target: {fileID: 4467826770650692711, guid: a4695b76ad26d4e42820676a2317449a,
         type: 3}
@@ -1979,6 +1988,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_isInputParsingRequired
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6876063512464523268, guid: f5e34600c3eff420bb8873c7e9fe74b7,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2976877414878312109}
+    - target: {fileID: 6876063512464523268, guid: f5e34600c3eff420bb8873c7e9fe74b7,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DisplayLastNotification
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5e34600c3eff420bb8873c7e9fe74b7, type: 3}
