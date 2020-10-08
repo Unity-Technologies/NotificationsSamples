@@ -178,7 +178,6 @@ namespace NotificationSamples.Demo
         /// </summary>
         public void OnPlayReminder()
         {
-            console.SendMessage("hello");
             // Schedule a reminder to play the game. Schedule it for the next day.
             DateTime deliveryTime = DateTime.Now.ToLocalTime().AddDays(1);
             deliveryTime = new DateTime(deliveryTime.Year, deliveryTime.Month, deliveryTime.Day, playReminderHour, 0, 0,
@@ -263,7 +262,7 @@ namespace NotificationSamples.Demo
 
         private void UpdateNewsFeedLoadingIcon(float dt)
         {
-            if (!(newsFeedLoadingIcon != null) || !newsFeedLoadingIcon.activeInHierarchy)
+            if (newsFeedLoadingIcon == null || !newsFeedLoadingIcon.activeInHierarchy)
             {
                 return;
             }
