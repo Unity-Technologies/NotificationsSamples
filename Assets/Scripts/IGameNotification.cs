@@ -39,6 +39,11 @@ namespace NotificationSamples
         string Subtitle { get; set; }
 
         /// <summary>
+        /// Gets or sets optional arbitrary data for the notification.
+        /// </summary>
+        string Data { get; set; }
+
+        /// <summary>
         /// Gets or sets group to which this notification belongs.
         /// </summary>
         /// <value>A platform specific string identifier for the notification's group.</value>

@@ -56,6 +56,9 @@ namespace NotificationSamples.iOS
         public string Subtitle { get => internalNotification.Subtitle; set => internalNotification.Subtitle = value; }
 
         /// <inheritdoc />
+        public string Data { get => internalNotification.Data; set => internalNotification.Data = value; }
+
+        /// <inheritdoc />
         /// <remarks>
         /// On iOS, this represents the notification's Category Identifier.
         /// </remarks>

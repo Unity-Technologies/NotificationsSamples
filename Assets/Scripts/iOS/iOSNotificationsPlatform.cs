@@ -92,6 +92,25 @@ namespace NotificationSamples.iOS
             iOSNotificationCenter.RemoveAllDeliveredNotifications();
         }
 
+        /// <inheritdoc />
+        IGameNotification IGameNotificationsPlatform.GetLastNotification()
+        {
+            return GetLastNotification();
+        }
+
+        /// <inheritdoc />
+        public iOSGameNotification GetLastNotification()
+        {
+            var notification = iOSNotificationCenter.GetLastRespondedNotification();
+
+            if (notification != null)
+            {
+                return new iOSGameNotification(notification);
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Clears badge count.
         /// </summary>

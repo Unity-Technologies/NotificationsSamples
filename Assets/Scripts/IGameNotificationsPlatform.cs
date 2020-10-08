@@ -49,6 +49,18 @@ namespace NotificationSamples
         void DismissAllDisplayedNotifications();
 
         /// <summary>
+        /// Use this to retrieve the last local or remote notification received by the app.
+        /// </summary>
+        /// <remarks>
+        /// On Android the last notification is not cleared until the application is explicitly quit.
+        /// </remarks>
+        /// <returns>
+        /// Returns the last local or remote notification used to open the app or clicked on by the user. If no
+        /// notification is available it returns null.
+        /// </returns>
+        IGameNotification GetLastNotification();
+
+        /// <summary>
         /// Performs any initialization or processing necessary on foregrounding the application.
         /// </summary>
         void OnForeground();
@@ -79,5 +91,18 @@ namespace NotificationSamples
         /// <param name="notification">The notification to deliver.</param>
         /// <exception cref="ArgumentNullException"><paramref name="notification"/> is null.</exception>
         void ScheduleNotification(TNotificationType notification);
+
+        /// <summary>
+        /// Use this to retrieve the last local or remote notification of <typeparamref name="TNotificationType"/>
+        /// received by the app.
+        /// </summary>
+        /// <remarks>
+        /// On Android the last notification is not cleared until the application is explicitly quit.
+        /// </remarks>
+        /// <returns>
+        /// Returns new platform-appropriate notification object for the last local or remote notification used to open
+        /// the app or clicked on by the user. If no notification is available it returns null.
+        /// </returns>
+        new TNotificationType GetLastNotification();
     }
 }

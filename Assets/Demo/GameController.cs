@@ -49,6 +49,9 @@ namespace NotificationSamples.Demo
         [SerializeField, Tooltip("Reference to the notification console.")]
         protected NotificationConsole console;
 
+        [SerializeField, Tooltip("Reference to the notification manager.")]
+        protected GameNotificationsManager notificationsManager;
+
         [SerializeField, Tooltip("For reading the news feed items.")]
         protected NewsFeedReader newsFeedReader;
 
@@ -72,6 +75,9 @@ namespace NotificationSamples.Demo
 
         [SerializeField, Tooltip("Label to display the current time.")]
         protected TextMeshProUGUI timeLabel;
+
+        [SerializeField, Tooltip("Label to display log messages.")]
+        protected TextMeshProUGUI logLabel;
 
         [SerializeField, Tooltip("Loading icon to show the news feed is being loaded.")]
         protected GameObject newsFeedLoadingIcon;
@@ -179,6 +185,20 @@ namespace NotificationSamples.Demo
 
             console.SendNotification("Cookie Reminder", "Remember to make more cookies!", deliveryTime,
                 channelId: NotificationConsole.ReminderChannelId);
+        }
+
+        public void DisplayLastNotification()
+        {
+            var lastNotification = notificationsManager.GetLastNotification();
+            if (lastNotification == null)
+            {
+                logLabel.text = "No notification has been opened yet";
+                return;
+            }
+
+            logLabel.text = $"id: \"{lastNotification.Id}\"{Environment.NewLine}" +
+                            $"title: \"{lastNotification.Title}\"{Environment.NewLine}" +
+                            $"body: \"{lastNotification.Body}\"{Environment.NewLine}";
         }
 
         // Increase the currency by (currency bonus * elapsed time).
