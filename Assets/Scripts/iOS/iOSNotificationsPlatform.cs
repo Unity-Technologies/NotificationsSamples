@@ -1,6 +1,8 @@
 #if UNITY_IOS
 using System;
 using Unity.Notifications.iOS;
+using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace NotificationSamples.iOS
 {
@@ -10,6 +12,17 @@ namespace NotificationSamples.iOS
     public class iOSNotificationsPlatform : IGameNotificationsPlatform<iOSGameNotification>,
         IDisposable
     {
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad), Preserve]
+        static void GameNotificationsPlatformFactoryMethod()
+        {
+            GameNotificationsPlatformFactory.RegisterFactoryMethod(typeof(iOSNotificationsPlatform), Create);
+        }
+
+        static IGameNotificationsPlatform Create(params GameNotificationChannel[] channels)
+        {
+            return new iOSNotificationsPlatform();
+        }
+
         /// <inheritdoc />
         public event Action<IGameNotification> NotificationReceived;
 

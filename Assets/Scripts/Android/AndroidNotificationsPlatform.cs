@@ -1,6 +1,9 @@
 #if UNITY_ANDROID
 using System;
+using System.Linq;
 using Unity.Notifications.Android;
+using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace NotificationSamples.Android
 {
@@ -10,6 +13,49 @@ namespace NotificationSamples.Android
     public class AndroidNotificationsPlatform : IGameNotificationsPlatform<AndroidGameNotification>,
         IDisposable
     {
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad), Preserve]
+        static void GameNotificationsPlatformFactoryMethod()
+        {
+            GameNotificationsPlatformFactory.RegisterFactoryMethod(typeof(AndroidNotificationsPlatform), Create);
+        }
+
+        static IGameNotificationsPlatform Create(params GameNotificationChannel[] channels)
+        {
+            var platform = new AndroidNotificationsPlatform();
+
+            // Register the notification channels
+            var doneDefault = false;
+            foreach (GameNotificationChannel notificationChannel in channels)
+            {
+                if (!doneDefault)
+                {
+                    doneDefault = true;
+                    platform.DefaultChannelId = notificationChannel.Id;
+                }
+
+                long[] vibrationPattern = null;
+                if (notificationChannel.VibrationPattern != null)
+                    vibrationPattern = notificationChannel.VibrationPattern.Select(v => (long)v).ToArray();
+
+                // Wrap channel in Android object
+                var androidChannel = new AndroidNotificationChannel(notificationChannel.Id, notificationChannel.Name,
+                    notificationChannel.Description,
+                    (Importance)notificationChannel.Style)
+                {
+                    CanBypassDnd = notificationChannel.HighPriority,
+                    CanShowBadge = notificationChannel.ShowsBadge,
+                    EnableLights = notificationChannel.ShowLights,
+                    EnableVibration = notificationChannel.Vibrates,
+                    LockScreenVisibility = (LockScreenVisibility)notificationChannel.Privacy,
+                    VibrationPattern = vibrationPattern
+                };
+
+                AndroidNotificationCenter.RegisterNotificationChannel(androidChannel);
+            }
+
+            return platform;
+        }
+        
         /// <inheritdoc />
         public event Action<IGameNotification> NotificationReceived;
 

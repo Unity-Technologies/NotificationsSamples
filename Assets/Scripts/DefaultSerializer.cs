@@ -60,6 +60,9 @@ namespace NotificationSamples
                         // Group
                         writer.Write(notification.Group ?? "");
 
+                        // Data
+                        writer.Write(notification.Data ?? "");
+
                         // Badge
                         writer.Write(notification.BadgeNumber.HasValue);
                         if (notification.BadgeNumber.HasValue)
@@ -116,6 +119,9 @@ namespace NotificationSamples
 
                         // Group
                         notification.Group = reader.ReadString();
+
+                        // Data
+                        notification.Data = reader.ReadString();
 
                         // Badge
                         hasValue = reader.ReadBoolean();

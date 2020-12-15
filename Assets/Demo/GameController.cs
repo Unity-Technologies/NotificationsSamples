@@ -187,10 +187,7 @@ namespace NotificationSamples.Demo
                 channelId: NotificationConsole.ReminderChannelId);
         }
 
-        /// <summary>
-        /// Called when the display last notification button is pressed.
-        /// </summary>
-        public void DisplayLastNotification()
+        public void OnDisplayLastNotification()
         {
             var lastNotification = notificationsManager.GetLastNotification();
             if (lastNotification == null)

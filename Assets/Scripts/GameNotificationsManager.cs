@@ -2,12 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-#if UNITY_ANDROID
-using Unity.Notifications.Android;
-using NotificationSamples.Android;
-#elif UNITY_IOS
-using NotificationSamples.iOS;
-#endif
 using UnityEngine;
 
 namespace NotificationSamples
@@ -324,42 +318,8 @@ namespace NotificationSamples
             }
 
             Initialized = true;
-
-#if UNITY_ANDROID
-            Platform = new AndroidNotificationsPlatform();
-
-            // Register the notification channels
-            var doneDefault = false;
-            foreach (GameNotificationChannel notificationChannel in channels)
-            {
-                if (!doneDefault)
-                {
-                    doneDefault = true;
-                    ((AndroidNotificationsPlatform)Platform).DefaultChannelId = notificationChannel.Id;
-                }
-
-                long[] vibrationPattern = null;
-                if (notificationChannel.VibrationPattern != null)
-                    vibrationPattern = notificationChannel.VibrationPattern.Select(v => (long)v).ToArray();
-
-                // Wrap channel in Android object
-                var androidChannel = new AndroidNotificationChannel(notificationChannel.Id, notificationChannel.Name,
-                    notificationChannel.Description,
-                    (Importance)notificationChannel.Style)
-                {
-                    CanBypassDnd = notificationChannel.HighPriority,
-                    CanShowBadge = notificationChannel.ShowsBadge,
-                    EnableLights = notificationChannel.ShowLights,
-                    EnableVibration = notificationChannel.Vibrates,
-                    LockScreenVisibility = (LockScreenVisibility)notificationChannel.Privacy,
-                    VibrationPattern = vibrationPattern
-                };
-
-                AndroidNotificationCenter.RegisterNotificationChannel(androidChannel);
-            }
-#elif UNITY_IOS
-            Platform = new iOSNotificationsPlatform();
-#endif
+            
+            Platform = GameNotificationsPlatformFactory.Create(channels);
 
             if (Platform == null)
             {
@@ -510,9 +470,15 @@ namespace NotificationSamples
         }
 
         /// <summary>
-        ///
+        /// Retrieves the last local or remote notification received by the app.
         /// </summary>
-        /// <returns></returns>
+        /// <remarks>
+        /// On Android the last notification is not cleared until the application is explicitly quit.
+        /// </remarks>
+        /// <returns>
+        /// Returns the last local or remote notification used to open the app or clicked on by the user. If no
+        /// notification is available it returns null.
+        /// </returns>
         /// <exception cref="InvalidOperationException"></exception>
         public IGameNotification GetLastNotification()
         {
