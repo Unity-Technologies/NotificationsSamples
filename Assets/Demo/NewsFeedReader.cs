@@ -36,7 +36,9 @@ namespace NotificationSamples.Demo
             UnityWebRequest www = UnityWebRequest.Get(url);
             yield return www.SendWebRequest();
 
+#pragma warning disable 0618
             if (www.isNetworkError || www.isHttpError)
+#pragma warning restore 0618
             {
                 Debug.LogErrorFormat("Failed to get the feed from the url. ERROR: {0}", www.error);
                 doneAction?.Invoke(null);
