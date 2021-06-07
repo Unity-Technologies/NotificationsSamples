@@ -10,7 +10,7 @@ namespace NotificationSamples
     /// </summary>
     public class DefaultSerializer : IPendingNotificationsSerializer
     {
-        private const byte Version = 0;
+        private const byte Version = 1;
 
         private readonly string filename;
 
@@ -60,6 +60,9 @@ namespace NotificationSamples
                         // Group
                         writer.Write(notification.Group ?? "");
 
+                        // Data
+                        writer.Write(notification.Data ?? "");
+
                         // Badge
                         writer.Write(notification.BadgeNumber.HasValue);
                         if (notification.BadgeNumber.HasValue)
@@ -87,7 +90,7 @@ namespace NotificationSamples
                 using (var reader = new BinaryReader(file))
                 {
                     // Version
-                    reader.ReadByte();
+                    var version = reader.ReadByte();
 
                     // Length
                     int numElements = reader.ReadInt32();
@@ -116,6 +119,10 @@ namespace NotificationSamples
 
                         // Group
                         notification.Group = reader.ReadString();
+
+                        // Data, introoduced in version 1
+                        if (version == 0)
+                            notification.Data = reader.ReadString();
 
                         // Badge
                         hasValue = reader.ReadBoolean();
