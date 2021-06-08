@@ -121,7 +121,7 @@ namespace NotificationSamples
                         notification.Group = reader.ReadString();
 
                         // Data, introoduced in version 1
-                        if (version == 0)
+                        if (version > 0)
                             notification.Data = reader.ReadString();
 
                         // Badge
