@@ -77,6 +77,7 @@ namespace NotificationSamples
                             writer.Write(notification.DeliveryTime.Value.Ticks);
                         }
 
+                        writer.Flush();
                     }
                 }
             }
