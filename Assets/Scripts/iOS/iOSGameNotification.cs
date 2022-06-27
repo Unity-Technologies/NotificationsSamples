@@ -105,10 +105,10 @@ namespace NotificationSamples.iOS
                     calendarTrigger.Hour ?? now.Hour,
                     calendarTrigger.Minute ?? now.Minute,
                     calendarTrigger.Second ?? now.Second,
-                    DateTimeKind.Local
+                    calendarTrigger.UtcTime ? DateTimeKind.Utc : DateTimeKind.Local
                     );
 
-                return result;
+                return result.ToLocalTime();
             }
             set
             {
