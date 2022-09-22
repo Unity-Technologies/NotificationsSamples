@@ -68,7 +68,7 @@ namespace NotificationSamples.Demo
             }
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
             // Set up channels (mostly for Android)
             // You need to have at least one of these
@@ -76,7 +76,7 @@ namespace NotificationSamples.Demo
             var c2 = new GameNotificationChannel(NewsChannelId, "News Channel", "News feed notifications");
             var c3 = new GameNotificationChannel(ReminderChannelId, "Reminder Channel", "Reminder notifications");
 
-            manager.Initialize(c1, c2, c3);
+            return manager.Initialize(c1, c2, c3);
         }
 
         private void OnDestroy()
