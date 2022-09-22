@@ -1,5 +1,6 @@
 #if UNITY_ANDROID
 using System;
+using System.Collections;
 using Unity.Notifications.Android;
 
 namespace NotificationSamples.Android
@@ -25,6 +26,13 @@ namespace NotificationSamples.Android
         public AndroidNotificationsPlatform()
         {
             AndroidNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
+        }
+
+        public IEnumerator RequestNotificationPermission()
+        {
+            var request = new PermissionRequest();
+            while (request.Status == PermissionStatus.RequestPending)
+                yield return null;
         }
 
         /// <inheritdoc />
