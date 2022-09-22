@@ -1,5 +1,6 @@
 #if UNITY_IOS
 using System;
+using System.Collections;
 using Unity.Notifications.iOS;
 
 namespace NotificationSamples.iOS
@@ -19,6 +20,15 @@ namespace NotificationSamples.iOS
         public iOSNotificationsPlatform()
         {
             iOSNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
+        }
+
+        public IEnumerator RequestNotificationPermission()
+        {
+            using (var request = new AuthorizationRequest(AuthorizationOption.Badge | AuthorizationOption.Sound | AuthorizationOption.Alert, false))
+            {
+                while (!request.IsFinished)
+                    yield return null;
+            }
         }
 
         /// <inheritdoc />
