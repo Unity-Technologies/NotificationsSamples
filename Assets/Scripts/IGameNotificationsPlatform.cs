@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace NotificationSamples
 {
@@ -11,6 +12,8 @@ namespace NotificationSamples
         /// Fired when a notification is received.
         /// </summary>
         event Action<IGameNotification> NotificationReceived;
+
+        IEnumerator RequestNotificationPermission();
 
         /// <summary>
         /// Create a new instance of a <see cref="IGameNotification"/> for this platform.
