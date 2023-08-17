@@ -133,8 +133,7 @@ namespace NotificationSamples
                             notification.BadgeNumber = reader.ReadInt32();
 
                             // Time
-                            notification.DeliveryTime = new DateTime(reader.ReadInt64(), DateTimeKind.Local);
-                            var deliveryTime = notification.DeliveryTime;
+                            var deliveryTime = new DateTime(reader.ReadInt64(), DateTimeKind.Local);
 
                             result.Add(new PendingNotification(notification, deliveryTime));
                         }

@@ -137,7 +137,6 @@ namespace NotificationSamples.Demo
             notification.Title = title;
             notification.Body = body;
             notification.Group = !string.IsNullOrEmpty(channelId) ? channelId : ChannelId;
-            notification.DeliveryTime = deliveryTime;
             if (badgeNumber != null)
             {
                 notification.BadgeNumber = badgeNumber.Value;

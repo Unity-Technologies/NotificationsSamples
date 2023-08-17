@@ -73,14 +73,13 @@ namespace NotificationSamples.Android
                 throw new ArgumentNullException(nameof(gameNotification));
             }
 
-            gameNotification.DeliveryTime = deliveryTime;
-
             if (!(gameNotification is AndroidGameNotification androidNotification))
             {
                 throw new InvalidOperationException(
                     "Notification provided to ScheduleNotification isn't an AndroidGameNotification.");
             }
 
+            androidNotification.DeliveryTime = deliveryTime;
             ScheduleNotification(androidNotification);
         }
 

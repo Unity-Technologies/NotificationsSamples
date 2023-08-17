@@ -39,14 +39,13 @@ namespace NotificationSamples.iOS
                 throw new ArgumentNullException(nameof(gameNotification));
             }
 
-            gameNotification.DeliveryTime = deliveryTime;
-
             if (!(gameNotification is iOSGameNotification notification))
             {
                 throw new InvalidOperationException(
                     "Notification provided to ScheduleNotification isn't an iOSGameNotification.");
             }
 
+            notification.DeliveryTime = deliveryTime;
             ScheduleNotification(notification);
         }
 
