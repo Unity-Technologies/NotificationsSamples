@@ -48,10 +48,10 @@ namespace NotificationSamples.Android
         }
 
         /// <inheritdoc />
-        public DateTime? DeliveryTime
+        public DateTime DeliveryTime
         {
             get => InternalNotification.FireTime;
-            set => internalNotification.FireTime = value ?? throw new ArgumentNullException(nameof(value));
+            set => internalNotification.FireTime = value;
         }
 
         /// <summary>

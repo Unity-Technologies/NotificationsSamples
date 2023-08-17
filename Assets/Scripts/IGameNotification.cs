@@ -53,7 +53,7 @@ namespace NotificationSamples
         /// Gets or sets time to deliver the notification.
         /// </summary>
         /// <value>The time of delivery in local time.</value>
-        DateTime? DeliveryTime { get; set; }
+        DateTime DeliveryTime { get; set; }
 
         /// <summary>
         /// Gets whether this notification has been scheduled.

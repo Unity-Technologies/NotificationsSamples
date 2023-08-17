@@ -225,25 +225,14 @@ namespace NotificationSamples
                 {
                     PendingNotifications.Sort((a, b) =>
                     {
-                        if (!a.Notification.DeliveryTime.HasValue)
-                        {
-                            return 1;
-                        }
-
-                        if (!b.Notification.DeliveryTime.HasValue)
-                        {
-                            return -1;
-                        }
-
-                        return a.Notification.DeliveryTime.Value.CompareTo(b.Notification.DeliveryTime.Value);
+                        return a.Notification.DeliveryTime.CompareTo(b.Notification.DeliveryTime);
                     });
 
                     // Set badge numbers incrementally
                     var badgeNum = 1;
                     foreach (PendingNotification pendingNotification in PendingNotifications)
                     {
-                        if (pendingNotification.Notification.DeliveryTime.HasValue &&
-                            !pendingNotification.Notification.Scheduled)
+                        if (!pendingNotification.Notification.Scheduled)
                         {
                             pendingNotification.Notification.BadgeNumber = badgeNum++;
                         }
@@ -268,10 +257,7 @@ namespace NotificationSamples
                 {
                     foreach (PendingNotification pendingNotification in PendingNotifications)
                     {
-                        if (pendingNotification.Notification.DeliveryTime.HasValue)
-                        {
-                            pendingNotification.Notification.BadgeNumber = null;
-                        }
+                        pendingNotification.Notification.BadgeNumber = null;
                     }
                 }
             }
@@ -292,8 +278,7 @@ namespace NotificationSamples
                     // In reschedule mode, add ones that have been scheduled, are marked for
                     // rescheduling, and that have a time
                     if (pendingNotification.Reschedule &&
-                        pendingNotification.Notification.Scheduled &&
-                        pendingNotification.Notification.DeliveryTime.HasValue)
+                        pendingNotification.Notification.Scheduled)
                     {
                         notificationsToSave.Add(pendingNotification);
                     }
@@ -414,8 +399,7 @@ namespace NotificationSamples
 
             // If we queue, don't schedule immediately.
             // Also immediately schedule non-time based deliveries (for iOS)
-            if ((mode & OperatingMode.Queue) != OperatingMode.Queue ||
-                notification.DeliveryTime == null)
+            if ((mode & OperatingMode.Queue) != OperatingMode.Queue)
             {
                 Platform.ScheduleNotification(notification);
             }

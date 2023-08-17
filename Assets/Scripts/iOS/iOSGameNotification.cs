@@ -81,13 +81,13 @@ namespace NotificationSamples.iOS
         /// </remarks>
         /// <value>A <see cref="DateTime"/> representing the delivery time of this message, or null if
         /// not set or the trigger isn't a <see cref="iOSNotificationCalendarTrigger"/>.</value>
-        public DateTime? DeliveryTime
+        public DateTime DeliveryTime
         {
             get
             {
                 if (!(internalNotification.Trigger is iOSNotificationCalendarTrigger calendarTrigger))
                 {
-                    return null;
+                    return default;
                 }
 
                 DateTime now = DateTime.Now;
@@ -106,12 +106,7 @@ namespace NotificationSamples.iOS
             }
             set
             {
-                if (!value.HasValue)
-                {
-                    return;
-                }
-
-                DateTime date = value.Value.ToLocalTime();
+                DateTime date = value.ToLocalTime();
 
                 internalNotification.Trigger = new iOSNotificationCalendarTrigger
                 {

@@ -74,7 +74,7 @@ namespace NotificationSamples
                             }
 
                             // Time (must have a value)
-                            writer.Write(notification.DeliveryTime.Value.Ticks);
+                            writer.Write(notification.DeliveryTime.Ticks);
                         }
 
                         writer.Flush();
