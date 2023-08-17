@@ -164,8 +164,8 @@ namespace NotificationSamples
             for (int i = PendingNotifications.Count - 1; i >= 0; --i)
             {
                 PendingNotification queuedNotification = PendingNotifications[i];
-                DateTime? time = queuedNotification.Notification.DeliveryTime;
-                if (time != null && time < DateTime.Now)
+                DateTime time = queuedNotification.DeliveryTime;
+                if (time < DateTime.Now)
                 {
                     PendingNotifications.RemoveAt(i);
                     LocalNotificationExpired?.Invoke(queuedNotification);
@@ -210,8 +210,7 @@ namespace NotificationSamples
 
                     // If a non-scheduled notification is in the past (or not within our threshold)
                     // just remove it immediately
-                    if (pendingNotification.Notification.DeliveryTime != null &&
-                        pendingNotification.Notification.DeliveryTime - DateTime.Now < MinimumNotificationTime)
+                    if (pendingNotification.DeliveryTime - DateTime.Now < MinimumNotificationTime)
                     {
                         PendingNotifications.RemoveAt(i);
                     }
@@ -225,7 +224,7 @@ namespace NotificationSamples
                 {
                     PendingNotifications.Sort((a, b) =>
                     {
-                        return a.Notification.DeliveryTime.CompareTo(b.Notification.DeliveryTime);
+                        return a.DeliveryTime.CompareTo(b.DeliveryTime);
                     });
 
                     // Set badge numbers incrementally
