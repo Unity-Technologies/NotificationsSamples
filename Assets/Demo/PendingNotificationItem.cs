@@ -36,7 +36,7 @@ namespace NotificationSamples.Demo
 
             if (timeLabel != null)
             {
-                timeLabel.text = notificationToDisplay.Notification.DeliveryTime.ToString("yy-MM-dd HH:mm:ss");
+                timeLabel.text = notificationToDisplay.DeliveryTime.ToString("yy-MM-dd HH:mm:ss");
             }
         }
 

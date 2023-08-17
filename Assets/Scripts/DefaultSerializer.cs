@@ -70,7 +70,7 @@ namespace NotificationSamples
                             writer.Write(notification.BadgeNumber);
 
                             // Time (must have a value)
-                            writer.Write(notification.DeliveryTime.Ticks);
+                            writer.Write(notificationToSave.DeliveryTime.Ticks);
                         }
 
                         writer.Flush();
