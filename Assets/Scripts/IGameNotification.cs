@@ -33,12 +33,6 @@ namespace NotificationSamples
         string Body { get; set; }
 
         /// <summary>
-        /// Gets or sets a subtitle for the notification.
-        /// </summary>
-        /// <value>The subtitle message for the notification.</value>
-        string Subtitle { get; set; }
-
-        /// <summary>
         /// Gets or sets optional arbitrary data for the notification.
         /// </summary>
         string Data { get; set; }
@@ -54,12 +48,6 @@ namespace NotificationSamples
         /// </summary>
         /// <value>The number displayed on the app badge.</value>
         int? BadgeNumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets if this notification will be dismissed automatically when the user taps it.
-        /// Only available on Android.
-        /// </summary>
-        bool ShouldAutoCancel { get; set; }
 
         /// <summary>
         /// Gets or sets time to deliver the notification.

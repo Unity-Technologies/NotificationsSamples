@@ -53,9 +53,6 @@ namespace NotificationSamples.iOS
         public string Body { get => internalNotification.Body; set => internalNotification.Body = value; }
 
         /// <inheritdoc />
-        public string Subtitle { get => internalNotification.Subtitle; set => internalNotification.Subtitle = value; }
-
-        /// <inheritdoc />
         public string Data { get => internalNotification.Data; set => internalNotification.Data = value; }
 
         /// <inheritdoc />
@@ -71,9 +68,6 @@ namespace NotificationSamples.iOS
             get => internalNotification.Badge != -1 ? internalNotification.Badge : (int?)null;
             set => internalNotification.Badge = value ?? -1;
         }
-
-        /// <inheritdoc />
-        public bool ShouldAutoCancel { get; set; }
 
         /// <inheritdoc />
         public bool Scheduled { get; private set; }

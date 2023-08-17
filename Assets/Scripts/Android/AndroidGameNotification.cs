@@ -29,11 +29,6 @@ namespace NotificationSamples.Android
         /// <inheritdoc />
         public string Body { get => InternalNotification.Text; set => internalNotification.Text = value; }
 
-        /// <summary>
-        /// Does nothing on Android.
-        /// </summary>
-        public string Subtitle { get => null; set {} }
-
         /// <inheritdoc />
         public string Data { get => InternalNotification.IntentData; set => internalNotification.IntentData = value; }
 
@@ -50,13 +45,6 @@ namespace NotificationSamples.Android
         {
             get => internalNotification.Number != -1 ? internalNotification.Number : (int?)null;
             set => internalNotification.Number = value ?? -1;
-        }
-
-        /// <inheritdoc />
-        public bool ShouldAutoCancel
-        {
-            get => InternalNotification.ShouldAutoCancel;
-            set => internalNotification.ShouldAutoCancel = value;
         }
 
         /// <inheritdoc />

@@ -58,7 +58,7 @@ namespace NotificationSamples
                             writer.Write(notification.Body ?? "");
 
                             // Subtitle
-                            writer.Write(notification.Subtitle ?? "");
+                            //writer.Write(notification.Subtitle ?? "");
 
                             // Group
                             writer.Write(notification.Group ?? "");
@@ -125,9 +125,6 @@ namespace NotificationSamples
 
                             // Body
                             notification.Body = reader.ReadString();
-
-                            // Body
-                            notification.Subtitle = reader.ReadString();
 
                             // Group
                             notification.Group = reader.ReadString();
