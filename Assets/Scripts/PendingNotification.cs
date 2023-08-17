@@ -27,13 +27,16 @@ namespace NotificationSamples
         /// </summary>
         public readonly IGameNotification Notification;
 
+        public readonly DateTime DeliveryTime;
+
         /// <summary>
         /// Instantiate a new instance of <see cref="PendingNotification"/> from a <see cref="IGameNotification"/>.
         /// </summary>
         /// <param name="notification">The notification to create from.</param>
-        public PendingNotification(IGameNotification notification)
+        public PendingNotification(IGameNotification notification, DateTime deliveryTime)
         {
             Notification = notification ?? throw new ArgumentNullException(nameof(notification));
+            DeliveryTime = deliveryTime;
         }
     }
 }

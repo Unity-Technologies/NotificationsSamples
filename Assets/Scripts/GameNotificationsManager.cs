@@ -249,7 +249,7 @@ namespace NotificationSamples
                     }
 
                     // Schedule it now
-                    Platform.ScheduleNotification(pendingNotification.Notification, pendingNotification.Notification.DeliveryTime);
+                    Platform.ScheduleNotification(pendingNotification.Notification, pendingNotification.DeliveryTime);
                 }
 
                 // Clear badge numbers again (for saving)
@@ -385,7 +385,7 @@ namespace NotificationSamples
         /// Schedules a notification to be delivered.
         /// </summary>
         /// <param name="notification">The notification to deliver.</param>
-        public PendingNotification ScheduleNotification(IGameNotification notification)
+        public PendingNotification ScheduleNotification(IGameNotification notification, DateTime deliveryTime)
         {
             if (!Initialized)
             {
@@ -401,7 +401,7 @@ namespace NotificationSamples
             // Also immediately schedule non-time based deliveries (for iOS)
             if ((mode & OperatingMode.Queue) != OperatingMode.Queue)
             {
-                Platform.ScheduleNotification(notification, notification.DeliveryTime);
+                Platform.ScheduleNotification(notification, deliveryTime);
             }
             else if (!notification.Id.HasValue)
             {
@@ -411,7 +411,7 @@ namespace NotificationSamples
             }
 
             // Register pending notification
-            var result = new PendingNotification(notification);
+            var result = new PendingNotification(notification, deliveryTime);
             PendingNotifications.Add(result);
 
             return result;
@@ -542,7 +542,7 @@ namespace NotificationSamples
             Platform.OnForeground();
 
             // Deserialize saved items
-            IList<IGameNotification> loaded = Serializer?.Deserialize(Platform);
+            IList<PendingNotification> loaded = Serializer?.Deserialize(Platform);
 
             // Foregrounding
             if ((mode & OperatingMode.ClearOnForegrounding) == OperatingMode.ClearOnForegrounding)
@@ -558,11 +558,11 @@ namespace NotificationSamples
                 }
 
                 // Reschedule notifications from deserialization
-                foreach (IGameNotification savedNotification in loaded)
+                foreach (var savedNotification in loaded)
                 {
                     if (savedNotification.DeliveryTime > DateTime.Now)
                     {
-                        PendingNotification pendingNotification = ScheduleNotification(savedNotification);
+                        PendingNotification pendingNotification = ScheduleNotification(savedNotification.Notification, savedNotification.DeliveryTime);
                         pendingNotification.Reschedule = true;
                     }
                 }
@@ -576,11 +576,11 @@ namespace NotificationSamples
                     return;
                 }
 
-                foreach (IGameNotification savedNotification in loaded)
+                foreach (var savedNotification in loaded)
                 {
                     if (savedNotification.DeliveryTime > DateTime.Now)
                     {
-                        PendingNotifications.Add(new PendingNotification(savedNotification));
+                        PendingNotifications.Add(savedNotification);
                     }
                 }
             }

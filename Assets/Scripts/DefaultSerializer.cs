@@ -84,7 +84,7 @@ namespace NotificationSamples
         }
 
         /// <inheritdoc />
-        public IList<IGameNotification> Deserialize(IGameNotificationsPlatform platform)
+        public IList<PendingNotification> Deserialize(IGameNotificationsPlatform platform)
         {
             if (!File.Exists(filename))
             {
@@ -103,7 +103,7 @@ namespace NotificationSamples
                         // Length
                         int numElements = reader.ReadInt32();
 
-                        var result = new List<IGameNotification>(numElements);
+                        var result = new List<PendingNotification>(numElements);
                         for (var i = 0; i < numElements; ++i)
                         {
                             IGameNotification notification = platform.CreateNotification();
@@ -134,8 +134,9 @@ namespace NotificationSamples
 
                             // Time
                             notification.DeliveryTime = new DateTime(reader.ReadInt64(), DateTimeKind.Local);
+                            var deliveryTime = notification.DeliveryTime;
 
-                            result.Add(notification);
+                            result.Add(new PendingNotification(notification, deliveryTime));
                         }
 
                         return result;

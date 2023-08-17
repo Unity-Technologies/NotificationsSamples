@@ -143,7 +143,7 @@ namespace NotificationSamples.Demo
                 notification.BadgeNumber = badgeNumber.Value;
             }
 
-            PendingNotification notificationToDisplay = manager.ScheduleNotification(notification);
+            PendingNotification notificationToDisplay = manager.ScheduleNotification(notification, deliveryTime);
             notificationToDisplay.Reschedule = reschedule;
             updatePendingNotifications = true;
 
