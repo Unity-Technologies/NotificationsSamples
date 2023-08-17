@@ -66,12 +66,14 @@ namespace NotificationSamples.Android
         /// <remarks>
         /// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
         /// </remarks>
-        public void ScheduleNotification(IGameNotification gameNotification)
+        public void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
         {
             if (gameNotification == null)
             {
                 throw new ArgumentNullException(nameof(gameNotification));
             }
+
+            gameNotification.DeliveryTime = deliveryTime;
 
             if (!(gameNotification is AndroidGameNotification androidNotification))
             {

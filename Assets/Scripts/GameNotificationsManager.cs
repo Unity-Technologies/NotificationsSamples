@@ -249,7 +249,7 @@ namespace NotificationSamples
                     }
 
                     // Schedule it now
-                    Platform.ScheduleNotification(pendingNotification.Notification);
+                    Platform.ScheduleNotification(pendingNotification.Notification, pendingNotification.Notification.DeliveryTime);
                 }
 
                 // Clear badge numbers again (for saving)
@@ -401,7 +401,7 @@ namespace NotificationSamples
             // Also immediately schedule non-time based deliveries (for iOS)
             if ((mode & OperatingMode.Queue) != OperatingMode.Queue)
             {
-                Platform.ScheduleNotification(notification);
+                Platform.ScheduleNotification(notification, notification.DeliveryTime);
             }
             else if (!notification.Id.HasValue)
             {

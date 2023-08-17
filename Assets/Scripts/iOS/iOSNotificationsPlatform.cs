@@ -32,12 +32,14 @@ namespace NotificationSamples.iOS
         }
 
         /// <inheritdoc />
-        public void ScheduleNotification(IGameNotification gameNotification)
+        public void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
         {
             if (gameNotification == null)
             {
                 throw new ArgumentNullException(nameof(gameNotification));
             }
+
+            gameNotification.DeliveryTime = deliveryTime;
 
             if (!(gameNotification is iOSGameNotification notification))
             {

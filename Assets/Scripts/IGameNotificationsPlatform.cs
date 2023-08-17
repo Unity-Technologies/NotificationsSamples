@@ -27,7 +27,7 @@ namespace NotificationSamples
         /// <param name="gameNotification">The notification to deliver.</param>
         /// <exception cref="ArgumentNullException"><paramref name="gameNotification"/> is null.</exception>
         /// <exception cref="InvalidOperationException"><paramref name="gameNotification"/> isn't of the correct type.</exception>
-        void ScheduleNotification(IGameNotification gameNotification);
+        void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime);
 
         /// <summary>
         /// Cancels a scheduled notification.
