@@ -72,15 +72,5 @@ namespace NotificationSamples
         /// </summary>
         /// <value>True if the notification has been scheduled with the underlying operating system.</value>
         bool Scheduled { get; }
-
-        /// <summary>
-        /// Notification small icon.
-        /// </summary>
-        string SmallIcon { get; set; }
-
-        /// <summary>
-        /// Notification large icon.
-        /// </summary>
-        string LargeIcon { get; set; }
     }
 }

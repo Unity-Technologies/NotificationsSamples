@@ -141,16 +141,6 @@ namespace NotificationSamples.iOS
         }
 
         /// <summary>
-        /// Does nothing on iOS.
-        /// </summary>
-        public string SmallIcon { get => null; set {} }
-
-        /// <summary>
-        /// Does nothing on iOS.
-        /// </summary>
-        public string LargeIcon { get => null; set {} }
-
-        /// <summary>
         /// Instantiate a new instance of <see cref="iOSGameNotification"/>.
         /// </summary>
         public iOSGameNotification()

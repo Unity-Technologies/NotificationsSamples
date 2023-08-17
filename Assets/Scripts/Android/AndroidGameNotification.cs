@@ -74,12 +74,6 @@ namespace NotificationSamples.Android
         /// <inheritdoc />
         public bool Scheduled { get; private set; }
 
-        /// <inheritdoc />
-        public string SmallIcon { get => InternalNotification.SmallIcon; set => internalNotification.SmallIcon = value; }
-
-        /// <inheritdoc />
-        public string LargeIcon { get => InternalNotification.LargeIcon; set => internalNotification.LargeIcon = value; }
-
         /// <summary>
         /// Instantiate a new instance of <see cref="AndroidGameNotification"/>.
         /// </summary>

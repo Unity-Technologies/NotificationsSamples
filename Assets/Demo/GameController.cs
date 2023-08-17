@@ -219,8 +219,7 @@ namespace NotificationSamples.Demo
             }
 
             DateTime deliveryTime = DateTime.Now.ToLocalTime() + TimeSpan.FromMinutes(item.Minutes);
-            console.SendNotification(item.Title, item.Description, deliveryTime, reschedule: true,
-                smallIcon: item.ItemData.IconId, largeIcon: item.ItemData.IconId);
+            console.SendNotification(item.Title, item.Description, deliveryTime, reschedule: true);
 
             pendingItems.Add(new PendingInventoryItem
             {

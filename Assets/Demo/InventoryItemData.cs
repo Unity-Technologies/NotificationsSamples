@@ -31,8 +31,5 @@ namespace NotificationSamples.Demo
 
         [Tooltip("Currency bonus the item provides per second.")]
         public float CurrencyBonus;
-
-        [Tooltip("Notification icon ID.")]
-        public string IconId;
     }
 }
