@@ -140,7 +140,7 @@ namespace NotificationSamples.Demo
             notification.DeliveryTime = deliveryTime;
             if (badgeNumber != null)
             {
-                notification.BadgeNumber = badgeNumber;
+                notification.BadgeNumber = badgeNumber.Value;
             }
 
             PendingNotification notificationToDisplay = manager.ScheduleNotification(notification);

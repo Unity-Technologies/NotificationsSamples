@@ -63,10 +63,10 @@ namespace NotificationSamples.iOS
         public string Group { get => CategoryIdentifier; set => CategoryIdentifier = value; }
 
         /// <inheritdoc />
-        public int? BadgeNumber
+        public int BadgeNumber
         {
-            get => internalNotification.Badge != -1 ? internalNotification.Badge : (int?)null;
-            set => internalNotification.Badge = value ?? -1;
+            get => internalNotification.Badge;
+            set => internalNotification.Badge = value;
         }
 
         /// <inheritdoc />

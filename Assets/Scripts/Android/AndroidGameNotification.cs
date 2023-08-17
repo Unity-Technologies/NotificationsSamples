@@ -41,10 +41,10 @@ namespace NotificationSamples.Android
         public string Group { get => DeliveredChannel; set => DeliveredChannel = value; }
 
         /// <inheritdoc />
-        public int? BadgeNumber
+        public int BadgeNumber
         {
-            get => internalNotification.Number != -1 ? internalNotification.Number : (int?)null;
-            set => internalNotification.Number = value ?? -1;
+            get => internalNotification.Number;
+            set => internalNotification.Number = value;
         }
 
         /// <inheritdoc />

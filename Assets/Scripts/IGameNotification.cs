@@ -47,7 +47,7 @@ namespace NotificationSamples
         /// Gets or sets the badge number for this notification. No badge number will be shown if null.
         /// </summary>
         /// <value>The number displayed on the app badge.</value>
-        int? BadgeNumber { get; set; }
+        int BadgeNumber { get; set; }
 
         /// <summary>
         /// Gets or sets time to deliver the notification.

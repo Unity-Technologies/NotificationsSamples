@@ -67,11 +67,7 @@ namespace NotificationSamples
                             writer.Write(notification.Data ?? "");
 
                             // Badge
-                            writer.Write(notification.BadgeNumber.HasValue);
-                            if (notification.BadgeNumber.HasValue)
-                            {
-                                writer.Write(notification.BadgeNumber.Value);
-                            }
+                            writer.Write(notification.BadgeNumber);
 
                             // Time (must have a value)
                             writer.Write(notification.DeliveryTime.Ticks);
@@ -134,11 +130,7 @@ namespace NotificationSamples
                                 notification.Data = reader.ReadString();
 
                             // Badge
-                            hasValue = reader.ReadBoolean();
-                            if (hasValue)
-                            {
-                                notification.BadgeNumber = reader.ReadInt32();
-                            }
+                            notification.BadgeNumber = reader.ReadInt32();
 
                             // Time
                             notification.DeliveryTime = new DateTime(reader.ReadInt64(), DateTimeKind.Local);

@@ -257,7 +257,7 @@ namespace NotificationSamples
                 {
                     foreach (PendingNotification pendingNotification in PendingNotifications)
                     {
-                        pendingNotification.Notification.BadgeNumber = null;
+                        pendingNotification.Notification.BadgeNumber = 0;
                     }
                 }
             }
