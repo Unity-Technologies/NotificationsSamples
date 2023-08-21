@@ -93,7 +93,7 @@ namespace NotificationSamples
         /// </summary>
         /// <param name="notification">The notification to deliver.</param>
         /// <exception cref="ArgumentNullException"><paramref name="notification"/> is null.</exception>
-        void ScheduleNotification(TNotificationType notification);
+        void ScheduleNotification(TNotificationType notification, DateTime deliveryTime);
 
         /// <summary>
         /// Use this to retrieve the last local or remote notification of <typeparamref name="TNotificationType"/>

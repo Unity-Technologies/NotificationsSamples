@@ -36,18 +36,18 @@ namespace NotificationSamples.iOS
                     "Notification provided to ScheduleNotification isn't an iOSGameNotification.");
             }
 
-            notification.DeliveryTime = deliveryTime;
-            ScheduleNotification(notification);
+            ScheduleNotification(notification, deliveryTime);
         }
 
         /// <inheritdoc />
-        public void ScheduleNotification(iOSGameNotification notification)
+        public void ScheduleNotification(iOSGameNotification notification, DateTime deliveryTime)
         {
             if (notification == null)
             {
                 throw new ArgumentNullException(nameof(notification));
             }
 
+            notification.DeliveryTime = deliveryTime;
             iOSNotificationCenter.ScheduleNotification(notification.InternalNotification);
         }
 

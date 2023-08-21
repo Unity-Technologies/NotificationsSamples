@@ -32,13 +32,14 @@ namespace NotificationSamples.Android
         /// <remarks>
         /// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
         /// </remarks>
-        public void ScheduleNotification(AndroidGameNotification gameNotification)
+        public void ScheduleNotification(AndroidGameNotification gameNotification, DateTime deliveryTime)
         {
             if (gameNotification == null)
             {
                 throw new ArgumentNullException(nameof(gameNotification));
             }
 
+            gameNotification.DeliveryTime = deliveryTime;
             if (gameNotification.Id.HasValue)
             {
                 AndroidNotificationCenter.SendNotificationWithExplicitID(gameNotification.InternalNotification,
@@ -69,8 +70,7 @@ namespace NotificationSamples.Android
                     "Notification provided to ScheduleNotification isn't an AndroidGameNotification.");
             }
 
-            androidNotification.DeliveryTime = deliveryTime;
-            ScheduleNotification(androidNotification);
+            ScheduleNotification(androidNotification, deliveryTime);
         }
 
         /// <inheritdoc />
