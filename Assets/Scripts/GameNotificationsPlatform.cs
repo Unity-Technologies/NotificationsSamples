@@ -5,18 +5,35 @@ using Unity.Notifications;
 namespace NotificationSamples
 {
 
-    public abstract class GameNotificationsPlatform : IGameNotificationsPlatform
+    public abstract class GameNotificationsPlatform : IGameNotificationsPlatform, IDisposable
     {
-        public abstract event Action<GameNotification> NotificationReceived;
+        public event Action<GameNotification> NotificationReceived;
+
+        public GameNotificationsPlatform()
+        {
+            NotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
+        }
 
         public IEnumerator RequestNotificationPermission()
         {
             return NotificationCenter.RequestPermission();
         }
 
-        public abstract GameNotification CreateNotification();
+        public GameNotification CreateNotification()
+        {
+            return new GameNotification();
+        }
 
-        public abstract void ScheduleNotification(GameNotification gameNotification, DateTime deliveryTime);
+        public void ScheduleNotification(GameNotification gameNotification, DateTime deliveryTime)
+        {
+            if (gameNotification == null)
+            {
+                throw new ArgumentNullException(nameof(gameNotification));
+            }
+
+            int notificationId = NotificationCenter.ScheduleNotification(gameNotification.InternalNotification, new NotificationDateTimeSchedule(deliveryTime));
+            gameNotification.Id = notificationId;
+        }
 
         public void CancelNotification(int notificationId)
         {
@@ -38,11 +55,40 @@ namespace NotificationSamples
             NotificationCenter.CancelAllDeliveredNotifications();
         }
 
-        public abstract GameNotification GetLastNotification();
+        public GameNotification GetLastNotification()
+        {
+            var notification = NotificationCenter.LastRespondedNotification;
 
-        public abstract void OnForeground();
+            if (notification.HasValue)
+            {
+                return new GameNotification(notification.Value);
+            }
 
-        public abstract void OnBackground();
+            return null;
+        }
+
+        public void OnForeground()
+        {
+            NotificationCenter.ClearBadge();
+        }
+
+        public void OnBackground() {}
+
+        /// <summary>
+        /// Unregister delegates.
+        /// </summary>
+        public void Dispose()
+        {
+            NotificationCenter.OnNotificationReceived -= OnLocalNotificationReceived;
+        }
+
+        // Event handler for receiving local notifications.
+        private void OnLocalNotificationReceived(Notification notification)
+        {
+            // Create a new AndroidGameNotification out of the delivered notification, but only
+            // if the event is registered
+            NotificationReceived?.Invoke(new GameNotification(notification));
+        }
     }
 
 }

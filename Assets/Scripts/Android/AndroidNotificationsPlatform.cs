@@ -8,11 +8,8 @@ namespace NotificationSamples.Android
     /// <summary>
     /// Android implementation of <see cref="IGameNotificationsPlatform"/>.
     /// </summary>
-    public class AndroidNotificationsPlatform : GameNotificationsPlatform, IDisposable
+    public class AndroidNotificationsPlatform : GameNotificationsPlatform
     {
-        /// <inheritdoc />
-        public override event Action<GameNotification> NotificationReceived;
-
         /// <summary>
         /// Gets or sets the default channel ID for notifications.
         /// </summary>
@@ -24,70 +21,6 @@ namespace NotificationSamples.Android
         /// </summary>
         public AndroidNotificationsPlatform()
         {
-            NotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
-        }
-
-        /// <inheritdoc />
-        /// <remarks>
-        /// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
-        /// </remarks>
-        public override void ScheduleNotification(GameNotification gameNotification, DateTime deliveryTime)
-        {
-            if (gameNotification == null)
-            {
-                throw new ArgumentNullException(nameof(gameNotification));
-            }
-
-            int notificationId = NotificationCenter.ScheduleNotification(gameNotification.InternalNotification, new NotificationDateTimeSchedule(deliveryTime));
-            gameNotification.Id = notificationId;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Create a new <see cref="AndroidGameNotification" />.
-        /// </summary>
-        public override GameNotification CreateNotification()
-        {
-            return new GameNotification();
-        }
-
-        /// <inheritdoc />
-        public override GameNotification GetLastNotification()
-        {
-            var notification = NotificationCenter.LastRespondedNotification;
-
-            if (notification.HasValue)
-            {
-                return new GameNotification(notification.Value);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Does nothing on Android.
-        /// </summary>
-        public override void OnForeground() {}
-
-        /// <summary>
-        /// Does nothing on Android.
-        /// </summary>
-        public override void OnBackground() {}
-
-        /// <summary>
-        /// Unregister delegates.
-        /// </summary>
-        public void Dispose()
-        {
-            NotificationCenter.OnNotificationReceived -= OnLocalNotificationReceived;
-        }
-
-        // Event handler for receiving local notifications.
-        private void OnLocalNotificationReceived(Notification notification)
-        {
-            // Create a new AndroidGameNotification out of the delivered notification, but only
-            // if the event is registered
-            NotificationReceived?.Invoke(new GameNotification(notification));
         }
     }
 }
