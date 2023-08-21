@@ -42,13 +42,12 @@ namespace NotificationSamples.Android
             if (gameNotification.Id.HasValue)
             {
                 AndroidNotificationCenter.SendNotificationWithExplicitID(gameNotification.InternalNotification,
-                    gameNotification.DeliveredChannel,
+                    DefaultChannelId,
                     gameNotification.Id.Value);
             }
             else
             {
-                int notificationId = AndroidNotificationCenter.SendNotification(gameNotification.InternalNotification,
-                    gameNotification.DeliveredChannel);
+                int notificationId = AndroidNotificationCenter.SendNotification(gameNotification.InternalNotification, DefaultChannelId);
                 gameNotification.Id = notificationId;
             }
         }
@@ -80,12 +79,7 @@ namespace NotificationSamples.Android
         /// </summary>
         AndroidGameNotification IGameNotificationsPlatform<AndroidGameNotification>.CreateNotification()
         {
-            var notification = new AndroidGameNotification()
-            {
-                DeliveredChannel = DefaultChannelId
-            };
-
-            return notification;
+            return new AndroidGameNotification();
         }
 
         /// <inheritdoc />
@@ -110,7 +104,7 @@ namespace NotificationSamples.Android
 
             if (data != null)
             {
-                return new AndroidGameNotification(data.Notification, data.Id, data.Channel);
+                return new AndroidGameNotification(data.Notification, data.Id);
             }
 
             return null;
@@ -139,7 +133,7 @@ namespace NotificationSamples.Android
         {
             // Create a new AndroidGameNotification out of the delivered notification, but only
             // if the event is registered
-            NotificationReceived?.Invoke(new AndroidGameNotification(data.Notification, data.Id, data.Channel));
+            NotificationReceived?.Invoke(new AndroidGameNotification(data.Notification, data.Id));
         }
     }
 }
