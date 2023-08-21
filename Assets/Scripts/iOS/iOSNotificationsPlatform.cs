@@ -8,11 +8,11 @@ namespace NotificationSamples.iOS
     /// <summary>
     /// iOS implementation of <see cref="IGameNotificationsPlatform"/>.
     /// </summary>
-    public class iOSNotificationsPlatform : IGameNotificationsPlatform<iOSGameNotification>,
+    public class iOSNotificationsPlatform : GameNotificationsPlatform, IGameNotificationsPlatform<iOSGameNotification>,
         IDisposable
     {
         /// <inheritdoc />
-        public event Action<IGameNotification> NotificationReceived;
+        public override event Action<IGameNotification> NotificationReceived;
 
         /// <summary>
         /// Instantiate a new instance of <see cref="iOSNotificationsPlatform"/>.
@@ -22,7 +22,7 @@ namespace NotificationSamples.iOS
             iOSNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
         }
 
-        public IEnumerator RequestNotificationPermission()
+        public override IEnumerator RequestNotificationPermission()
         {
             using (var request = new AuthorizationRequest(AuthorizationOption.Badge | AuthorizationOption.Sound | AuthorizationOption.Alert, false))
             {
@@ -32,7 +32,7 @@ namespace NotificationSamples.iOS
         }
 
         /// <inheritdoc />
-        public void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
+        public override void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
         {
             if (gameNotification == null)
             {
@@ -65,7 +65,7 @@ namespace NotificationSamples.iOS
         /// <summary>
         /// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
         /// </summary>
-        IGameNotification IGameNotificationsPlatform.CreateNotification()
+        public override IGameNotification CreateNotification()
         {
             return CreateNotification();
         }
@@ -74,43 +74,43 @@ namespace NotificationSamples.iOS
         /// <summary>
         /// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
         /// </summary>
-        public iOSGameNotification CreateNotification()
+        iOSGameNotification IGameNotificationsPlatform<iOSGameNotification>.CreateNotification()
         {
             return new iOSGameNotification();
         }
 
         /// <inheritdoc />
-        public void CancelNotification(int notificationId)
+        public override void CancelNotification(int notificationId)
         {
             iOSNotificationCenter.RemoveScheduledNotification(notificationId.ToString());
         }
 
         /// <inheritdoc />
-        public void DismissNotification(int notificationId)
+        public override void DismissNotification(int notificationId)
         {
             iOSNotificationCenter.RemoveDeliveredNotification(notificationId.ToString());
         }
 
         /// <inheritdoc />
-        public void CancelAllScheduledNotifications()
+        public override void CancelAllScheduledNotifications()
         {
             iOSNotificationCenter.RemoveAllScheduledNotifications();
         }
 
         /// <inheritdoc />
-        public void DismissAllDisplayedNotifications()
+        public override void DismissAllDisplayedNotifications()
         {
             iOSNotificationCenter.RemoveAllDeliveredNotifications();
         }
 
         /// <inheritdoc />
-        IGameNotification IGameNotificationsPlatform.GetLastNotification()
+        public override IGameNotification GetLastNotification()
         {
             return GetLastNotification();
         }
 
         /// <inheritdoc />
-        public iOSGameNotification GetLastNotification()
+        iOSGameNotification IGameNotificationsPlatform<iOSGameNotification>.GetLastNotification()
         {
             var notification = iOSNotificationCenter.GetLastRespondedNotification();
 
@@ -125,7 +125,7 @@ namespace NotificationSamples.iOS
         /// <summary>
         /// Clears badge count.
         /// </summary>
-        public void OnForeground()
+        public override void OnForeground()
         {
             iOSNotificationCenter.ApplicationBadge = 0;
         }
@@ -133,7 +133,7 @@ namespace NotificationSamples.iOS
         /// <summary>
         /// Does nothing on iOS.
         /// </summary>
-        public void OnBackground() {}
+        public override void OnBackground() {}
 
         /// <summary>
         /// Unregister delegates.

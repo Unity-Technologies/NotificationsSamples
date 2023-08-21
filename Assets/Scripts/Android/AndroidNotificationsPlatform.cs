@@ -8,11 +8,11 @@ namespace NotificationSamples.Android
     /// <summary>
     /// Android implementation of <see cref="IGameNotificationsPlatform"/>.
     /// </summary>
-    public class AndroidNotificationsPlatform : IGameNotificationsPlatform<AndroidGameNotification>,
+    public class AndroidNotificationsPlatform : GameNotificationsPlatform, IGameNotificationsPlatform<AndroidGameNotification>,
         IDisposable
     {
         /// <inheritdoc />
-        public event Action<IGameNotification> NotificationReceived;
+        public override event Action<IGameNotification> NotificationReceived;
 
         /// <summary>
         /// Gets or sets the default channel ID for notifications.
@@ -28,7 +28,7 @@ namespace NotificationSamples.Android
             AndroidNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
         }
 
-        public IEnumerator RequestNotificationPermission()
+        public override IEnumerator RequestNotificationPermission()
         {
             var request = new PermissionRequest();
             while (request.Status == PermissionStatus.RequestPending)
@@ -66,7 +66,7 @@ namespace NotificationSamples.Android
         /// <remarks>
         /// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
         /// </remarks>
-        public void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
+        public override void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
         {
             if (gameNotification == null)
             {
@@ -87,7 +87,7 @@ namespace NotificationSamples.Android
         /// <summary>
         /// Create a new <see cref="AndroidGameNotification" />.
         /// </summary>
-        public AndroidGameNotification CreateNotification()
+        AndroidGameNotification IGameNotificationsPlatform<AndroidGameNotification>.CreateNotification()
         {
             var notification = new AndroidGameNotification()
             {
@@ -101,13 +101,13 @@ namespace NotificationSamples.Android
         /// <summary>
         /// Create a new <see cref="AndroidGameNotification" />.
         /// </summary>
-        IGameNotification IGameNotificationsPlatform.CreateNotification()
+        public override IGameNotification CreateNotification()
         {
             return CreateNotification();
         }
 
         /// <inheritdoc />
-        public void CancelNotification(int notificationId)
+        public override void CancelNotification(int notificationId)
         {
             AndroidNotificationCenter.CancelScheduledNotification(notificationId);
         }
@@ -116,31 +116,31 @@ namespace NotificationSamples.Android
         /// <summary>
         /// Not currently implemented on Android
         /// </summary>
-        public void DismissNotification(int notificationId)
+        public override void DismissNotification(int notificationId)
         {
             AndroidNotificationCenter.CancelDisplayedNotification(notificationId);
         }
 
         /// <inheritdoc />
-        public void CancelAllScheduledNotifications()
+        public override void CancelAllScheduledNotifications()
         {
             AndroidNotificationCenter.CancelAllScheduledNotifications();
         }
 
         /// <inheritdoc />
-        public void DismissAllDisplayedNotifications()
+        public override void DismissAllDisplayedNotifications()
         {
             AndroidNotificationCenter.CancelAllDisplayedNotifications();
         }
 
         /// <inheritdoc />
-        IGameNotification IGameNotificationsPlatform.GetLastNotification()
+        public override IGameNotification GetLastNotification()
         {
             return GetLastNotification();
         }
 
         /// <inheritdoc />
-        public AndroidGameNotification GetLastNotification()
+        AndroidGameNotification IGameNotificationsPlatform<AndroidGameNotification>.GetLastNotification()
         {
             var data = AndroidNotificationCenter.GetLastNotificationIntent();
 
@@ -155,12 +155,12 @@ namespace NotificationSamples.Android
         /// <summary>
         /// Does nothing on Android.
         /// </summary>
-        public void OnForeground() {}
+        public override void OnForeground() {}
 
         /// <summary>
         /// Does nothing on Android.
         /// </summary>
-        public void OnBackground() {}
+        public override void OnBackground() {}
 
         /// <summary>
         /// Unregister delegates.
