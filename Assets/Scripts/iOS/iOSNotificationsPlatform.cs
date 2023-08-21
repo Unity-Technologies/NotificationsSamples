@@ -1,7 +1,7 @@
 #if UNITY_IOS
 using System;
 using System.Collections;
-using Unity.Notifications.iOS;
+using Unity.Notifications;
 
 namespace NotificationSamples.iOS
 {
@@ -19,7 +19,7 @@ namespace NotificationSamples.iOS
         /// </summary>
         public iOSNotificationsPlatform()
         {
-            iOSNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
+            NotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
         }
 
         /// <inheritdoc />
@@ -47,8 +47,8 @@ namespace NotificationSamples.iOS
                 throw new ArgumentNullException(nameof(notification));
             }
 
-            notification.DeliveryTime = deliveryTime;
-            iOSNotificationCenter.ScheduleNotification(notification.InternalNotification);
+            int id = NotificationCenter.ScheduleNotification(notification.InternalNotification, new NotificationDateTimeSchedule(deliveryTime));
+            notification.Id = id;
         }
 
         /// <inheritdoc />
@@ -78,11 +78,11 @@ namespace NotificationSamples.iOS
         /// <inheritdoc />
         iOSGameNotification IGameNotificationsPlatform<iOSGameNotification>.GetLastNotification()
         {
-            var notification = iOSNotificationCenter.GetLastRespondedNotification();
+            var notification = NotificationCenter.LastRespondedNotification;
 
-            if (notification != null)
+            if (notification.HasValue)
             {
-                return new iOSGameNotification(notification);
+                return new iOSGameNotification(notification.Value);
             }
 
             return null;
@@ -93,7 +93,7 @@ namespace NotificationSamples.iOS
         /// </summary>
         public override void OnForeground()
         {
-            iOSNotificationCenter.ApplicationBadge = 0;
+            NotificationCenter.ClearBadge();
         }
 
         /// <summary>
@@ -106,11 +106,11 @@ namespace NotificationSamples.iOS
         /// </summary>
         public void Dispose()
         {
-            iOSNotificationCenter.OnNotificationReceived -= OnLocalNotificationReceived;
+            NotificationCenter.OnNotificationReceived -= OnLocalNotificationReceived;
         }
 
         // Event handler for receiving local notifications.
-        private void OnLocalNotificationReceived(iOSNotification notification)
+        private void OnLocalNotificationReceived(Notification notification)
         {
             // Create a new AndroidGameNotification out of the delivered notification, but only
             // if the event is registered
