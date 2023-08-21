@@ -1,7 +1,6 @@
 #if UNITY_ANDROID
 using System;
-using Unity.Notifications.Android;
-using UnityEngine.Assertions;
+using Unity.Notifications;
 
 namespace NotificationSamples.Android
 {
@@ -10,12 +9,12 @@ namespace NotificationSamples.Android
     /// </summary>
     public class AndroidGameNotification : IGameNotification
     {
-        private AndroidNotification internalNotification;
+        private Notification internalNotification;
 
         /// <summary>
         /// Gets the internal notification object used by the mobile notifications system.
         /// </summary>
-        public AndroidNotification InternalNotification => internalNotification;
+        public Notification InternalNotification => internalNotification;
 
         /// <inheritdoc />
         /// <summary>
@@ -30,20 +29,13 @@ namespace NotificationSamples.Android
         public string Body { get => InternalNotification.Text; set => internalNotification.Text = value; }
 
         /// <inheritdoc />
-        public string Data { get => InternalNotification.IntentData; set => internalNotification.IntentData = value; }
+        public string Data { get => InternalNotification.Data; set => internalNotification.Data = value; }
 
         /// <inheritdoc />
         public int BadgeNumber
         {
-            get => internalNotification.Number;
-            set => internalNotification.Number = value;
-        }
-
-        /// <inheritdoc />
-        public DateTime DeliveryTime
-        {
-            get => InternalNotification.FireTime;
-            set => internalNotification.FireTime = value;
+            get => internalNotification.Badge;
+            set => internalNotification.Badge = value;
         }
 
         /// <summary>
@@ -51,7 +43,7 @@ namespace NotificationSamples.Android
         /// </summary>
         public AndroidGameNotification()
         {
-            internalNotification = new AndroidNotification();
+            internalNotification = new Notification();
         }
 
         /// <summary>
@@ -59,10 +51,9 @@ namespace NotificationSamples.Android
         /// </summary>
         /// <param name="deliveredNotification">The notification that has been delivered.</param>
         /// <param name="deliveredId">The ID of the delivered notification.</param>
-        internal AndroidGameNotification(AndroidNotification deliveredNotification, int deliveredId)
+        internal AndroidGameNotification(Notification deliveredNotification)
         {
             internalNotification = deliveredNotification;
-            Id = deliveredId;
         }
     }
 }

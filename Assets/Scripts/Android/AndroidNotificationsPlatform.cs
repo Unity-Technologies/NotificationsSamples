@@ -1,7 +1,7 @@
 #if UNITY_ANDROID
 using System;
 using System.Collections;
-using Unity.Notifications.Android;
+using Unity.Notifications;
 
 namespace NotificationSamples.Android
 {
@@ -25,7 +25,7 @@ namespace NotificationSamples.Android
         /// </summary>
         public AndroidNotificationsPlatform()
         {
-            AndroidNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
+            NotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
         }
 
         /// <inheritdoc />
@@ -39,18 +39,8 @@ namespace NotificationSamples.Android
                 throw new ArgumentNullException(nameof(gameNotification));
             }
 
-            gameNotification.DeliveryTime = deliveryTime;
-            if (gameNotification.Id.HasValue)
-            {
-                AndroidNotificationCenter.SendNotificationWithExplicitID(gameNotification.InternalNotification,
-                    DefaultChannelId,
-                    gameNotification.Id.Value);
-            }
-            else
-            {
-                int notificationId = AndroidNotificationCenter.SendNotification(gameNotification.InternalNotification, DefaultChannelId);
-                gameNotification.Id = notificationId;
-            }
+            int notificationId = NotificationCenter.ScheduleNotification(gameNotification.InternalNotification, new NotificationDateTimeSchedule(deliveryTime));
+            gameNotification.Id = notificationId;
         }
 
         /// <inheritdoc />
@@ -100,11 +90,11 @@ namespace NotificationSamples.Android
         /// <inheritdoc />
         AndroidGameNotification IGameNotificationsPlatform<AndroidGameNotification>.GetLastNotification()
         {
-            var data = AndroidNotificationCenter.GetLastNotificationIntent();
+            var notification = NotificationCenter.LastRespondedNotification;
 
-            if (data != null)
+            if (notification.HasValue)
             {
-                return new AndroidGameNotification(data.Notification, data.Id);
+                return new AndroidGameNotification(notification.Value);
             }
 
             return null;
@@ -125,15 +115,15 @@ namespace NotificationSamples.Android
         /// </summary>
         public void Dispose()
         {
-            AndroidNotificationCenter.OnNotificationReceived -= OnLocalNotificationReceived;
+            NotificationCenter.OnNotificationReceived -= OnLocalNotificationReceived;
         }
 
         // Event handler for receiving local notifications.
-        private void OnLocalNotificationReceived(AndroidNotificationIntentData data)
+        private void OnLocalNotificationReceived(Notification notification)
         {
             // Create a new AndroidGameNotification out of the delivered notification, but only
             // if the event is registered
-            NotificationReceived?.Invoke(new AndroidGameNotification(data.Notification, data.Id));
+            NotificationReceived?.Invoke(new AndroidGameNotification(notification));
         }
     }
 }
