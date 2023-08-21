@@ -38,12 +38,6 @@ namespace NotificationSamples
         string Data { get; set; }
 
         /// <summary>
-        /// Gets or sets group to which this notification belongs.
-        /// </summary>
-        /// <value>A platform specific string identifier for the notification's group.</value>
-        string Group { get; set; }
-
-        /// <summary>
         /// Gets or sets the badge number for this notification. No badge number will be shown if null.
         /// </summary>
         /// <value>The number displayed on the app badge.</value>

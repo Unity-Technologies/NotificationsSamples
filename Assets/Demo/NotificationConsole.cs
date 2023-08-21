@@ -125,7 +125,7 @@ namespace NotificationSamples.Demo
         /// <param name="smallIcon">Notification small icon.</param>
         /// <param name="largeIcon">Notification large icon.</param>
         public void SendNotification(string title, string body, DateTime deliveryTime, int? badgeNumber = null,
-            bool reschedule = false, string channelId = null)
+            bool reschedule = false)
         {
             IGameNotification notification = manager.CreateNotification();
 
@@ -136,7 +136,6 @@ namespace NotificationSamples.Demo
 
             notification.Title = title;
             notification.Body = body;
-            notification.Group = !string.IsNullOrEmpty(channelId) ? channelId : ChannelId;
             if (badgeNumber != null)
             {
                 notification.BadgeNumber = badgeNumber.Value;

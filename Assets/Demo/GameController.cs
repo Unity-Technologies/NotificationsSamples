@@ -183,8 +183,7 @@ namespace NotificationSamples.Demo
             deliveryTime = new DateTime(deliveryTime.Year, deliveryTime.Month, deliveryTime.Day, playReminderHour, 0, 0,
                 DateTimeKind.Local);
 
-            console.SendNotification("Cookie Reminder", "Remember to make more cookies!", deliveryTime,
-                channelId: NotificationConsole.ReminderChannelId);
+            console.SendNotification("Cookie Reminder", "Remember to make more cookies!", deliveryTime);
         }
 
         /// <summary>
@@ -350,7 +349,7 @@ namespace NotificationSamples.Demo
             }
 
             DateTime deliveryTime = DateTime.Now.ToLocalTime() + TimeSpan.FromMinutes(newsNotificationTime);
-            console.SendNotification(title, body, deliveryTime, channelId: NotificationConsole.NewsChannelId);
+            console.SendNotification(title, body, deliveryTime);
         }
     }
 }

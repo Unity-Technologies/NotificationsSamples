@@ -60,9 +60,6 @@ namespace NotificationSamples
                             // Subtitle
                             //writer.Write(notification.Subtitle ?? "");
 
-                            // Group
-                            writer.Write(notification.Group ?? "");
-
                             // Data
                             writer.Write(notification.Data ?? "");
 
@@ -121,9 +118,6 @@ namespace NotificationSamples
 
                             // Body
                             notification.Body = reader.ReadString();
-
-                            // Group
-                            notification.Group = reader.ReadString();
 
                             // Data, introduced in version 1
                             if (version > 0)

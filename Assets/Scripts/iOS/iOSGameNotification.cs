@@ -56,13 +56,6 @@ namespace NotificationSamples.iOS
         public string Data { get => internalNotification.Data; set => internalNotification.Data = value; }
 
         /// <inheritdoc />
-        /// <remarks>
-        /// On iOS, this represents the notification's Category Identifier.
-        /// </remarks>
-        /// <value>The value of <see cref="CategoryIdentifier"/>.</value>
-        public string Group { get => CategoryIdentifier; set => CategoryIdentifier = value; }
-
-        /// <inheritdoc />
         public int BadgeNumber
         {
             get => internalNotification.Badge;
