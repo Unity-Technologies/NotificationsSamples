@@ -8,7 +8,7 @@ namespace NotificationSamples.iOS
     /// <summary>
     /// iOS implementation of <see cref="IGameNotificationsPlatform"/>.
     /// </summary>
-    public class iOSNotificationsPlatform : GameNotificationsPlatform, IGameNotificationsPlatform<iOSGameNotification>,
+    public class iOSNotificationsPlatform : GameNotificationsPlatform, IGameNotificationsPlatform<GameNotification>,
         IDisposable
     {
         /// <inheritdoc />
@@ -30,7 +30,7 @@ namespace NotificationSamples.iOS
                 throw new ArgumentNullException(nameof(gameNotification));
             }
 
-            if (!(gameNotification is iOSGameNotification notification))
+            if (!(gameNotification is GameNotification notification))
             {
                 throw new InvalidOperationException(
                     "Notification provided to ScheduleNotification isn't an iOSGameNotification.");
@@ -40,7 +40,7 @@ namespace NotificationSamples.iOS
         }
 
         /// <inheritdoc />
-        public void ScheduleNotification(iOSGameNotification notification, DateTime deliveryTime)
+        public void ScheduleNotification(GameNotification notification, DateTime deliveryTime)
         {
             if (notification == null)
             {
@@ -64,9 +64,9 @@ namespace NotificationSamples.iOS
         /// <summary>
         /// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
         /// </summary>
-        iOSGameNotification IGameNotificationsPlatform<iOSGameNotification>.CreateNotification()
+        GameNotification IGameNotificationsPlatform<GameNotification>.CreateNotification()
         {
-            return new iOSGameNotification();
+            return new GameNotification();
         }
 
         /// <inheritdoc />
@@ -76,13 +76,13 @@ namespace NotificationSamples.iOS
         }
 
         /// <inheritdoc />
-        iOSGameNotification IGameNotificationsPlatform<iOSGameNotification>.GetLastNotification()
+        GameNotification IGameNotificationsPlatform<GameNotification>.GetLastNotification()
         {
             var notification = NotificationCenter.LastRespondedNotification;
 
             if (notification.HasValue)
             {
-                return new iOSGameNotification(notification.Value);
+                return new GameNotification(notification.Value);
             }
 
             return null;
@@ -114,7 +114,7 @@ namespace NotificationSamples.iOS
         {
             // Create a new AndroidGameNotification out of the delivered notification, but only
             // if the event is registered
-            NotificationReceived?.Invoke(new iOSGameNotification(notification));
+            NotificationReceived?.Invoke(new GameNotification(notification));
         }
     }
 }

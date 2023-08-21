@@ -8,7 +8,7 @@ namespace NotificationSamples.Android
     /// <summary>
     /// Android implementation of <see cref="IGameNotificationsPlatform"/>.
     /// </summary>
-    public class AndroidNotificationsPlatform : GameNotificationsPlatform, IGameNotificationsPlatform<AndroidGameNotification>,
+    public class AndroidNotificationsPlatform : GameNotificationsPlatform, IGameNotificationsPlatform<GameNotification>,
         IDisposable
     {
         /// <inheritdoc />
@@ -32,7 +32,7 @@ namespace NotificationSamples.Android
         /// <remarks>
         /// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
         /// </remarks>
-        public void ScheduleNotification(AndroidGameNotification gameNotification, DateTime deliveryTime)
+        public void ScheduleNotification(GameNotification gameNotification, DateTime deliveryTime)
         {
             if (gameNotification == null)
             {
@@ -54,7 +54,7 @@ namespace NotificationSamples.Android
                 throw new ArgumentNullException(nameof(gameNotification));
             }
 
-            if (!(gameNotification is AndroidGameNotification androidNotification))
+            if (!(gameNotification is GameNotification androidNotification))
             {
                 throw new InvalidOperationException(
                     "Notification provided to ScheduleNotification isn't an AndroidGameNotification.");
@@ -67,9 +67,9 @@ namespace NotificationSamples.Android
         /// <summary>
         /// Create a new <see cref="AndroidGameNotification" />.
         /// </summary>
-        AndroidGameNotification IGameNotificationsPlatform<AndroidGameNotification>.CreateNotification()
+        GameNotification IGameNotificationsPlatform<GameNotification>.CreateNotification()
         {
-            return new AndroidGameNotification();
+            return new GameNotification();
         }
 
         /// <inheritdoc />
@@ -88,13 +88,13 @@ namespace NotificationSamples.Android
         }
 
         /// <inheritdoc />
-        AndroidGameNotification IGameNotificationsPlatform<AndroidGameNotification>.GetLastNotification()
+        GameNotification IGameNotificationsPlatform<GameNotification>.GetLastNotification()
         {
             var notification = NotificationCenter.LastRespondedNotification;
 
             if (notification.HasValue)
             {
-                return new AndroidGameNotification(notification.Value);
+                return new GameNotification(notification.Value);
             }
 
             return null;
@@ -123,7 +123,7 @@ namespace NotificationSamples.Android
         {
             // Create a new AndroidGameNotification out of the delivered notification, but only
             // if the event is registered
-            NotificationReceived?.Invoke(new AndroidGameNotification(notification));
+            NotificationReceived?.Invoke(new GameNotification(notification));
         }
     }
 }
