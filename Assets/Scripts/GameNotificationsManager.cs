@@ -203,7 +203,7 @@ namespace NotificationSamples
                 {
                     PendingNotification pendingNotification = PendingNotifications[i];
                     // Ignore already scheduled ones
-                    if (pendingNotification.Notification.Scheduled)
+                    if (pendingNotification.Scheduled)
                     {
                         continue;
                     }
@@ -231,7 +231,7 @@ namespace NotificationSamples
                     var badgeNum = 1;
                     foreach (PendingNotification pendingNotification in PendingNotifications)
                     {
-                        if (!pendingNotification.Notification.Scheduled)
+                        if (!pendingNotification.Scheduled)
                         {
                             pendingNotification.Notification.BadgeNumber = badgeNum++;
                         }
@@ -242,13 +242,14 @@ namespace NotificationSamples
                 {
                     PendingNotification pendingNotification = PendingNotifications[i];
                     // Ignore already scheduled ones
-                    if (pendingNotification.Notification.Scheduled)
+                    if (pendingNotification.Scheduled)
                     {
                         continue;
                     }
 
                     // Schedule it now
                     Platform.ScheduleNotification(pendingNotification.Notification, pendingNotification.DeliveryTime);
+                    pendingNotification.Schedule();
                 }
 
                 // Clear badge numbers again (for saving)
@@ -277,7 +278,7 @@ namespace NotificationSamples
                     // In reschedule mode, add ones that have been scheduled, are marked for
                     // rescheduling, and that have a time
                     if (pendingNotification.Reschedule &&
-                        pendingNotification.Notification.Scheduled)
+                        pendingNotification.Scheduled)
                     {
                         notificationsToSave.Add(pendingNotification);
                     }
@@ -285,7 +286,7 @@ namespace NotificationSamples
                 else
                 {
                     // In non-clear mode, just add all scheduled notifications
-                    if (pendingNotification.Notification.Scheduled)
+                    if (pendingNotification.Scheduled)
                     {
                         notificationsToSave.Add(pendingNotification);
                     }
@@ -396,11 +397,14 @@ namespace NotificationSamples
                 return null;
             }
 
+            bool scheduled = false;
+
             // If we queue, don't schedule immediately.
             // Also immediately schedule non-time based deliveries (for iOS)
             if ((mode & OperatingMode.Queue) != OperatingMode.Queue)
             {
                 Platform.ScheduleNotification(notification, deliveryTime);
+                scheduled = true;
             }
             else if (!notification.Id.HasValue)
             {
@@ -410,7 +414,7 @@ namespace NotificationSamples
             }
 
             // Register pending notification
-            var result = new PendingNotification(notification, deliveryTime);
+            var result = new PendingNotification(notification, deliveryTime, scheduled);
             PendingNotifications.Add(result);
 
             return result;

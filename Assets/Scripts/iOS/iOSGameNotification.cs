@@ -70,9 +70,6 @@ namespace NotificationSamples.iOS
         }
 
         /// <inheritdoc />
-        public bool Scheduled { get; private set; }
-
-        /// <inheritdoc />
         /// <remarks>
         /// <para>On iOS, setting this causes the notification to be delivered on a calendar time.</para>
         /// <para>If it has previously been manually set to a different type of trigger, or has not been set before,
@@ -147,15 +144,6 @@ namespace NotificationSamples.iOS
         internal iOSGameNotification(iOSNotification internalNotification)
         {
             this.internalNotification = internalNotification;
-        }
-
-        /// <summary>
-        /// Mark this notifications scheduled flag.
-        /// </summary>
-        internal void OnScheduled()
-        {
-            Assert.IsFalse(Scheduled);
-            Scheduled = true;
         }
     }
 }

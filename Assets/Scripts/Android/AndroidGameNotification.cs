@@ -59,9 +59,6 @@ namespace NotificationSamples.Android
         /// </summary>
         public string DeliveredChannel { get; set; }
 
-        /// <inheritdoc />
-        public bool Scheduled { get; private set; }
-
         /// <summary>
         /// Instantiate a new instance of <see cref="AndroidGameNotification"/>.
         /// </summary>
@@ -82,15 +79,6 @@ namespace NotificationSamples.Android
             internalNotification = deliveredNotification;
             Id = deliveredId;
             DeliveredChannel = deliveredChannel;
-        }
-
-        /// <summary>
-        /// Set the scheduled flag.
-        /// </summary>
-        internal void OnScheduled()
-        {
-            Assert.IsFalse(Scheduled);
-            Scheduled = true;
         }
     }
 }

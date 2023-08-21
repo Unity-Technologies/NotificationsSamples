@@ -51,8 +51,6 @@ namespace NotificationSamples.Android
                     gameNotification.DeliveredChannel);
                 gameNotification.Id = notificationId;
             }
-
-            gameNotification.OnScheduled();
         }
 
         /// <inheritdoc />

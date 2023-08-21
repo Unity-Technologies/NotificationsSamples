@@ -22,6 +22,8 @@ namespace NotificationSamples
         /// </remarks>
         public bool Reschedule;
 
+        public bool Scheduled { get; private set; }
+
         /// <summary>
         /// The scheduled notification.
         /// </summary>
@@ -33,10 +35,16 @@ namespace NotificationSamples
         /// Instantiate a new instance of <see cref="PendingNotification"/> from a <see cref="IGameNotification"/>.
         /// </summary>
         /// <param name="notification">The notification to create from.</param>
-        public PendingNotification(IGameNotification notification, DateTime deliveryTime)
+        public PendingNotification(IGameNotification notification, DateTime deliveryTime, bool scheduled = false)
         {
             Notification = notification ?? throw new ArgumentNullException(nameof(notification));
             DeliveryTime = deliveryTime;
+            Scheduled = scheduled;
+        }
+
+        public void Schedule()
+        {
+            Scheduled = true;
         }
     }
 }

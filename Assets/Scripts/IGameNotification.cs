@@ -48,11 +48,5 @@ namespace NotificationSamples
         /// </summary>
         /// <value>The number displayed on the app badge.</value>
         int BadgeNumber { get; set; }
-
-        /// <summary>
-        /// Gets whether this notification has been scheduled.
-        /// </summary>
-        /// <value>True if the notification has been scheduled with the underlying operating system.</value>
-        bool Scheduled { get; }
     }
 }
