@@ -5,12 +5,13 @@ using Unity.Notifications;
 namespace NotificationSamples
 {
 
-    public abstract class GameNotificationsPlatform : IGameNotificationsPlatform, IDisposable
+    public class GameNotificationsPlatform : IGameNotificationsPlatform, IDisposable
     {
         public event Action<GameNotification> NotificationReceived;
 
-        public GameNotificationsPlatform()
+        public GameNotificationsPlatform(NotificationCenterArgs args)
         {
+            NotificationCenter.Initialize(args);
             NotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
         }
 

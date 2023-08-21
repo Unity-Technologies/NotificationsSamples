@@ -3,13 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-#if UNITY_ANDROID
-using Unity.Notifications.Android;
-using NotificationSamples.Android;
-#elif UNITY_IOS
-using NotificationSamples.iOS;
-#endif
 using UnityEngine;
+using Unity.Notifications;
 
 namespace NotificationSamples
 {
@@ -311,46 +306,11 @@ namespace NotificationSamples
 
             Initialized = true;
 
-#if UNITY_ANDROID
-            Platform = new AndroidNotificationsPlatform();
-
-            // Register the notification channels
-            var doneDefault = false;
-            foreach (GameNotificationChannel notificationChannel in channels)
-            {
-                if (!doneDefault)
-                {
-                    doneDefault = true;
-                    ((AndroidNotificationsPlatform)Platform).DefaultChannelId = notificationChannel.Id;
-                }
-
-                long[] vibrationPattern = null;
-                if (notificationChannel.VibrationPattern != null)
-                    vibrationPattern = notificationChannel.VibrationPattern.Select(v => (long)v).ToArray();
-
-                // Wrap channel in Android object
-                var androidChannel = new AndroidNotificationChannel(notificationChannel.Id, notificationChannel.Name,
-                    notificationChannel.Description,
-                    (Importance)notificationChannel.Style)
-                {
-                    CanBypassDnd = notificationChannel.HighPriority,
-                    CanShowBadge = notificationChannel.ShowsBadge,
-                    EnableLights = notificationChannel.ShowLights,
-                    EnableVibration = notificationChannel.Vibrates,
-                    LockScreenVisibility = (LockScreenVisibility)notificationChannel.Privacy,
-                    VibrationPattern = vibrationPattern
-                };
-
-                AndroidNotificationCenter.RegisterNotificationChannel(androidChannel);
-            }
-#elif UNITY_IOS
-            Platform = new iOSNotificationsPlatform();
-#endif
-
-            if (Platform == null)
-            {
-                yield break;
-            }
+            var args = NotificationCenterArgs.Default;
+            args.AndroidChannelId = "notifications";
+            args.AndroidChannelName = "Notifications";
+            args.AndroidChannelDescription = "Game notifications";
+            Platform = new GameNotificationsPlatform(args);
 
             PendingNotifications = new List<PendingNotification>();
             Platform.NotificationReceived += OnNotificationReceived;
