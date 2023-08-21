@@ -297,7 +297,7 @@ namespace NotificationSamples
         /// </summary>
         /// <param name="channels">An optional collection of channels to register, for Android</param>
         /// <exception cref="InvalidOperationException"><see cref="Initialize"/> has already been called.</exception>
-        public IEnumerator Initialize(params GameNotificationChannel[] channels)
+        public IEnumerator Initialize()
         {
             if (Initialized)
             {

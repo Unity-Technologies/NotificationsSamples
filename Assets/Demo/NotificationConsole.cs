@@ -12,13 +12,6 @@ namespace NotificationSamples.Demo
     /// </summary>
     public class NotificationConsole : MonoBehaviour
     {
-        // On iOS, this represents the notification's Category Identifier, and is optional
-        // On Android, this represents the notification's channel, and is required (at least one).
-        // Channels defined as global constants so can be referred to from GameController.cs script when setting/sending notification
-        public const string ChannelId = "game_channel0";
-        public const string ReminderChannelId = "reminder_channel1";
-        public const string NewsChannelId = "news_channel2";
-
         [SerializeField]
         protected Button sendButton;
 
@@ -70,13 +63,7 @@ namespace NotificationSamples.Demo
 
         private IEnumerator Start()
         {
-            // Set up channels (mostly for Android)
-            // You need to have at least one of these
-            var c1 = new GameNotificationChannel(ChannelId, "Default Game Channel", "Generic notifications");
-            var c2 = new GameNotificationChannel(NewsChannelId, "News Channel", "News feed notifications");
-            var c3 = new GameNotificationChannel(ReminderChannelId, "Reminder Channel", "Reminder notifications");
-
-            return manager.Initialize(c1, c2, c3);
+            return manager.Initialize();
         }
 
         private void OnDestroy()
@@ -120,14 +107,13 @@ namespace NotificationSamples.Demo
         /// <param name="reschedule">
         /// Whether to reschedule the notification if foregrounding and the notification hasn't yet been shown.
         /// </param>
-        /// <param name="channelId">Channel ID to use. If this is null/empty then it will use the default ID. For Android
         /// the channel must be registered in <see cref="GameNotificationsManager.Initialize"/>.</param>
         /// <param name="smallIcon">Notification small icon.</param>
         /// <param name="largeIcon">Notification large icon.</param>
         public void SendNotification(string title, string body, DateTime deliveryTime, int? badgeNumber = null,
             bool reschedule = false)
         {
-            IGameNotification notification = manager.CreateNotification();
+            GameNotification notification = manager.CreateNotification();
 
             if (notification == null)
             {
