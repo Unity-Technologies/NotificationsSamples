@@ -371,7 +371,7 @@ namespace NotificationSamples
         /// </summary>
         /// <returns>The new notification, ready to be scheduled, or null if there's no valid platform.</returns>
         /// <exception cref="InvalidOperationException"><see cref="Initialize"/> has not been called.</exception>
-        public IGameNotification CreateNotification()
+        public GameNotification CreateNotification()
         {
             if (!Initialized)
             {
@@ -385,7 +385,7 @@ namespace NotificationSamples
         /// Schedules a notification to be delivered.
         /// </summary>
         /// <param name="notification">The notification to deliver.</param>
-        public PendingNotification ScheduleNotification(IGameNotification notification, DateTime deliveryTime)
+        public PendingNotification ScheduleNotification(GameNotification notification, DateTime deliveryTime)
         {
             if (!Initialized)
             {
@@ -517,7 +517,7 @@ namespace NotificationSamples
         /// <summary>
         /// Event fired by <see cref="Platform"/> when a notification is received.
         /// </summary>
-        private void OnNotificationReceived(IGameNotification deliveredNotification)
+        private void OnNotificationReceived(GameNotification deliveredNotification)
         {
             // Ignore for background messages (this happens on Android sometimes)
             if (!inForeground)

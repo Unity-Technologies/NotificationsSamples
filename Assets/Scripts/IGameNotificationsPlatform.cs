@@ -11,7 +11,7 @@ namespace NotificationSamples
         /// <summary>
         /// Fired when a notification is received.
         /// </summary>
-        event Action<IGameNotification> NotificationReceived;
+        event Action<GameNotification> NotificationReceived;
 
         IEnumerator RequestNotificationPermission();
 
@@ -19,7 +19,7 @@ namespace NotificationSamples
         /// Create a new instance of a <see cref="IGameNotification"/> for this platform.
         /// </summary>
         /// <returns>A new platform-appropriate notification object.</returns>
-        IGameNotification CreateNotification();
+        GameNotification CreateNotification();
 
         /// <summary>
         /// Schedules a notification to be delivered.
@@ -27,7 +27,7 @@ namespace NotificationSamples
         /// <param name="gameNotification">The notification to deliver.</param>
         /// <exception cref="ArgumentNullException"><paramref name="gameNotification"/> is null.</exception>
         /// <exception cref="InvalidOperationException"><paramref name="gameNotification"/> isn't of the correct type.</exception>
-        void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime);
+        void ScheduleNotification(GameNotification gameNotification, DateTime deliveryTime);
 
         /// <summary>
         /// Cancels a scheduled notification.
@@ -61,7 +61,7 @@ namespace NotificationSamples
         /// Returns the last local or remote notification used to open the app or clicked on by the user. If no
         /// notification is available it returns null.
         /// </returns>
-        IGameNotification GetLastNotification();
+        GameNotification GetLastNotification();
 
         /// <summary>
         /// Performs any initialization or processing necessary on foregrounding the application.
@@ -72,40 +72,5 @@ namespace NotificationSamples
         /// Performs any processing necessary on backgrounding or closing the application.
         /// </summary>
         void OnBackground();
-    }
-
-    /// <summary>
-    /// Any type that handles notifications for a specific game platform.
-    /// </summary>
-    /// <remarks>Has a concrete notification type</remarks>
-    /// <typeparam name="TNotificationType">The type of notification returned by this platform.</typeparam>
-    public interface IGameNotificationsPlatform<TNotificationType> : IGameNotificationsPlatform
-        where TNotificationType : IGameNotification
-    {
-        /// <summary>
-        /// Create an instance of <typeparamref name="TNotificationType"/>.
-        /// </summary>
-        /// <returns>A new platform-appropriate notification object.</returns>
-        new TNotificationType CreateNotification();
-
-        /// <summary>
-        /// Schedule a notification to be delivered.
-        /// </summary>
-        /// <param name="notification">The notification to deliver.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="notification"/> is null.</exception>
-        void ScheduleNotification(TNotificationType notification, DateTime deliveryTime);
-
-        /// <summary>
-        /// Use this to retrieve the last local or remote notification of <typeparamref name="TNotificationType"/>
-        /// received by the app.
-        /// </summary>
-        /// <remarks>
-        /// On Android the last notification is not cleared until the application is explicitly quit.
-        /// </remarks>
-        /// <returns>
-        /// Returns new platform-appropriate notification object for the last local or remote notification used to open
-        /// the app or clicked on by the user. If no notification is available it returns null.
-        /// </returns>
-        new TNotificationType GetLastNotification();
     }
 }

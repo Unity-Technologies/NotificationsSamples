@@ -8,11 +8,10 @@ namespace NotificationSamples.iOS
     /// <summary>
     /// iOS implementation of <see cref="IGameNotificationsPlatform"/>.
     /// </summary>
-    public class iOSNotificationsPlatform : GameNotificationsPlatform, IGameNotificationsPlatform<GameNotification>,
-        IDisposable
+    public class iOSNotificationsPlatform : GameNotificationsPlatform, IDisposable
     {
         /// <inheritdoc />
-        public override event Action<IGameNotification> NotificationReceived;
+        public override event Action<GameNotification> NotificationReceived;
 
         /// <summary>
         /// Instantiate a new instance of <see cref="iOSNotificationsPlatform"/>.
@@ -23,24 +22,7 @@ namespace NotificationSamples.iOS
         }
 
         /// <inheritdoc />
-        public override void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
-        {
-            if (gameNotification == null)
-            {
-                throw new ArgumentNullException(nameof(gameNotification));
-            }
-
-            if (!(gameNotification is GameNotification notification))
-            {
-                throw new InvalidOperationException(
-                    "Notification provided to ScheduleNotification isn't an iOSGameNotification.");
-            }
-
-            ScheduleNotification(notification, deliveryTime);
-        }
-
-        /// <inheritdoc />
-        public void ScheduleNotification(GameNotification notification, DateTime deliveryTime)
+        public override void ScheduleNotification(GameNotification notification, DateTime deliveryTime)
         {
             if (notification == null)
             {
@@ -55,28 +37,13 @@ namespace NotificationSamples.iOS
         /// <summary>
         /// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
         /// </summary>
-        public override IGameNotification CreateNotification()
-        {
-            return CreateNotification();
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Create a new <see cref="T:NotificationSamples.Android.AndroidNotification" />.
-        /// </summary>
-        GameNotification IGameNotificationsPlatform<GameNotification>.CreateNotification()
+        public override GameNotification CreateNotification()
         {
             return new GameNotification();
         }
 
         /// <inheritdoc />
-        public override IGameNotification GetLastNotification()
-        {
-            return GetLastNotification();
-        }
-
-        /// <inheritdoc />
-        GameNotification IGameNotificationsPlatform<GameNotification>.GetLastNotification()
+        public override GameNotification GetLastNotification()
         {
             var notification = NotificationCenter.LastRespondedNotification;
 

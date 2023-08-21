@@ -103,7 +103,7 @@ namespace NotificationSamples
                         var result = new List<PendingNotification>(numElements);
                         for (var i = 0; i < numElements; ++i)
                         {
-                            IGameNotification notification = platform.CreateNotification();
+                            GameNotification notification = platform.CreateNotification();
                             bool hasValue;
 
                             // ID

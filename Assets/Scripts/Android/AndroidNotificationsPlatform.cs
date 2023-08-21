@@ -8,11 +8,10 @@ namespace NotificationSamples.Android
     /// <summary>
     /// Android implementation of <see cref="IGameNotificationsPlatform"/>.
     /// </summary>
-    public class AndroidNotificationsPlatform : GameNotificationsPlatform, IGameNotificationsPlatform<GameNotification>,
-        IDisposable
+    public class AndroidNotificationsPlatform : GameNotificationsPlatform, IDisposable
     {
         /// <inheritdoc />
-        public override event Action<IGameNotification> NotificationReceived;
+        public override event Action<GameNotification> NotificationReceived;
 
         /// <summary>
         /// Gets or sets the default channel ID for notifications.
@@ -32,7 +31,7 @@ namespace NotificationSamples.Android
         /// <remarks>
         /// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
         /// </remarks>
-        public void ScheduleNotification(GameNotification gameNotification, DateTime deliveryTime)
+        public override void ScheduleNotification(GameNotification gameNotification, DateTime deliveryTime)
         {
             if (gameNotification == null)
             {
@@ -44,51 +43,16 @@ namespace NotificationSamples.Android
         }
 
         /// <inheritdoc />
-        /// <remarks>
-        /// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
-        /// </remarks>
-        public override void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
-        {
-            if (gameNotification == null)
-            {
-                throw new ArgumentNullException(nameof(gameNotification));
-            }
-
-            if (!(gameNotification is GameNotification androidNotification))
-            {
-                throw new InvalidOperationException(
-                    "Notification provided to ScheduleNotification isn't an AndroidGameNotification.");
-            }
-
-            ScheduleNotification(androidNotification, deliveryTime);
-        }
-
-        /// <inheritdoc />
         /// <summary>
         /// Create a new <see cref="AndroidGameNotification" />.
         /// </summary>
-        GameNotification IGameNotificationsPlatform<GameNotification>.CreateNotification()
+        public override GameNotification CreateNotification()
         {
             return new GameNotification();
         }
 
         /// <inheritdoc />
-        /// <summary>
-        /// Create a new <see cref="AndroidGameNotification" />.
-        /// </summary>
-        public override IGameNotification CreateNotification()
-        {
-            return CreateNotification();
-        }
-
-        /// <inheritdoc />
-        public override IGameNotification GetLastNotification()
-        {
-            return GetLastNotification();
-        }
-
-        /// <inheritdoc />
-        GameNotification IGameNotificationsPlatform<GameNotification>.GetLastNotification()
+        public override GameNotification GetLastNotification()
         {
             var notification = NotificationCenter.LastRespondedNotification;
 

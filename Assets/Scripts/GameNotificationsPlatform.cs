@@ -7,16 +7,16 @@ namespace NotificationSamples
 
     public abstract class GameNotificationsPlatform : IGameNotificationsPlatform
     {
-        public abstract event Action<IGameNotification> NotificationReceived;
+        public abstract event Action<GameNotification> NotificationReceived;
 
         public IEnumerator RequestNotificationPermission()
         {
             return NotificationCenter.RequestPermission();
         }
 
-        public abstract IGameNotification CreateNotification();
+        public abstract GameNotification CreateNotification();
 
-        public abstract void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime);
+        public abstract void ScheduleNotification(GameNotification gameNotification, DateTime deliveryTime);
 
         public void CancelNotification(int notificationId)
         {
@@ -38,7 +38,7 @@ namespace NotificationSamples
             NotificationCenter.CancelAllDeliveredNotifications();
         }
 
-        public abstract IGameNotification GetLastNotification();
+        public abstract GameNotification GetLastNotification();
 
         public abstract void OnForeground();
 
