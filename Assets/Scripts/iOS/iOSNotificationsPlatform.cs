@@ -22,15 +22,6 @@ namespace NotificationSamples.iOS
             iOSNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
         }
 
-        public override IEnumerator RequestNotificationPermission()
-        {
-            using (var request = new AuthorizationRequest(AuthorizationOption.Badge | AuthorizationOption.Sound | AuthorizationOption.Alert, false))
-            {
-                while (!request.IsFinished)
-                    yield return null;
-            }
-        }
-
         /// <inheritdoc />
         public override void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime)
         {
@@ -77,30 +68,6 @@ namespace NotificationSamples.iOS
         iOSGameNotification IGameNotificationsPlatform<iOSGameNotification>.CreateNotification()
         {
             return new iOSGameNotification();
-        }
-
-        /// <inheritdoc />
-        public override void CancelNotification(int notificationId)
-        {
-            iOSNotificationCenter.RemoveScheduledNotification(notificationId.ToString());
-        }
-
-        /// <inheritdoc />
-        public override void DismissNotification(int notificationId)
-        {
-            iOSNotificationCenter.RemoveDeliveredNotification(notificationId.ToString());
-        }
-
-        /// <inheritdoc />
-        public override void CancelAllScheduledNotifications()
-        {
-            iOSNotificationCenter.RemoveAllScheduledNotifications();
-        }
-
-        /// <inheritdoc />
-        public override void DismissAllDisplayedNotifications()
-        {
-            iOSNotificationCenter.RemoveAllDeliveredNotifications();
         }
 
         /// <inheritdoc />

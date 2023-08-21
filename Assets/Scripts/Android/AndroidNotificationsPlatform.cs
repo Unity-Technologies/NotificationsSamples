@@ -28,13 +28,6 @@ namespace NotificationSamples.Android
             AndroidNotificationCenter.OnNotificationReceived += OnLocalNotificationReceived;
         }
 
-        public override IEnumerator RequestNotificationPermission()
-        {
-            var request = new PermissionRequest();
-            while (request.Status == PermissionStatus.RequestPending)
-                yield return null;
-        }
-
         /// <inheritdoc />
         /// <remarks>
         /// Will set the <see cref="AndroidGameNotification.Id"/> field of <paramref name="gameNotification"/>.
@@ -104,33 +97,6 @@ namespace NotificationSamples.Android
         public override IGameNotification CreateNotification()
         {
             return CreateNotification();
-        }
-
-        /// <inheritdoc />
-        public override void CancelNotification(int notificationId)
-        {
-            AndroidNotificationCenter.CancelScheduledNotification(notificationId);
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Not currently implemented on Android
-        /// </summary>
-        public override void DismissNotification(int notificationId)
-        {
-            AndroidNotificationCenter.CancelDisplayedNotification(notificationId);
-        }
-
-        /// <inheritdoc />
-        public override void CancelAllScheduledNotifications()
-        {
-            AndroidNotificationCenter.CancelAllScheduledNotifications();
-        }
-
-        /// <inheritdoc />
-        public override void DismissAllDisplayedNotifications()
-        {
-            AndroidNotificationCenter.CancelAllDisplayedNotifications();
         }
 
         /// <inheritdoc />

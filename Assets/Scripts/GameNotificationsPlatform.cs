@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Notifications;
 
 namespace NotificationSamples
 {
@@ -8,19 +9,34 @@ namespace NotificationSamples
     {
         public abstract event Action<IGameNotification> NotificationReceived;
 
-        public abstract IEnumerator RequestNotificationPermission();
+        public IEnumerator RequestNotificationPermission()
+        {
+            return NotificationCenter.RequestPermission();
+        }
 
         public abstract IGameNotification CreateNotification();
 
         public abstract void ScheduleNotification(IGameNotification gameNotification, DateTime deliveryTime);
 
-        public abstract void CancelNotification(int notificationId);
+        public void CancelNotification(int notificationId)
+        {
+            NotificationCenter.CancelScheduledNotification(notificationId);
+        }
 
-        public abstract void DismissNotification(int notificationId);
+        public void DismissNotification(int notificationId)
+        {
+            NotificationCenter.CancelDeliveredNotification(notificationId);
+        }
 
-        public abstract void CancelAllScheduledNotifications();
+        public void CancelAllScheduledNotifications()
+        {
+            NotificationCenter.CancelAllScheduledNotifications();
+        }
 
-        public abstract void DismissAllDisplayedNotifications();
+        public void DismissAllDisplayedNotifications()
+        {
+            NotificationCenter.CancelAllDeliveredNotifications();
+        }
 
         public abstract IGameNotification GetLastNotification();
 
