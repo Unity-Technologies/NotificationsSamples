@@ -81,7 +81,7 @@ namespace NotificationSamples
         }
 
         /// <inheritdoc />
-        public IList<PendingNotification> Deserialize(IGameNotificationsPlatform platform)
+        public IList<PendingNotification> Deserialize(GameNotificationsPlatform platform)
         {
             if (!File.Exists(filename))
             {

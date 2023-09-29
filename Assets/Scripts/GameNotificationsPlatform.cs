@@ -7,7 +7,7 @@ namespace NotificationSamples
     /// <summary>
     /// A type that handles notifications for a specific game platform
     /// </summary>
-    public class GameNotificationsPlatform : IGameNotificationsPlatform, IDisposable
+    public class GameNotificationsPlatform : IDisposable
     {
         /// <summary>
         /// Fired when a notification is received.

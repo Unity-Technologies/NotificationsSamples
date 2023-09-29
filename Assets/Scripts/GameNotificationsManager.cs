@@ -93,7 +93,7 @@ namespace NotificationSamples
         /// <summary>
         /// Gets the implementation of the notifications for the current platform;
         /// </summary>
-        public IGameNotificationsPlatform Platform { get; private set; }
+        public GameNotificationsPlatform Platform { get; private set; }
 
         /// <summary>
         /// Gets a collection of notifications that are scheduled or queued.
