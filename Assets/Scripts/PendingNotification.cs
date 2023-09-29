@@ -22,6 +22,9 @@ namespace NotificationSamples
         /// </remarks>
         public bool Reschedule;
 
+        /// <summary>
+        /// Whether notification is scheduled.
+        /// </summary>
         public bool Scheduled { get; private set; }
 
         /// <summary>
