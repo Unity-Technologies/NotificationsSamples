@@ -42,7 +42,7 @@ namespace NotificationSamples
                         // Write each item
                         foreach (PendingNotification notificationToSave in notifications)
                         {
-                            IGameNotification notification = notificationToSave.Notification;
+                            GameNotification notification = notificationToSave.Notification;
 
                             // ID
                             writer.Write(notification.Id.HasValue);

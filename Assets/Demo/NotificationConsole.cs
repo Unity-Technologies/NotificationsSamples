@@ -184,7 +184,7 @@ namespace NotificationSamples.Demo
             QueueEvent($"Notification with title \"{obj.Notification.Title}\" expired and was not displayed.");
         }
 
-        private IEnumerator ShowDeliveryNotificationCoroutine(IGameNotification deliveredNotification)
+        private IEnumerator ShowDeliveryNotificationCoroutine(GameNotification deliveredNotification)
         {
             yield return null;
 

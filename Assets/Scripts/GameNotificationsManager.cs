@@ -460,11 +460,10 @@ namespace NotificationSamples
         }
 
         /// <summary>
-        ///
+        /// Last notification tapped by user.
         /// </summary>
-        /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public IGameNotification GetLastNotification()
+        public GameNotification GetLastNotification()
         {
             if (!Initialized)
             {

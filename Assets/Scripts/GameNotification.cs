@@ -5,7 +5,7 @@ namespace NotificationSamples
     /// <summary>
     /// Represents a notification that will be delivered for this application.
     /// </summary>
-    public class GameNotification : IGameNotification
+    public class GameNotification
     {
         private Notification internalNotification;
 
