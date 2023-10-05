@@ -34,9 +34,9 @@ namespace NotificationSamples.Demo
                 titleLabel.text = notificationToDisplay.Notification.Title;
             }
 
-            if (timeLabel != null && notificationToDisplay.Notification.DeliveryTime.HasValue)
+            if (timeLabel != null)
             {
-                timeLabel.text = notificationToDisplay.Notification.DeliveryTime.Value.ToString("yy-MM-dd HH:mm:ss");
+                timeLabel.text = notificationToDisplay.DeliveryTime.ToString("yy-MM-dd HH:mm:ss");
             }
         }
 

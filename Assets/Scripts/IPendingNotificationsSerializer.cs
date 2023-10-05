@@ -19,6 +19,6 @@ namespace NotificationSamples
         /// Retrieve a saved list of pending notifications.
         /// </summary>
         /// <returns>The deserialized collection of pending notifications, or null if the file did not exist.</returns>
-        IList<IGameNotification> Deserialize(IGameNotificationsPlatform platform);
+        IList<PendingNotification> Deserialize(GameNotificationsPlatform platform);
     }
 }
