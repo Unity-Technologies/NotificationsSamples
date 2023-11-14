@@ -212,8 +212,7 @@ namespace NotificationSamples
                 }
 
                 // Sort notifications by delivery time, if no notifications have a badge number set
-                bool noBadgeNumbersSet =
-                    PendingNotifications.All(notification => notification.Notification.BadgeNumber == null);
+                bool noBadgeNumbersSet = PendingNotifications.All(notification => notification.Notification.BadgeNumber == 0);
 
                 if (noBadgeNumbersSet && AutoBadging)
                 {
